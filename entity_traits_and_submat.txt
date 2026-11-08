@@ -1,0 +1,189 @@
+--@name Multi-Trait Behavioral Entities & SubMaterial Glitcher
+--@author Cognitive Decay Project
+--@shared
+
+-- 1. Multi-Trait Behavioral Taxonomy:
+-- Entities can roll MULTIPLE combined personality & behavioral traits:
+--   - "passive": Ignores players, stands or wanders aimlessly.
+--   - "quiet": Completely silent, stealthy movements with zero audio cues.
+--   - "loud": Screeches, plays distorted broadcasts or alarm pulses.
+--   - "follow": Creeps behind players at a distance, stopping when looked at (weeping angel / stalking).
+--   - "chase": Aggressive, twitching pursuit.
+--   - "corrupt": Emits electric sparks, HUD glitches, and screen tearing when close.
+--   - "void_black": Ultra-rare silhouette texture (pure light-absorbing black).
+--
+-- 2. SubMaterial Level Texture Replacement (ent:setSubMaterial(index, mat)):
+-- Allows overriding individual sub-textures on models (e.g. replacing just the face, eyes, or clothing
+-- with yellow wallpaper, static television noise, or glowing radioactive concrete).
+
+if SERVER then
+    util.addNetworkString("SpawnTraitedAnomaly")
+
+    local TRAIT_POOL = {
+        "passive", "quiet", "loud", "follow", "chase", "corrupt"
+    }
+
+    -- Rolls 1 to 3 combined traits
+    local function rollTraits(confusion)
+        local traits = {}
+        local count = math.random(1, 2)
+        if confusion > 0.6 and math.random() > 0.5 then
+            count = 3
+        end
+
+        local shuffled = table.Copy(TRAIT_POOL)
+        for i = 1, count do
+            local idx = math.random(1, #shuffled)
+            table.insert(traits, shuffled[idx])
+            table.remove(shuffled, idx)
+        end
+
+        -- Ultra-Rare Appearance Traits
+        if math.random() < (0.04 + (confusion * 0.08)) then
+            table.insert(traits, "void_black")
+        end
+        if math.random() < (0.03 + (confusion * 0.07)) then
+            table.insert(traits, "submaterial_glitch")
+        end
+
+        return traits
+    end
+
+    function spawnTraitedEntity(pos, ang, modelPath, confusion)
+        local traits = rollTraits(confusion)
+        
+        net.start("SpawnTraitedAnomaly")
+        net.writeVector(pos)
+        net.writeAngle(ang)
+        net.writeString(modelPath)
+        net.writeTable(traits)
+        net.writeFloat(confusion)
+        net.send()
+
+        print("[Entity Engine] Spawned Anomaly with Traits: [" .. table.concat(traits, ", ") .. "]")
+    end
+end
+
+if CLIENT then
+    local activeAnomalies = {}
+
+    -- SubMaterial Glitch Application
+    local function applySubMaterialGlitch(holo)
+        local mats = holo:getMaterials()
+        if mats and #mats > 0 then
+            -- Replace an arbitrary sub-material (e.g. eyes or face or torso) with a glitched texture
+            local targetIdx = math.random(0, #mats - 1)
+            local glitchMats = {
+                "materials/plaster/office_wallpaper_yellow",
+                "materials/tools/toolsblack",
+                "models/props_lab/monitor02",
+                "effects/tvscreen_noise001a",
+                "materials/carpet/office_carpet_damp_01"
+            }
+            local chosenMat = glitchMats[math.random(1, #glitchMats)]
+            pcall(holo.setSubMaterial, holo, targetIdx, chosenMat)
+            print("[SubMaterial Glitch] Swapped SubMat Index " .. targetIdx .. " -> " .. chosenMat)
+        end
+    end
+
+    net.receive("SpawnTraitedAnomaly", function()
+        local pos       = net.readVector()
+        local ang       = net.readAngle()
+        local mdl       = net.readString()
+        local traits    = net.readTable()
+        local confusion = net.readFloat()
+
+        local holo = holograms.create(pos, ang, mdl, Vector(1, 1, 1))
+        if not isValid(holo) then return end
+
+        local traitMap = {}
+        for _, t in ipairs(traits) do traitMap[t] = true end
+
+        -- Appearance Modifications
+        if traitMap["void_black"] then
+            -- Light-absorbing silhouette
+            holo:setColor(Color(5, 5, 5, 255))
+            pcall(holo.setMaterial, holo, "models/debug/debugwhite")
+            holo:setColor(Color(0, 0, 0, 255))
+        elseif traitMap["submaterial_glitch"] then
+            applySubMaterialGlitch(holo)
+        end
+
+        -- Facial & Bone Distortions
+        local flexNum = holo:getFlexNum()
+        if flexNum and flexNum > 0 and math.random() > 0.4 then
+            holo:setFlexWeight(math.random(0, flexNum - 1), math.Rand(1.2, 2.5))
+        end
+
+        local headBone = holo:lookupBone("ValveBiped.Bip01_Head1")
+        if headBone then
+            holo:manipulateBoneAngles(headBone, Angle(math.random(-35, 35), math.random(-60, 60), math.random(25, 65)))
+        end
+
+        table.insert(activeAnomalies, {
+            holo = holo,
+            traits = traitMap,
+            spawnPos = pos,
+            nextAction = timer.curtime() + 1.0,
+            soundCool = timer.curtime() + math.random(3, 7)
+        })
+    end)
+
+    -- Behavioral Loop (Follow, Chase, Corrupt, Sound)
+    hook.add("think", "AnomalyBehaviorThink", function()
+        local ply = player()
+        if not isValid(ply) then return end
+        local plyPos = ply:getPos()
+        local curTime = timer.curtime()
+
+        for i = #activeAnomalies, 1, -1 do
+            local item = activeAnomalies[i]
+            local h = item.holo
+            local traits = item.traits
+
+            if isValid(h) then
+                local hPos = h:getPos()
+                local dist = hPos:getDistance(plyPos)
+                local dir = (plyPos - hPos):getNormalized()
+
+                -- 1. CHASE BEHAVIOR
+                if traits["chase"] and dist < 700 and dist > 40 then
+                    h:setAngles(Angle(0, dir:getAngle().y, 0))
+                    h:setPos(hPos + (dir * (render.getFrameTime() * 140)))
+                end
+
+                -- 2. FOLLOW (Stalker / Weeping Angel: only moves when player is NOT looking directly at it)
+                if traits["follow"] and dist < 900 and dist > 120 then
+                    local plyAim = ply:getEyeAngles():getForward()
+                    local toEnt = (hPos - plyPos):getNormalized()
+                    local isBeingWatched = plyAim:dot(toEnt) > 0.4
+
+                    if not isBeingWatched then
+                        -- Creeps forward silently in the shadows
+                        h:setAngles(Angle(0, dir:getAngle().y, 0))
+                        h:setPos(hPos + (dir * (render.getFrameTime() * 85)))
+                    end
+                end
+
+                -- 3. LOUD VS QUIET AUDIO BEHAVIOR
+                if traits["loud"] and curTime > item.soundCool and dist < 600 then
+                    sound.play("ambient/energy/zap1.wav", hPos, 80, math.random(110, 160))
+                    sound.play("vo/npc/male01/behindyou01.wav", hPos, 75, math.random(80, 120))
+                    item.soundCool = curTime + math.random(4, 9)
+                elseif not traits["quiet"] and not traits["loud"] and curTime > item.soundCool and dist < 450 then
+                    -- Subtle uncanny breathing or murmur
+                    sound.play("vo/npc/male01/whoops01.wav", hPos, 60, math.random(60, 85))
+                    item.soundCool = curTime + math.random(8, 16)
+                end
+
+                -- 4. CORRUPT (Electric Sparks & Distance Distortion)
+                if traits["corrupt"] and dist < 350 and math.random() > 0.88 then
+                    local sparkPos = hPos + Vector(math.random(-20, 20), math.random(-20, 20), math.random(20, 65))
+                    sound.play("ambient/energy/spark" .. math.random(1, 4) .. ".wav", sparkPos, 65, 120)
+                end
+            else
+                table.remove(activeAnomalies, i)
+            end
+        end
+    end)
+end
