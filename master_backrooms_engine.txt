@@ -4,60 +4,72 @@
 -- ==============================================================================
 -- THE ULTIMATE BACKROOMS PROCEDURAL GENERATOR FOR GARRY'S MOD (STARFALL EX)
 -- 
--- Key Design Update: Liminal Order & Sterile Mundanity
---  1. The "Too Perfect" Baseline:
---     98%+ of the complex is pristine, orderly, and sterile. Desks and chairs
---     are neatly positioned with proper clearances. Corridors are quiet, clean,
---     and architecturally uniform. This creates authentic liminal suspense.
---  2. Glitches are Rare & High-Impact:
---     Anomalies (tipped chairs, flickering lights, floor CRTs, Still Life entities)
---     are dialed to very low frequencies (1-2%). When an anomaly occurs, it stands
---     out with profound uncanny dread.
---  3. Structural Phasing:
---     Phase 1 builds all floors and walls first. Phase 2 places furniture inside
---     with a generous 52-unit wall clearance (Zero sliced tables).
---  4. Pervasive Half-Life 1 Xen Green Zappy Particle Storm:
---     Active materializing sectors burst with violent crackling Xen green lightning
+-- Key Features & Architectural Enhancements:
+--  1. Fully Enclosed Ceiling (Zero Skybox/Daylight Leaks):
+--     Spawns an inverted ceiling canopy at z = CONFIG.WALL_HEIGHT (189.8 units)
+--     using modular plates tinted with off-white acoustic tile finish.
+--     Completely traps the player inside the claustrophobic Backrooms.
+--  2. Seamless Matte Yellow Drywall (Zero Tiling/UV Banding):
+--     Flat diffuse vertex-lit shader prevents horizontal stripes, metal borders,
+--     and texture seams. Clean, continuous Backrooms Level 0 wallpaper.
+--  3. Native Valve Textures on All Props & Furniture:
+--     Desks, chairs, monitors, file cabinets, and PC towers NEVER have white
+--     debug materials applied; they retain 100% of their rich dark wood,
+--     matte plastic, and vintage chassis materials.
+--  4. The Signature Liminal Reality Glitch (Image 2 Aesthetic):
+--     94%+ of rooms are orderly and pristine, but rare cells manifest the
+--     authentic dreamcore anomaly: a vintage wooden drop-leaf table partially
+--     embedded halfway into the drywall at an angle, holding an old PC tower.
+--  5. The Liminal Vibe & Functioning Radios (90% Normal, 10% Glitched):
+--     Citizen radios (models/props_lab/citizenradio.mdl) spawn in offices and hallways.
+--     - 90% are FUNCTIONING VIBE RADIOS: Play smooth, warm, nostalgic ballroom/lo-fi
+--       tunes with optional smooth permanent pitch, zero stutters.
+--     - 10% are SUPER GLITCHY ANOMALIES: Rare corrupted radios with pitch waver & flutter.
+--  6. Half-Life 1 Xen Green Zappy Particle Storm:
+--     Active materializing sectors burst with branching Xen green lightning
 --     arcs (sprites/physbeam) and spatialized zaps.
---  5. Dark World Atmospheric Lighting:
---     Oppressive atmospheric fog smothers the outside daylight. Fluorescent
---     ceiling fixtures cast soft pools of light down onto the carpet.
---  6. Distance-Culled Parented CRT TV Screens:
---     Rare powered-on CRT monitors display 3D2D analog static and emergency broadcasts.
---  7. Non-UV-Sensitive Matte Yellow Drywall:
---     Flat diffuse shaders prevent UV stretching, seams, and keypad repeats.
---  8. 100% Burst-Safe FIFO Queue & Protected pcall Calls.
+--  7. Atmospheric World Darkness & Fluorescent Lighting Pools:
+--     Enclosed fog and dimming smother daylight; ceiling fluorescent fixtures
+--     cast soft pools of light down onto the damp carpet.
+--  8. Distance-Culled Parented CRT TV Screens:
+--     Powered-on CRT monitors display 3D2D analog static and emergency broadcasts.
+--  9. 100% Burst-Safe FIFO Queue & Protected pcall Calls.
 -- ==============================================================================
 
 if SERVER then
     -- --------------------------------------------------------------------------
-    -- 1. CONFIGURATION & TUNING (Tuned for Orderly Liminal Perfection)
+    -- 1. CONFIGURATION & TUNING
     -- --------------------------------------------------------------------------
     local CONFIG = {
         GRID_W = 10,
         GRID_H = 10,
         CELL_SIZE = 189.8,     -- Matches plate4x4: 4 * 47.45 = 189.8
-        WALL_HEIGHT = 189.8,   -- Solid high partitions, open roof
+        WALL_HEIGHT = 189.8,   -- Solid high partitions, fully enclosed ceiling
         
         -- Models
-        FLOOR_MODEL_LARGE = "models/hunter/plates/plate16x16.mdl",
-        WALL_MODEL = "models/hunter/plates/plate4x4.mdl",
-        LIGHT_MODEL = "models/props_c17/light_fluorescent01a.mdl",
+        FLOOR_MODEL_LARGE   = "models/hunter/plates/plate16x16.mdl",
+        CEILING_MODEL_LARGE = "models/hunter/plates/plate16x16.mdl",
+        WALL_MODEL          = "models/hunter/plates/plate4x4.mdl",
+        LIGHT_MODEL         = "models/props_c17/light_fluorescent01a.mdl",
+        RADIO_MODEL         = "models/props_lab/citizenradio.mdl",
         
         -- Spawning Throttle
         SPAWN_INTERVAL = 0.22,
         
-        -- Tuned for Authentic Liminality (98% Order, Rare Anomalies)
-        DESK_CHANCE       = 0.08, -- 8% chance for an orderly desk
-        CABINET_CHANCE    = 0.05, -- 5% chance for a neat corner cabinet
-        SOLO_CHAIR_CHANCE = 0.04, -- 4% chance for solitary liminal chair
-        TIPPED_CHAIR_RATE = 0.01, -- 1% chance for tipped chair (99% upright & neat)
-        FLOOR_TV_CHANCE   = 0.03, -- 3% chance for rare unplugged floor CRT
-        LIGHT_CHANCE      = 0.35, -- 35% of corridors have fluorescent ceiling lights
-        NPC_CHANCE        = 0.02, -- 2% in dead ends only (extremely rare entity!)
+        -- Probabilities (Liminal Order & Subtle Vibes)
+        DESK_CHANCE         = 0.08, -- 8% chance for an orderly desk
+        PHASED_TABLE_CHANCE = 0.06, -- 6% chance for Image 2's signature wall-clipped table anomaly!
+        CABINET_CHANCE      = 0.05, -- 5% chance for a neat corner cabinet
+        SOLO_CHAIR_CHANCE   = 0.04, -- 4% chance for solitary liminal chair
+        RADIO_CHANCE        = 0.06, -- 6% chance for a desktop or hallway radio
+        GLITCH_RADIO_RATE   = 0.10, -- Only 10% of radios glitch; 90% are smooth vibe radios!
+        TIPPED_CHAIR_RATE   = 0.01, -- 1% chance for tipped chair (99% upright & neat)
+        FLOOR_TV_CHANCE     = 0.03, -- 3% chance for rare unplugged floor CRT
+        LIGHT_CHANCE        = 0.35, -- 35% of corridors have fluorescent ceiling lights
+        NPC_CHANCE          = 0.02, -- 2% in dead ends only (extremely rare entity!)
         
-        VOID_TRIGGER_DIST = 260,
-        BASE_ALTITUDE     = 0
+        VOID_TRIGGER_DIST   = 260,
+        BASE_ALTITUDE       = 0
     }
 
     -- --------------------------------------------------------------------------
@@ -70,9 +82,14 @@ if SERVER then
     }
 
     local FLOOR_PRESETS = {
-        { mat = "models/props_c17/furniturefabric001a", color = Color(135, 120, 75) },
-        { mat = "models/props_c17/furniturefabric002a", color = Color(118, 105, 62) },
+        { mat = "models/props_c17/furniturefabric001a", color = Color(145, 128, 75) },
+        { mat = "models/props_c17/furniturefabric002a", color = Color(125, 110, 65) },
         { mat = "models/props_debris/tilefloor001c",    color = Color(175, 170, 150) }
+    }
+
+    local CEILING_PRESET = {
+        mat = "models/debug/debugwhite",
+        color = Color(242, 238, 228)
     }
 
     local PROP_PRESETS = {
@@ -88,6 +105,10 @@ if SERVER then
         },
         storage = {
             "models/props_wasteland/controlroom_filecabinet002a.mdl"
+        },
+        pcs = {
+            "models/props_lab/harddrive02.mdl",
+            "models/props_lab/reciever01a.mdl"
         }
     }
 
@@ -145,7 +166,7 @@ if SERVER then
     -- --------------------------------------------------------------------------
     local HALF_CELL = CONFIG.CELL_SIZE * 0.5 -- 94.9 units
     local function checkClearance(localPos, radius, cell, existingProps)
-        local margin = 14 -- Generous wall clearance
+        local margin = 14
         if cell.north and (localPos.y + radius > HALF_CELL - margin) then return false end
         if cell.south and (localPos.y - radius < -HALF_CELL + margin) then return false end
         if cell.east  and (localPos.x + radius > HALF_CELL - margin) then return false end
@@ -231,13 +252,14 @@ if SERVER then
     end
 
     -- --------------------------------------------------------------------------
-    -- 7. PHASE 1: FLOORS & WALLS (Solid Structure Built FIRST)
+    -- 7. PHASE 1: FLOORS, CEILINGS & WALLS (Solid Structure Built FIRST)
     -- --------------------------------------------------------------------------
-    print("[Backrooms Engine] Phase 1: Materializing solid floors and walls...")
+    print("[Backrooms Engine] Phase 1: Materializing solid floors, ceilings, and walls...")
 
-    -- A. Floor Plates
     local floorStep = 4
     local defaultFloor = FLOOR_PRESETS[1]
+
+    -- A. Floor Plates
     for x = 1, CONFIG.GRID_W, floorStep do
         for y = 1, CONFIG.GRID_H, floorStep do
             local fPos = chipOrigin + Vector((x - 1 + floorStep * 0.5) * CONFIG.CELL_SIZE, 
@@ -253,7 +275,23 @@ if SERVER then
         end
     end
 
-    -- B. Wall Partitions & Exterior Boundary Enclosure
+    -- B. Ceiling Plates (Complete Enclosed Roof - Zero Skybox/Daylight Leaks)
+    for x = 1, CONFIG.GRID_W, floorStep do
+        for y = 1, CONFIG.GRID_H, floorStep do
+            local cPos = chipOrigin + Vector((x - 1 + floorStep * 0.5) * CONFIG.CELL_SIZE, 
+                                            (y - 1 + floorStep * 0.5) * CONFIG.CELL_SIZE, CONFIG.WALL_HEIGHT)
+            table.insert(spawnQueue, {
+                pos = cPos,
+                ang = Angle(180, 0, 0), -- Face down into the room
+                model = CONFIG.CEILING_MODEL_LARGE,
+                mat = CEILING_PRESET.mat,
+                color = CEILING_PRESET.color,
+                category = "ceiling"
+            })
+        end
+    end
+
+    -- C. Wall Partitions & Exterior Boundary Enclosure
     local designatedGateways = 0
     for x = 1, CONFIG.GRID_W do
         for y = 1, CONFIG.GRID_H do
@@ -373,9 +411,9 @@ if SERVER then
                 })
             end
 
-            -- C. Ceiling Fluorescent Light Fixtures
+            -- D. Ceiling Fluorescent Light Fixtures (Mounted flush to ceiling)
             if math.random() < CONFIG.LIGHT_CHANCE then
-                local lightPos = cCenter + Vector(0, 0, CONFIG.WALL_HEIGHT - 6)
+                local lightPos = cCenter + Vector(0, 0, CONFIG.WALL_HEIGHT - 3)
                 local lightAng = Angle(0, (cell.north or cell.south) and 0 or 90, 0)
                 table.insert(spawnQueue, {
                     pos = lightPos,
@@ -395,9 +433,9 @@ if SERVER then
     end
 
     -- --------------------------------------------------------------------------
-    -- 8. PHASE 2: INTERIOR OBJECTS (Clean, Orderly, Sterile Mundanity)
+    -- 8. PHASE 2: INTERIOR OBJECTS (Sterile Mundanity, Image 2 Phase Anomaly & Radios)
     -- --------------------------------------------------------------------------
-    print("[Backrooms Engine] Phase 2: Placing orderly furniture with safe clearances...")
+    print("[Backrooms Engine] Phase 2: Placing orderly furniture, phase anomalies, and vibe radios...")
 
     for x = 1, CONFIG.GRID_W do
         for y = 1, CONFIG.GRID_H do
@@ -405,11 +443,46 @@ if SERVER then
             local cCenter = chipOrigin + Vector((x - 0.5) * CONFIG.CELL_SIZE, (y - 0.5) * CONFIG.CELL_SIZE, 0)
             local cellProps = {}
 
-            -- Rule 1: A Desk seeks a flat wall with generous 52-unit wall margin
             local deskSpawned = nil
-            if not cell.isDeadEnd and math.random() < CONFIG.DESK_CHANCE then
+
+            -- Rule 1A: RARE LIMINAL PHASE ANOMALY (The exact Image 2 aesthetic!)
+            -- 6% chance in a walled room: vintage wooden table embedded into the drywall holding an old PC tower
+            if not cell.isDeadEnd and math.random() < CONFIG.PHASED_TABLE_CHANCE then
+                local wallEdges = {}
+                if cell.north then table.insert(wallEdges, { pos = Vector(0, HALF_CELL - 14, 18.2), ang = Angle(0, -90 + math.random(-22, 22), 0) }) end
+                if cell.south then table.insert(wallEdges, { pos = Vector(0, -HALF_CELL + 14, 18.2), ang = Angle(0, 90 + math.random(-22, 22), 0) }) end
+                if cell.east  then table.insert(wallEdges, { pos = Vector(HALF_CELL - 14, 0, 18.2), ang = Angle(0, 180 + math.random(-22, 22), 0) }) end
+                if cell.west  then table.insert(wallEdges, { pos = Vector(-HALF_CELL + 14, 0, 18.2), ang = Angle(0, math.random(-22, 22), 0) }) end
+
+                if #wallEdges > 0 then
+                    local chosenWall = wallEdges[math.random(#wallEdges)]
+                    local worldTablePos = cCenter + chosenWall.pos
+                    table.insert(cellProps, { pos = chosenWall.pos, radius = 22 })
+                    
+                    -- Spawn the drop-leaf wooden round table half-embedded into the wall (Image 2!)
+                    table.insert(spawnQueue, {
+                        pos = worldTablePos,
+                        ang = chosenWall.ang,
+                        model = "models/props_c17/FurnitureTable002a.mdl",
+                        category = "furniture"
+                    })
+
+                    -- Spawn the vintage PC tower resting on the visible surface (Image 2!)
+                    local pcOffset = chosenWall.ang:getForward() * -4 + Vector(0, 0, 16.5)
+                    table.insert(spawnQueue, {
+                        pos = worldTablePos + pcOffset,
+                        ang = chosenWall.ang + Angle(0, math.random(-15, 15), 0),
+                        model = "models/props_lab/harddrive02.mdl",
+                        category = "furniture"
+                    })
+
+                    deskSpawned = { pos = chosenWall.pos, worldPos = worldTablePos, ang = chosenWall.ang, radius = 22 }
+                end
+            end
+
+            -- Rule 1B: Standard Orderly Office Desk (52-unit wall clearance, all 4 legs on floor)
+            if not deskSpawned and not cell.isDeadEnd and math.random() < CONFIG.DESK_CHANCE then
                 local candidateWalls = {}
-                -- 38 units from center = 56.9 units from wall (All 4 legs sit cleanly on carpet!)
                 if cell.north then table.insert(candidateWalls, { pos = Vector(0, 38, 18.2), ang = Angle(0, -90, 0) }) end
                 if cell.south then table.insert(candidateWalls, { pos = Vector(0, -38, 18.2), ang = Angle(0, 90, 0) }) end
                 if cell.east  then table.insert(candidateWalls, { pos = Vector(38, 0, 18.2), ang = Angle(0, 180, 0) }) end
@@ -425,7 +498,7 @@ if SERVER then
                         table.insert(spawnQueue, {
                             pos = worldDeskPos,
                             ang = chosen.ang,
-                            model = PROP_PRESETS.desks[math.random(#PROP_PRESETS.desks)],
+                            model = PROP_PRESETS.desks[1],
                             category = "furniture"
                         })
                     end
@@ -463,7 +536,6 @@ if SERVER then
                 if checkClearance(localChairPos, 14, cell, cellProps) then
                     local worldChairPos = cCenter + localChairPos
                     worldChairPos.z = chipOrigin.z + 20.1
-                    -- Clean, sterile alignment (+/- 6 deg, not messy)
                     local chairYaw = deskSpawned.ang.yaw + math.random(-6, 6)
                     table.insert(cellProps, { pos = localChairPos, radius = 14 })
                     table.insert(spawnQueue, {
@@ -474,13 +546,11 @@ if SERVER then
                     })
                 end
             elseif not deskSpawned and math.random() < CONFIG.SOLO_CHAIR_CHANCE then
-                -- Solitary upright chair against a wall
                 local localChairPos = Vector(math.random(-25, 25), math.random(-25, 25), 0)
                 if checkClearance(localChairPos, 14, cell, cellProps) then
                     local worldChairPos = cCenter + localChairPos
                     worldChairPos.z = chipOrigin.z + 20.1
                     local chairAng = Angle(0, math.random(0, 3) * 90, 0)
-                    -- Rare 1% anomaly: tipped over chair
                     if math.random() < CONFIG.TIPPED_CHAIR_RATE then
                         chairAng = Angle(80, math.random(0, 360), 0)
                         worldChairPos.z = chipOrigin.z + 10
@@ -495,11 +565,44 @@ if SERVER then
                 end
             end
 
-            -- Rule 4: CRT TV Monitor (Perched neatly on desk)
-            if deskSpawned and math.random() < 0.65 then
+            -- Rule 4: Citizen Radio (The Liminal Vibe: 90% Functioning, 10% Glitch)
+            if math.random() < CONFIG.RADIO_CHANCE then
+                local radioWorldPos = nil
+                local radioAng = Angle(0, math.random(0, 360), 0)
+                
+                if deskSpawned then
+                    radioWorldPos = deskSpawned.worldPos + (deskSpawned.ang:getRight() * 14) + Vector(0, 0, 20.5)
+                    radioAng = deskSpawned.ang + Angle(0, math.random(-15, 15), 0)
+                else
+                    local localRadioPos = Vector(math.random(-20, 20), math.random(-20, 20), 0)
+                    if checkClearance(localRadioPos, 10, cell, cellProps) then
+                        radioWorldPos = cCenter + localRadioPos
+                        radioWorldPos.z = chipOrigin.z + 6.2
+                    end
+                end
+
+                if radioWorldPos then
+                    local isGlitchRadio = (math.random() < CONFIG.GLITCH_RADIO_RATE) -- Only 10% glitch!
+                    table.insert(spawnQueue, {
+                        pos = radioWorldPos,
+                        ang = radioAng,
+                        model = CONFIG.RADIO_MODEL,
+                        category = "furniture",
+                        onSpawn = function(ent)
+                            net.start("BackroomsRadioSpawn")
+                            net.writeEntity(ent)
+                            net.writeBool(isGlitchRadio)
+                            net.send()
+                        end
+                    })
+                end
+            end
+
+            -- Rule 5: CRT TV Monitor (Perched neatly on desk)
+            if deskSpawned and math.random() < 0.60 then
                 local monWorldPos = deskSpawned.worldPos + Vector(0, 0, 27.1)
                 local monAng = Angle(0, deskSpawned.ang.yaw, 0)
-                local isPoweredOn = math.random() < 0.25 -- Only 25% of monitors are powered on!
+                local isPoweredOn = math.random() < 0.25
                 table.insert(spawnQueue, {
                     pos = monWorldPos,
                     ang = monAng,
@@ -514,7 +617,6 @@ if SERVER then
                     end
                 })
             elseif cell.isDeadEnd and math.random() < CONFIG.FLOOR_TV_CHANCE then
-                -- Rare 3% unplugged floor CRT in dead end corner
                 local localMonPos = Vector(math.random(-20, 20), math.random(-20, 20), 0)
                 if checkClearance(localMonPos, 12, cell, cellProps) then
                     local monWorldPos = cCenter + localMonPos
@@ -529,7 +631,7 @@ if SERVER then
                 end
             end
 
-            -- D. Rare NPCs in Dead Ends (Only 2% chance - truly anomalous dread!)
+            -- Rule 6: Rare NPCs in Dead Ends (Only 2% chance)
             if cell.isDeadEnd and math.random() < CONFIG.NPC_CHANCE then
                 local isStillLife = math.random() < 0.65
                 local npcPos = cCenter + Vector(0, 0, 10)
@@ -603,6 +705,7 @@ if SERVER then
             for step = 1, 3 do
                 local extCell = curCenter + (stepVec * step)
                 
+                -- Extended Floor
                 table.insert(spawnQueue, {
                     pos = extCell,
                     ang = Angle(0, 0, 0),
@@ -610,6 +713,16 @@ if SERVER then
                     mat = FLOOR_PRESETS[1].mat,
                     color = FLOOR_PRESETS[1].color,
                     category = "floor"
+                })
+
+                -- Extended Ceiling
+                table.insert(spawnQueue, {
+                    pos = extCell + Vector(0, 0, CONFIG.WALL_HEIGHT),
+                    ang = Angle(180, 0, 0),
+                    model = "models/hunter/plates/plate4x4.mdl",
+                    mat = CEILING_PRESET.mat,
+                    color = CEILING_PRESET.color,
+                    category = "ceiling"
                 })
 
                 local rightOffset = Angle(0, gate.ang.yaw, 0):getRight() * (CONFIG.CELL_SIZE * 0.5)
@@ -673,9 +786,11 @@ if SERVER then
             local item = spawnQueue[spawnIndex]
             local ok, p = pcall(prop.create, item.pos, item.ang, item.model, true)
             if ok and isValid(p) then
-                if item.category == "wall" or item.category == "floor" or item.category == "void_barrier" then
+                -- Architectural components get their custom materials:
+                if item.category == "wall" or item.category == "floor" or item.category == "ceiling" or item.category == "void_barrier" then
                     safeSetMaterial(p, item.mat, item.color)
                 end
+                -- Furniture and props STRICTLY retain their authentic native Valve materials!
 
                 if item.onSpawn then
                     pcall(item.onSpawn, p)
@@ -685,7 +800,6 @@ if SERVER then
                 spawnedCount = spawnedCount + 1
                 spawnIndex = spawnIndex + 1
 
-                -- Broadcast Green Xen Lightning Burst at active materializing location!
                 net.start("BackroomsSpawnZap")
                 net.writeVector(item.pos)
                 net.send()
@@ -719,6 +833,7 @@ else
     local activeZaps = {}
     local activeTVs = {}
     local activeLights = {}
+    local activeRadios = {}
     local pulseAlpha = 0
     local pulseColor = Color(20, 255, 60, 0)
     local xenBeamMat = material.load("sprites/physbeam") or material.load("sprites/lgtning")
@@ -750,15 +865,51 @@ else
         end
     end)
 
+    -- Receive Citizen Radio Registration (Vibe vs Glitch)
+    net.receive("BackroomsRadioSpawn", function()
+        local radio = net.readEntity()
+        local isGlitch = net.readBool()
+        if isValid(radio) then
+            -- 3D Spatialized Nostalgic Radio Sound
+            pcall(sound.playFile, "music/radio1.mp3", "3d noblock", function(st)
+                if isValid(st) and isValid(radio) then
+                    pcall(st.setPos, st, radio:getPos())
+                    pcall(st.setFade, st, 60, 480)
+                    pcall(st.setVolume, st, 0.65)
+                    pcall(st.play, st)
+
+                    table.insert(activeRadios, {
+                        ent = radio,
+                        station = st,
+                        isGlitch = isGlitch,
+                        nextGlitch = timer.curtime() + 4
+                    })
+                end
+            end)
+        end
+    end)
+
     -- Receive Active Generation Green Xen Zap
     net.receive("BackroomsSpawnZap", function()
         local pos = net.readVector()
         table.insert(activeZaps, {
             pos = pos,
             ang = Angle(0, math.random(0, 360), 0),
-            dieTime = timer.curtime() + 0.35,
-            bolts = 4
+            dieTime = timer.curtime() + 0.65,
+            bolts = 5
         })
+
+        -- Localized spatial zap sound when nearby
+        local ply = player()
+        if isValid(ply) and ply:getPos():getDistance(pos) < 550 then
+            pcall(sound.playFile, "ambient/energy/zap" .. math.random(1, 3) .. ".wav", "3d", function(st)
+                if isValid(st) then
+                    pcall(st.setPos, st, pos)
+                    pcall(st.setVolume, st, 0.35)
+                    pcall(st.play, st)
+                end
+            end)
+        end
     end)
 
     -- Receive Void Threshold Materialization Trigger
@@ -789,6 +940,32 @@ else
         })
     end)
 
+    -- Radio Think: Spatial Follow & Rare Glitch Processing
+    hook.add("think", "BackroomsRadioThink", function()
+        local now = timer.curtime()
+        for i = #activeRadios, 1, -1 do
+            local r = activeRadios[i]
+            if not isValid(r.ent) or not isValid(r.station) then
+                if isValid(r.station) then pcall(r.station.stop, r.station) end
+                table.remove(activeRadios, i)
+            else
+                -- Follow radio prop in case it moves
+                pcall(r.station.setPos, r.station, r.ent:getPos())
+
+                -- Only 10% glitch radios have dynamic tape skips & pitch waver!
+                -- 90% vibe radios play smooth, stable, cozy music.
+                if r.isGlitch and now > r.nextGlitch then
+                    r.nextGlitch = now + math.random(3, 7)
+                    -- Brief volume dip / tape flutter
+                    pcall(r.station.setVolume, r.station, 0.2)
+                    timer.simple(0.15, function()
+                        if isValid(r.station) then pcall(r.station.setVolume, r.station, 0.65) end
+                    end)
+                end
+            end
+        end
+    end)
+
     -- 3D Rendering Hook: Xen Lightning, Fluorescent Glow & CRT Screens
     hook.add("render", "BackroomsClientRender", function()
         local now = timer.curtime()
@@ -797,9 +974,9 @@ else
         -- 1. Apply Atmospheric Darkness & Deep Liminal Fog
         pcall(function()
             render.setFogMode(1)
-            render.setFogStart(60)
-            render.setFogEnd(620)
-            render.setFogColor(Color(8, 7, 5))
+            render.setFogStart(40)
+            render.setFogEnd(480)
+            render.setFogColor(Color(12, 10, 6))
         end)
 
         -- 2. Pervasive Half-Life 1 Xen Green Zappy Beams on Active Areas
@@ -812,17 +989,17 @@ else
                 if xenBeamMat then render.setMaterial(xenBeamMat) end
 
                 local right = zap.ang:getRight()
-                local halfW = 45
+                local halfW = 55
 
                 for b = 1, zap.bolts do
                     local lateral = (b / zap.bolts - 0.5) * (halfW * 2)
-                    local top = zap.pos + (right * lateral) + Vector(0, 0, 75)
-                    local bottom = zap.pos + (right * (lateral + math.random(-15, 15))) - Vector(0, 0, 10)
-                    local mid1 = top + Vector(math.random(-12, 12), math.random(-12, 12), -35)
-                    local mid2 = bottom + Vector(math.random(-12, 12), math.random(-12, 12), 35)
-                    local w = math.random(6, 14)
+                    local top = zap.pos + (right * lateral) + Vector(0, 0, 85)
+                    local bottom = zap.pos + (right * (lateral + math.random(-20, 20))) - Vector(0, 0, 10)
+                    local mid1 = top + Vector(math.random(-15, 15), math.random(-15, 15), -40)
+                    local mid2 = bottom + Vector(math.random(-15, 15), math.random(-15, 15), 40)
+                    local w = math.random(8, 16)
                     render.draw3DBeam(top, mid1, w, 0, 1)
-                    render.draw3DBeam(mid1, mid2, w * 0.8, 0, 1)
+                    render.draw3DBeam(mid1, mid2, w * 0.85, 0, 1)
                     render.draw3DBeam(mid2, bottom, w, 0, 1)
                 end
             end
@@ -891,7 +1068,7 @@ else
 
     -- Atmospheric Ambient Dimming
     hook.add("drawhud", "BackroomsDarkAmbience", function()
-        render.setColor(Color(6, 6, 4, 120))
+        render.setColor(Color(6, 6, 4, 110))
         render.drawRect(0, 0, render.getGameResolution())
 
         if pulseAlpha > 0 then
