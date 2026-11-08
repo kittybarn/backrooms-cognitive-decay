@@ -1,0 +1,131 @@
+--@name Analog Distortion & Cognitive Media Glitcher
+--@author Cognitive Decay Project
+--@client
+
+-- Advanced Acoustic Degrader for Music, Radio, TV broadcasts, and Analog Horror:
+-- Goes far beyond simple pitch shifting:
+-- 1. Vinyl / Tape Needle Jumps & Time Skips (snd:setTime)
+-- 2. Buffer Underrun Stutter Loops (machine gets stuck looping 0.1s fragments)
+-- 3. Volume Ducking / Corrupted Signal Dropouts (simulating rotting tape / dying RF transmission)
+-- 4. Stereo Panning Drift & Spatial Disorientation (snd:setPan)
+-- 5. Sudden Tape Stops & Slow Rewinds (pitch down to 0, pause, sudden stutter recovery)
+
+local activeAudioSources = {}
+local globalConfusion = 0.0
+
+-- Spawns a music / broadcast stream onto a TV, Radio, or Corrupted Speaker
+local function spawnCognitiveMediaStream(url, pos, mediaType)
+    bass.loadURL(url, "3d noblock", function(snd, err, errtxt)
+        if isValid(snd) then
+            local isMusic = (mediaType == "music" or mediaType == "radio")
+            local baseVol = isMusic and 0.65 or 0.5
+            
+            snd:setPos(pos)
+            snd:setVolume(baseVol)
+            snd:setFade(80, 750)
+            pcall(snd.setLooping, snd, true)
+            snd:play()
+
+            table.insert(activeAudioSources, {
+                snd = snd,
+                mediaType = mediaType or "music",
+                baseVol = baseVol,
+                isStuttering = false,
+                stutterTimeTarget = 0,
+                stutterDuration = 0,
+                nextNeedleSkip = timer.curtime() + math.random(8, 20),
+                nextSignalDropout = timer.curtime() + math.random(5, 14),
+                panOffset = 0.0
+            })
+        end
+    end)
+end
+
+hook.add("think", "AnalogMediaDistortionLoop", function()
+    local curTime = timer.curtime()
+
+    for i = #activeAudioSources, 1, -1 do
+        local item = activeAudioSources[i]
+        local snd = item.snd
+
+        if isValid(snd) then
+            -- 1. TAPE JUMP / NEEDLE SKIP (Random time-travel jumps)
+            if globalConfusion > 0.25 and curTime > item.nextNeedleSkip then
+                local length = snd:getLength()
+                if length and length > 5 then
+                    local curPos = snd:getTime()
+                    -- Jump backwards by 1-4 seconds (looping memory) or skip forward abruptly
+                    local jumpOffset = math.random() > 0.6 and -math.random(1, 4) or math.random(2, 6)
+                    local newTime = math.Clamp(curPos + jumpOffset, 0, length - 1)
+                    snd:setTime(newTime)
+                    
+                    -- Micro click / volume pop on needle skip
+                    snd:setVolume(item.baseVol * 0.2)
+                    timer.simple(0.06, function() if isValid(snd) then snd:setVolume(item.baseVol) end end)
+                end
+                item.nextNeedleSkip = curTime + math.random(6, 18) / math.max(0.3, globalConfusion)
+            end
+
+            -- 2. HARDWARE BUFFER STUTTER (CD-ROM / AI Token Stutter)
+            -- Gets stuck repeating a 0.08 - 0.20 second micro-loop 4 to 8 times
+            if globalConfusion > 0.4 and not item.isStuttering and math.random() < (globalConfusion * 0.015) then
+                item.isStuttering = true
+                item.stutterTimeTarget = snd:getTime()
+                item.stutterReps = math.random(4, 9)
+                item.stutterInterval = 0.12
+
+                local function doStutter(count)
+                    if not isValid(snd) or count <= 0 then
+                        item.isStuttering = false
+                        return
+                    end
+                    snd:setTime(item.stutterTimeTarget)
+                    -- Slight pitch spike during digital choke
+                    snd:setPitch(1.0 + (math.random(-15, 25) / 100.0))
+                    
+                    timer.simple(item.stutterInterval, function()
+                        doStutter(count - 1)
+                    end)
+                end
+                doStutter(item.stutterReps)
+            end
+
+            -- 3. SIGNAL DROPOUT & AM FLUTTER (Rotting magnetic tape)
+            if globalConfusion > 0.35 and curTime > item.nextSignalDropout then
+                -- Drop volume to a muffled whisper for 0.4 - 1.2 seconds
+                local dropoutVol = item.baseVol * (math.random(5, 25) / 100.0)
+                snd:setVolume(dropoutVol)
+                
+                timer.simple(math.random(30, 90) / 100.0, function()
+                    if isValid(snd) then
+                        snd:setVolume(item.baseVol)
+                    end
+                end)
+                item.nextSignalDropout = curTime + math.random(4, 10)
+            end
+
+            -- 4. STEREO PANNING DRIFT (Unsettling ear-to-ear phantom crawling)
+            if globalConfusion > 0.5 then
+                local panWave = math.sin(curTime * 1.2) * (globalConfusion * 0.75)
+                snd:setPan(math.Clamp(panWave, -1.0, 1.0))
+            end
+
+            -- 5. VOLTAGE SAG / DECAY PITCH
+            if not item.isStuttering then
+                local tapeSag = 1.0 - (math.sin(curTime * 0.6) * (globalConfusion * 0.28))
+                -- If confusion is very high, drag down into slowed-down sludge
+                if globalConfusion > 0.75 then
+                    tapeSag = tapeSag * 0.65
+                end
+                snd:setPitch(math.Clamp(tapeSag, 0.2, 1.5))
+            end
+        else
+            table.remove(activeAudioSources, i)
+        end
+    end
+end)
+
+-- Receive confusion updates
+net.receive("UpdateConfusionLevel", function()
+    globalConfusion = net.readFloat()
+end)
