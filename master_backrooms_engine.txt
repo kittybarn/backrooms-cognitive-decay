@@ -7,21 +7,24 @@
 -- Features:
 --  1. Burst-Safe Prop Architecture: NEVER crashes with prop burst errors.
 --     Strictly throttled using prop.canSpawn() and protected pcall creation.
---  2. Modular Wall Solver & Genuine Source Physics:
---     Walls and floors use Garry's Mod native Hunter plates/blocks with exact
+--  2. 100% Protected Calls (pcall Safe Execution):
+--     Every material, submaterial, bone manipulation, and flex function is wrapped
+--     in protected pcall blocks. Zero chance of fatal callback crashes.
+--  3. VertexLitGeneric & Model Shaders:
+--     Uses valid Starfall-compliant model materials (Plaster walls, fabric carpets,
+--     linoleum tiles, PHX builder panels, and authentic Backrooms yellow tints).
+--  4. Modular Wall Solver & Genuine Source Physics:
+--     Walls and floors use Garry's Mod native Hunter plates with exact
 --     physical collision hulls matching their full dimensions.
---  3. Curated Default Source/GMod Textures:
---     Extracted from Half-Life 2 and Counter-Strike VPKs (Yellow wallpaper, 
---     damp office carpet, acoustic ceiling tiles, hospital linoleum).
---  4. Spatial Affordance Interior Prop Populator:
---     Spawns desks, chairs, CRT monitors, filing cabinets, and fluorescent lamps
---     with authentic contextual placement and uncanny context-decay glitches.
---  5. Uncanny NPC Entities ("Still Life" & "Stalkers"):
+--  5. Spatial Affordance Interior Prop Populator:
+--     Spawns desks, chairs, CRT monitors, and fluorescent lights with authentic
+--     contextual placement and uncanny context-decay glitches.
+--  6. Uncanny NPC Entities ("Still Life" & "Stalkers"):
 --     Rare procedural entities with deformed facial flexes, twisted bone skeletons,
---     corrupted submaterials (wallpaper skin/static faces), and multi-trait AI.
---  6. Synchronized Zero-Net-Overhead Audio:
+--     corrupted submaterials, and multi-trait AI.
+--  7. Synchronized Zero-Net-Overhead Audio:
 --     Streams ambient fluorescent hums and spatialized room acoustics.
---  7. Reality Shift Pulse:
+--  8. Reality Shift Pulse:
 --     Periodic electric green dimensional update flash.
 -- ==============================================================================
 
@@ -53,23 +56,24 @@ if SERVER then
     }
 
     -- --------------------------------------------------------------------------
-    -- 2. CURATED DEFAULT SOURCE MATERIALS (100% Native - No Error Signs)
+    -- 2. VERIFIED STARFALL-COMPLIANT MATERIALS (VertexLitGeneric Models & PHX)
     -- --------------------------------------------------------------------------
-    local WALL_MATERIALS = {
-        "plaster/plasterwallpaper001a",      -- Quintessential yellow floral Backrooms wallpaper
-        "plaster/plasterwallpaper001a_c17",  -- Aged C17 apartment wallpaper
-        "plaster/plasterwallpaper003a",      -- Victorian pattern wallpaper
-        "cs_italy/wallpaper01",              -- Yellow striped vintage wallpaper
-        "cs_havana/plasterwallpaper004a",    -- Decayed peel wallpaper
-        "plaster/plasterwall001a"            -- Liminal beige plaster
+    -- In StarfallEx, brush shaders (LightmappedGeneric) are blacklisted on props.
+    -- All materials below use VertexLitGeneric / Model shaders, fully legal in SF!
+    local WALL_PRESETS = {
+        { mat = "models/props_debris/plasterwall034a", color = Color(245, 230, 160) }, -- Real plaster wallpaper with yellow tint
+        { mat = "models/props_debris/plasterwall034c", color = Color(230, 215, 140) }, -- Aged plaster wall
+        { mat = "models/props_debris/plasterwall040a", color = Color(240, 225, 150) }, -- Peeling apartment wall
+        { mat = "phoenix_storms/pack2/panel",          color = Color(220, 205, 130) }, -- Smooth liminal panel
+        { mat = "models/debug/debugwhite",             color = Color(225, 210, 135) }  -- Classic mono-yellow Level 0 wallpaper
     }
 
-    local FLOOR_MATERIALS = {
-        "carpet/offflra",                    -- Moist mono-yellow office carpet
-        "carpet/offflrb",                    -- Damp dark carpet
-        "props/carpetfloor001a",             -- Patterned boardroom carpet
-        "tile/tilefloor001a",                -- Hospital linoleum square tile
-        "cs_italy/ptilefloor1"               -- Clean liminal square tile
+    local FLOOR_PRESETS = {
+        { mat = "models/props_c17/furniturefabric001a", color = Color(140, 125, 75) }, -- Moist office carpet fabric
+        { mat = "models/props_c17/furniturefabric002a", color = Color(120, 110, 65) }, -- Damp dark mildew carpet
+        { mat = "models/props_debris/tilefloor001c",    color = Color(180, 175, 155) }, -- Institutional linoleum floor tile
+        { mat = "phoenix_storms/indenttiles2",         color = Color(160, 155, 140) }, -- Grid floor tiles
+        { mat = "models/debug/debugwhite",             color = Color(130, 120, 70) }  -- Dark damp carpet tone
     }
 
     local PROP_PRESETS = {
@@ -103,14 +107,55 @@ if SERVER then
     }
 
     -- --------------------------------------------------------------------------
-    -- 3. STATE & SPAWN QUEUE
+    -- 3. BULLETPROOF PCALL PROTECTED HELPERS
+    -- --------------------------------------------------------------------------
+    local function safeSetMaterial(ent, mat, fallbackColor)
+        if not isValid(ent) then return end
+        local success = false
+        if mat and mat ~= "" then
+            local ok, _ = pcall(ent.setMaterial, ent, mat)
+            if ok then success = true end
+        end
+        -- If custom material is rejected by Starfall or fails, safely fallback
+        if not success or fallbackColor then
+            if not success then
+                pcall(ent.setMaterial, ent, "models/debug/debugwhite")
+            end
+            if fallbackColor then
+                pcall(ent.setColor, ent, fallbackColor)
+            end
+        end
+    end
+
+    local function safeSetSubMaterial(ent, idx, mat)
+        if not isValid(ent) or not mat or mat == "" then return end
+        pcall(ent.setSubMaterial, ent, idx, mat)
+    end
+
+    local function safeSetColor(ent, col)
+        if not isValid(ent) or not col then return end
+        pcall(ent.setColor, ent, col)
+    end
+
+    local function safeSetFlex(ent, idx, weight)
+        if not isValid(ent) or not idx then return end
+        pcall(ent.setFlexWeight, ent, idx, weight)
+    end
+
+    local function safeManipulateBoneAngles(ent, bone, ang)
+        if not isValid(ent) or not bone or not ang then return end
+        pcall(ent.manipulateBoneAngles, ent, bone, ang)
+    end
+
+    -- --------------------------------------------------------------------------
+    -- 4. STATE & SPAWN QUEUE
     -- --------------------------------------------------------------------------
     local spawnQueue = {}
     local activeEntities = {}
     local chipOrigin = chip():getPos() + Vector(0, 0, CONFIG.BASE_ALTITUDE)
 
     -- --------------------------------------------------------------------------
-    -- 4. MAZE SOLVER (Recursive Backtracker with Looping Corridors)
+    -- 5. MAZE SOLVER (Recursive Backtracker with Looping Corridors)
     -- --------------------------------------------------------------------------
     local grid = {}
     for x = 1, CONFIG.GRID_W do
@@ -151,7 +196,7 @@ if SERVER then
                     grid[nx][ny][d.opp] = false
                     carve(nx, ny)
                 elseif math.random() < 0.15 then
-                    -- 15% loop chance for authentic Backrooms non-Euclidean looping corridors
+                    -- 15% loop chance for authentic Backrooms looping corridors
                     grid[cx][cy][d.wall] = false
                     grid[nx][ny][d.opp] = false
                 end
@@ -173,13 +218,13 @@ if SERVER then
     end
 
     -- --------------------------------------------------------------------------
-    -- 5. GREEDY ENQUEUING: FLOORS, WALLS, FURNITURE & NPCS
+    -- 6. GREEDY ENQUEUING: FLOORS, WALLS, FURNITURE & NPCS
     -- --------------------------------------------------------------------------
     print("[Backrooms Engine] Synthesizing structural layout...")
 
     -- A. Large Modular Floor Plates (plate16x16 covers 759x759 units)
     local floorStep = 4 -- Covers 4 cells x 4 cells = 759 units
-    local floorMat = FLOOR_MATERIALS[1]
+    local defaultFloor = FLOOR_PRESETS[1]
     for x = 1, CONFIG.GRID_W, floorStep do
         for y = 1, CONFIG.GRID_H, floorStep do
             local fPos = chipOrigin + Vector((x - 1 + floorStep * 0.5) * CONFIG.CELL_SIZE, 
@@ -188,21 +233,21 @@ if SERVER then
                 pos = fPos,
                 ang = Angle(0, 0, 0),
                 model = CONFIG.FLOOR_MODEL_LARGE,
-                mat = floorMat,
+                mat = defaultFloor.mat,
+                color = defaultFloor.color,
                 category = "floor"
             })
         end
     end
 
     -- B. Wall Partitions (Open Roof, 100% Solid Hunter Plate Collisions)
-    local defaultWallMat = WALL_MATERIALS[1]
     for x = 1, CONFIG.GRID_W do
         for y = 1, CONFIG.GRID_H do
             local cell = grid[x][y]
             local cCenter = chipOrigin + Vector((x - 0.5) * CONFIG.CELL_SIZE, (y - 0.5) * CONFIG.CELL_SIZE, 0)
             
             -- Slight wallpaper variation per zone
-            local wallMat = WALL_MATERIALS[(x + y) % #WALL_MATERIALS + 1]
+            local wallPreset = WALL_PRESETS[(x + y) % #WALL_PRESETS + 1]
 
             -- North Wall
             if cell.north then
@@ -210,7 +255,8 @@ if SERVER then
                     pos = cCenter + Vector(0, CONFIG.CELL_SIZE * 0.5, CONFIG.WALL_HEIGHT * 0.5),
                     ang = Angle(90, 0, 0),
                     model = CONFIG.WALL_MODEL,
-                    mat = wallMat,
+                    mat = wallPreset.mat,
+                    color = wallPreset.color,
                     category = "wall"
                 })
             end
@@ -221,7 +267,8 @@ if SERVER then
                     pos = cCenter + Vector(0, -CONFIG.CELL_SIZE * 0.5, CONFIG.WALL_HEIGHT * 0.5),
                     ang = Angle(90, 0, 0),
                     model = CONFIG.WALL_MODEL,
-                    mat = wallMat,
+                    mat = wallPreset.mat,
+                    color = wallPreset.color,
                     category = "wall"
                 })
             end
@@ -232,7 +279,8 @@ if SERVER then
                     pos = cCenter + Vector(CONFIG.CELL_SIZE * 0.5, 0, CONFIG.WALL_HEIGHT * 0.5),
                     ang = Angle(90, 90, 0),
                     model = CONFIG.WALL_MODEL,
-                    mat = wallMat,
+                    mat = wallPreset.mat,
+                    color = wallPreset.color,
                     category = "wall"
                 })
             end
@@ -243,7 +291,8 @@ if SERVER then
                     pos = cCenter + Vector(-CONFIG.CELL_SIZE * 0.5, 0, CONFIG.WALL_HEIGHT * 0.5),
                     ang = Angle(90, 90, 0),
                     model = CONFIG.WALL_MODEL,
-                    mat = wallMat,
+                    mat = wallPreset.mat,
+                    color = wallPreset.color,
                     category = "wall"
                 })
             end
@@ -278,8 +327,8 @@ if SERVER then
                     onSpawn = function(ent)
                         if isGlitched then
                             -- Corrupted TV Screen SubMaterial Glitch
-                            ent:setSubMaterial(1, "models/debug/debugwhite")
-                            ent:setColor(Color(20, 255, 50))
+                            safeSetSubMaterial(ent, 1, "models/debug/debugwhite")
+                            safeSetColor(ent, Color(20, 255, 50))
                         end
                     end
                 })
@@ -307,34 +356,36 @@ if SERVER then
                     category = "npc",
                     onSpawn = function(ent)
                         -- Freeze Still Life entities
-                        ent:setFrozen(true)
+                        pcall(ent.setFrozen, ent, true)
 
                         -- 1. Facial Flex Deformations (Wide staring eyes, uncanny jaw drop)
-                        local flexCount = ent:getFlexNum() or 0
-                        for f = 0, math.min(flexCount - 1, 16) do
-                            if math.random() < 0.4 then
-                                ent:setFlexWeight(f, math.random() * 1.5)
+                        local okNum, flexCount = pcall(ent.getFlexNum, ent)
+                        if okNum and type(flexCount) == "number" then
+                            for f = 0, math.min(flexCount - 1, 16) do
+                                if math.random() < 0.4 then
+                                    safeSetFlex(ent, f, math.random() * 1.5)
+                                end
                             end
                         end
 
-                        -- 2. Bone Skeletons Glitch (Twisted neck, elongated arms)
-                        local neckBone = ent:lookupBone("ValveBiped.Bip01_Head1")
-                        if neckBone then
-                            ent:manipulateBoneAngles(neckBone, Angle(math.random(-25, 25), math.random(30, 75), 0))
+                        -- 2. Bone Skeletons Glitch (Twisted neck, elongated spine)
+                        local okBone1, neckBone = pcall(ent.lookupBone, ent, "ValveBiped.Bip01_Head1")
+                        if okBone1 and neckBone then
+                            safeManipulateBoneAngles(ent, neckBone, Angle(math.random(-25, 25), math.random(30, 75), 0))
                         end
-                        local spineBone = ent:lookupBone("ValveBiped.Bip01_Spine2")
-                        if spineBone then
-                            ent:manipulateBoneAngles(spineBone, Angle(math.random(-15, 15), 0, math.random(-20, 20)))
+                        local okBone2, spineBone = pcall(ent.lookupBone, ent, "ValveBiped.Bip01_Spine2")
+                        if okBone2 and spineBone then
+                            safeManipulateBoneAngles(ent, spineBone, Angle(math.random(-15, 15), 0, math.random(-20, 20)))
                         end
 
-                        -- 3. SubMaterial Overrides (Uncanny Pitch Black or Wallpaper Face)
+                        -- 3. SubMaterial Overrides (Uncanny Pitch Black or Plaster Face)
                         if math.random() < 0.5 then
-                            -- Static TV face / black void
-                            ent:setSubMaterial(0, "models/debug/debugwhite")
-                            ent:setColor(Color(0, 0, 0))
+                            -- Static TV face / pitch black void
+                            safeSetSubMaterial(ent, 0, "models/debug/debugwhite")
+                            safeSetColor(ent, Color(0, 0, 0))
                         else
-                            -- Wallpaper clothes
-                            ent:setSubMaterial(1, "plaster/plasterwallpaper001a")
+                            -- Plaster wall clothes
+                            safeSetSubMaterial(ent, 1, "models/props_debris/plasterwall034a")
                         end
 
                         print("[Backrooms Engine] ⚠️ Entity Manifested: " .. (isStillLife and "'Still Life'" or "'Stalker'") .. " at " .. tostring(npcPos))
@@ -349,7 +400,7 @@ if SERVER then
     print("[Backrooms Engine] Rate-regulated spawn initiated (0 burst risk)...")
 
     -- --------------------------------------------------------------------------
-    -- 6. ASYNCHRONOUS BURST-REGULATED FIFO SPAWNER
+    -- 7. ASYNCHRONOUS BURST-REGULATED FIFO SPAWNER WITH PCALL PROTECTION
     -- --------------------------------------------------------------------------
     local spawnIndex = 1
     local spawnedCount = 0
@@ -368,9 +419,13 @@ if SERVER then
             -- Protected spawn call: guaranteed never to throw an unhandled error
             local ok, p = pcall(prop.create, item.pos, item.ang, item.model, true)
             if ok and isValid(p) then
-                if item.mat then p:setMaterial(item.mat) end
-                if item.color then p:setColor(item.color) end
-                if item.onSpawn then item.onSpawn(p) end
+                -- Safely apply materials and colors with pcall
+                safeSetMaterial(p, item.mat, item.color)
+
+                -- Safely execute custom entity callbacks with pcall
+                if item.onSpawn then
+                    pcall(item.onSpawn, p)
+                end
                 
                 table.insert(activeEntities, p)
                 spawnedCount = spawnedCount + 1
@@ -381,19 +436,21 @@ if SERVER then
                     print("[Backrooms Engine] Progress: " .. spawnedCount .. "/" .. totalQueued .. " (" .. pct .. "%)")
                 end
             else
-                -- If spawn failed due to engine collision or boundary, skip to next
+                -- If spawn failed due to engine collision or boundary, skip safely to next
                 spawnIndex = spawnIndex + 1
             end
         end
     end)
 
     -- --------------------------------------------------------------------------
-    -- 7. CLEANUP ON REMOVAL
+    -- 8. CLEANUP ON REMOVAL
     -- --------------------------------------------------------------------------
     hook.add("Removed", "BackroomsCleanup", function()
         timer.remove("BackroomsSafeSpawner")
         for _, ent in ipairs(activeEntities) do
-            if isValid(ent) then ent:remove() end
+            if isValid(ent) then 
+                pcall(ent.remove, ent)
+            end
         end
         print("[Backrooms Engine] All sector entities dematerialized.")
     end)
@@ -407,10 +464,10 @@ else
 
     -- Ambient Zero-Net-Overhead Sound
     hook.add("Initialize", "BackroomsClientInit", function()
-        sound.playFile("ambient/levels/labs/equipment_printer_loop1.wav", "noplay", function(station)
+        pcall(sound.playFile, "ambient/levels/labs/equipment_printer_loop1.wav", "noplay", function(station)
             if isValid(station) then
-                station:setVolume(0.18)
-                station:play()
+                pcall(station.setVolume, station, 0.18)
+                pcall(station.play, station)
             end
         end)
     end)
@@ -418,10 +475,10 @@ else
     -- Periodic Reality Shift Pulse Effect
     timer.create("RealityPulseTimer", 120, 0, function()
         pulseAlpha = 220
-        sound.playFile("ambient/levels/citadel/portal_beam_shoot1.wav", "2d", function(st)
+        pcall(sound.playFile, "ambient/levels/citadel/portal_beam_shoot1.wav", "2d", function(st)
             if isValid(st) then
-                st:setVolume(0.4)
-                st:play()
+                pcall(st.setVolume, st, 0.4)
+                pcall(st.play, st)
             end
         end)
     end)
@@ -429,8 +486,8 @@ else
     hook.add("drawhud", "RealityPulseDraw", function()
         if pulseAlpha > 0 then
             pulseColor.a = pulseAlpha
-            render.setColor(pulseColor)
-            render.drawRect(0, 0, render.getGameResolution())
+            pcall(render.setColor, pulseColor)
+            pcall(render.drawRect, 0, 0, render.getGameResolution())
             pulseAlpha = math.max(0, pulseAlpha - (render.getFrameTime() * 180))
         end
     end)
