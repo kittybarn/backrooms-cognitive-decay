@@ -51,7 +51,7 @@ local DATASET = {
     PROPS = {
         surface_mount = {
             "models/props_lab/citizenradio.mdl",
-            "models/breen_monitor.mdl",
+            "models/props_lab/monitor02.mdl",
             "models/combine_room/combine_monitor002.mdl",
             "models/combine_room/combine_monitor003a.mdl",
             "models/eli_monitor.mdl",
@@ -82,7 +82,7 @@ local DATASET = {
             "models/props/cs_office/computer_caseb_p6.mdl",
         },
         storage = {
-            "models/props_c17/filecabinet02.mdl",
+            "models/props/cs_office/file_cabinet1.mdl",
             "models/props/cs_italy/it_mkt_shelf1.mdl",
             "models/props/cs_militia/furniture_shelf01a.mdl",
             "models/props/cs_militia/gun_cabinet.mdl",
@@ -114,11 +114,11 @@ local DATASET = {
             "models/props/de_inferno/wine_barrel_p10.mdl",
         },
         flat_surface = {
-            "models/props_interiors/table_folding.mdl",
-            "models/props_c17/FurnitureDesk001a.mdl",
-            "models/props_c17/FurnitureTable003a.mdl",
-            "models/props_c17/FurnitureTable002a.mdl",
-            "models/props_c17/FurnitureTable001a.mdl",
+            "models/props/cs_italy/it_mkt_table1.mdl",
+            "models/props_interiors/furniture_desk01a.mdl",
+            "models/props/cs_office/table_meeting.mdl",
+            "models/props_c17/furnituretable002a.mdl",
+            "models/props_c17/furnituretable001a.mdl",
             "models/props/cs_italy/it_mkt_table1.mdl",
             "models/props/cs_italy/it_mkt_table2.mdl",
             "models/props/cs_italy/it_mkt_table3.mdl",
@@ -146,8 +146,8 @@ local DATASET = {
             "models/props_silo/desk_console2.mdl",
         },
         seating = {
-            "models/props_interiors/chair_office2.mdl",
-            "models/props_c17/FurnitureChair001a.mdl",
+            "models/props/cs_office/chair_office.mdl",
+            "models/props_c17/furniturechair001a.mdl",
             "models/props/cs_militia/couch.mdl",
             "models/props/cs_militia/wood_bench.mdl",
             "models/props/cs_office/chair_office.mdl",
@@ -173,8 +173,8 @@ local DATASET = {
             "models/props_wasteland/controlroom_chair001a.mdl",
         },
         light = {
-            "models/props_wasteland/light_caged01a.mdl",
-            "models/props_c17/light_fluorescent01a.mdl",
+            "models/props_c17/light_cagelight01_on.mdl",
+            "models/props/cs_office/light_ceiling.mdl",
         },
     },
 
@@ -496,8 +496,8 @@ if SERVER then
         WALL_MODEL  = "models/hunter/plates/plate4x4.mdl",
         RAMP_MODEL  = "models/hunter/plates/plate4x8.mdl",
         DOOR_MODEL  = "models/props_c17/door01_left.mdl",
-        LIGHT_MODEL = "models/props_c17/light_fluorescent01a.mdl",
-        CAGE_LIGHT  = "models/props_wasteland/light_caged01a.mdl",
+        LIGHT_MODEL = "models/props/cs_office/light_ceiling.mdl",
+        CAGE_LIGHT  = "models/props_c17/light_cagelight01_on.mdl",
         
         -- Generation Probabilities
         LIGHT_CHANCE        = 0.35,
@@ -832,7 +832,7 @@ if SERVER then
                     table.insert(spawnQueue, {
                         pos = worldPos,
                         ang = Angle(0, -90, 0),
-                        model = "models/props_c17/FurnitureTable002a.mdl",
+                        model = "models/props_c17/furnituretable002a.mdl",
                         category = "furniture",
                         keepFrozen = true
                     })
@@ -851,7 +851,7 @@ if SERVER then
                         local deskWorld = cCenter + deskLocal
                         local dynamicYaw = math.random(0, 359)
                         local deskAng = Angle(0, dynamicYaw, 0)
-                        local deskMdl = DATASET.PROPS.flat_surface[math.random(#DATASET.PROPS.flat_surface)] or "models/props_c17/FurnitureDesk001a.mdl"
+                        local deskMdl = DATASET.PROPS.flat_surface[math.random(#DATASET.PROPS.flat_surface)] or "models/props_interiors/furniture_desk01a.mdl"
 
                         table.insert(spawnQueue, {
                             pos = deskWorld,
@@ -912,7 +912,7 @@ if SERVER then
                             local chairLocal = adjustPositionWithSensing(deskLocal + chairOffset, 18, cellProps)
                             table.insert(cellProps, { pos = chairLocal, radius = 18 })
                             local chairWorld = cCenter + chairLocal
-                            local chairMdl = DATASET.PROPS.seating[math.random(#DATASET.PROPS.seating)] or "models/props_c17/FurnitureChair001a.mdl"
+                            local chairMdl = DATASET.PROPS.seating[math.random(#DATASET.PROPS.seating)] or "models/props_c17/furniturechair001a.mdl"
 
                             -- 20% chance chair is askew or knocked over
                             local isTipped = math.random() < 0.20
@@ -943,7 +943,7 @@ if SERVER then
                         local cabinetLocal = adjustPositionWithSensing(Vector(math.random(-35, 35), HALF_CELL - 20, 0), 20, cellProps)
                         table.insert(cellProps, { pos = cabinetLocal, radius = 20 })
                         local cabinetWorld = cCenter + cabinetLocal
-                        local storageMdl = DATASET.PROPS.storage[math.random(#DATASET.PROPS.storage)] or "models/props_c17/filecabinet02.mdl"
+                        local storageMdl = DATASET.PROPS.storage[math.random(#DATASET.PROPS.storage)] or "models/props/cs_office/file_cabinet1.mdl"
 
                         table.insert(spawnQueue, {
                             pos = cabinetWorld,
@@ -1081,7 +1081,7 @@ if SERVER then
                 table.insert(spawnQueue, {
                     pos = bedPos,
                     ang = Angle(0, math.random(0, 360), 0),
-                    model = "models/props_c17/FurnitureTable001a.mdl",
+                    model = "models/props_c17/furnituretable001a.mdl",
                     category = "furniture",
                     keepFrozen = false,
                     onSpawn = function(ent)
@@ -1112,9 +1112,9 @@ if SERVER then
         if not prop.canSpawn() then return end
 
         local item = table.remove(spawnQueue, 1)
-        local ent = prop.create(item.pos, item.ang, item.model, item.keepFrozen)
+        local ok, ent = pcall(prop.create, item.pos, item.ang, item.model, item.keepFrozen)
 
-        if isValid(ent) then
+        if ok and isValid(ent) then
             table.insert(activeEntities, ent)
             if item.mat then safeSetMaterial(ent, item.mat) end
             if item.onSpawn then item.onSpawn(ent) end
