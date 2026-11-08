@@ -343,7 +343,7 @@ local DATASET = {
     },
 
     -- Audio Tracks & Soundscapes (by Cognitive Decay Stage)
-                        AUDIO = {
+                            AUDIO = {
         music = {
             { name = "Backrooms (Original Score), Vol. 1 - Async Research Institute.mp3", url = "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms%20%28Original%20Score%29%2C%20Vol.%201%20-%20Async%20Research%20Institute.mp3", is_music = true, category = "music", weight = 8.5, eeriness = 8.5 },
             { name = "Backrooms (Original Score), Vol. 1 - Auditory Guidepost.mp3", url = "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms%20%28Original%20Score%29%2C%20Vol.%201%20-%20Auditory%20Guidepost.mp3", is_music = true, category = "music", weight = 8.5, eeriness = 8.5 },
@@ -571,21 +571,12 @@ if SERVER then
     -- --------------------------------------------------------------------------
     -- 2. FULL AIRSPACE BOUNDS & DESCENDING MULTI-TIER GEOMETRY
     -- --------------------------------------------------------------------------
-    -- User Airspace:
-    -- Corner 1 (Top NW):    Vector(6441.24, -4107.08, -12576.30)
-    -- Corner 2 (Bottom SE): Vector(16306.50, -16307.30, -16255.70)
-    -- Total Drop: 3,679.4 units!
-    local BOUNDS = {
-        C1 = Vector(6441.24, -4107.08, -12576.30),
-        C2 = Vector(16306.50, -16307.30, -16255.70),
-    }
-
     local CONFIG = {
         CELL_SIZE   = 189.8,     -- Hunter plate4x4 dimension: 189.8 units
         WALL_HEIGHT = 189.8,
         
         -- Multi-Tier Descending Elevations (Top to Bottom across airspace)
-        Z_TIER_0 = -12700.0, -- Level 0: High Mezzanine / Reception (Near Corner 1)
+        Z_TIER_0 = -12700.0, -- Level 0: High Mezzanine / Ingress (Near Corner 1)
         Z_TIER_1 = -13840.0, -- Level 0/1: Mid Liminal Sub-Offices
         Z_TIER_2 = -14980.0, -- Level 1: Industrial Warehouse / Habitable Zone
         Z_TIER_3 = -16250.0, -- Level 2: Concrete Crypt / Bedrock (Floor of Corner 2)
@@ -598,23 +589,20 @@ if SERVER then
         DOOR_MODEL  = "models/props_c17/door01_left.mdl",
         DOOR_HEADER = "models/hunter/plates/plate2x2.mdl",
         
-        -- Authentic Backrooms Material Palettes & Tints
-        MAT_WALL_YELLOW   = "plaster/plasterwallpaper001a",
-        MAT_WALL_YELLOW_2 = "plaster/plasterwallpaper004a",
-        MAT_CARPET        = "props/carpetfloor004a",
-        MAT_CARPET_ALT    = "props/carpetfloor001a",
-        MAT_CEILING       = "concrete/concreteceiling001a",
-        MAT_CONCRETE_WALL = "phoenix_storms/concrete1",
-        MAT_CONCRETE_FLR  = "concrete/concretefloor008a",
-        MAT_STRIPES       = "phoenix_storms/stripes",
-        MAT_INTERIOR_SIDES= "phoenix_storms/pack2/interior_sides",
-        MAT_INTERIOR_TOP  = "phoenix_storms/pack2/interior_top",
+        -- 100% VERIFIED VertexLitGeneric MODEL MATERIALS (NEVER USE HAZARD CAUTION)
+        MAT_WALL_PANEL    = "phoenix_storms/pack2/interior_sides", -- Smooth interior office wall panel
+        MAT_WALL_CLEAN    = "phoenix_storms/fender_white",        -- Clean matte white panel
+        MAT_FLOOR_CARPET  = "phoenix_storms/pack2/train_floor",   -- Textured office floor
+        MAT_CEILING_PANEL = "phoenix_storms/pack2/interior_top",   -- Drop-ceiling acoustic tile
+        MAT_CONCRETE      = "phoenix_storms/concrete1",            -- Real industrial concrete
+        MAT_DEBUG_WHITE   = "models/debug/debugwhite",             -- Universal VertexLitGeneric matte
         
-        TINT_YELLOW_WALL  = Color(245, 225, 140),
-        TINT_CARPET       = Color(190, 175, 125),
-        TINT_CEILING      = Color(215, 210, 190),
-        TINT_CONCRETE     = Color(155, 155, 155),
-        TINT_DARK_CRYPT   = Color(130, 130, 130),
+        -- Vibrant Liminal Color Tints
+        TINT_MONO_YELLOW  = Color(245, 225, 140), -- Classic Backrooms Level 0 Mono-Yellow!
+        TINT_CARPET       = Color(185, 170, 120), -- Damp vintage office carpet
+        TINT_CEILING      = Color(215, 210, 190), -- Aged drop-ceiling tiles
+        TINT_CONCRETE     = Color(150, 150, 150), -- Cold warehouse concrete
+        TINT_DARK_CRYPT   = Color(125, 125, 125), -- Subterranean crypt
     }
 
     -- --------------------------------------------------------------------------
@@ -680,26 +668,24 @@ if SERVER then
         ["models/props_c17/door01_left.mdl"]              = 54.28
     }
 
+    -- Pure VertexLitGeneric model materials (NO LIGHTMAPPED OR HAZARD CAUTION)
     local PHX_MATERIALS = {
         wallpaper = {
-            CONFIG.MAT_WALL_YELLOW,
-            CONFIG.MAT_WALL_YELLOW_2,
-            CONFIG.MAT_STRIPES,
-            CONFIG.MAT_INTERIOR_SIDES
+            CONFIG.MAT_WALL_PANEL,
+            CONFIG.MAT_WALL_CLEAN,
+            CONFIG.MAT_DEBUG_WHITE
         },
         carpet = {
-            CONFIG.MAT_CARPET,
-            CONFIG.MAT_CARPET_ALT,
-            "phoenix_storms/pack2/train_floor"
+            CONFIG.MAT_FLOOR_CARPET,
+            CONFIG.MAT_DEBUG_WHITE
         },
         ceiling = {
-            CONFIG.MAT_CEILING,
-            CONFIG.MAT_INTERIOR_TOP
+            CONFIG.MAT_CEILING_PANEL,
+            CONFIG.MAT_DEBUG_WHITE
         },
         concrete = {
-            CONFIG.MAT_CONCRETE_WALL,
-            CONFIG.MAT_CONCRETE_FLR,
-            "phoenix_storms/concrete2"
+            CONFIG.MAT_CONCRETE,
+            CONFIG.MAT_DEBUG_WHITE
         }
     }
 
@@ -739,8 +725,8 @@ if SERVER then
             end
         end
 
-        pcall(ent.setMaterial, ent, "models/debug/debugwhite")
-        pcall(ent.setColor, ent, tintColor or Color(245, 225, 140))
+        pcall(ent.setMaterial, ent, CONFIG.MAT_DEBUG_WHITE)
+        pcall(ent.setColor, ent, tintColor or CONFIG.TINT_MONO_YELLOW)
         return true
     end
 
@@ -776,8 +762,8 @@ if SERVER then
             pos = pos,
             ang = Angle(0, 0, 0),
             model = CONFIG.FLOOR_MODEL,
-            mat = floorMat,
-            tint = floorTint,
+            mat = floorMat or CONFIG.MAT_FLOOR_CARPET,
+            tint = floorTint or CONFIG.TINT_CARPET,
             category = "floor",
             matCategory = floorCat or "carpet",
             keepFrozen = true
@@ -787,8 +773,8 @@ if SERVER then
             pos = pos + Vector(0, 0, CONFIG.WALL_HEIGHT),
             ang = Angle(180, 0, 0),
             model = CONFIG.FLOOR_MODEL,
-            mat = ceilMat,
-            tint = ceilTint,
+            mat = ceilMat or CONFIG.MAT_CEILING_PANEL,
+            tint = ceilTint or CONFIG.TINT_CEILING,
             category = "ceiling",
             matCategory = ceilCat or "ceiling",
             keepFrozen = true
@@ -801,8 +787,8 @@ if SERVER then
             pos = pos,
             ang = wallAng,
             model = CONFIG.WALL_MODEL,
-            mat = wallMat,
-            tint = wallTint,
+            mat = wallMat or CONFIG.MAT_WALL_PANEL,
+            tint = wallTint or CONFIG.TINT_MONO_YELLOW,
             category = "wall",
             matCategory = wallCat or "wallpaper",
             keepFrozen = true
@@ -860,8 +846,8 @@ if SERVER then
             pos = headerPos,
             ang = headerAng,
             model = CONFIG.DOOR_HEADER,
-            mat = wallMat,
-            tint = wallTint,
+            mat = wallMat or CONFIG.MAT_WALL_PANEL,
+            tint = wallTint or CONFIG.TINT_MONO_YELLOW,
             category = "wall",
             keepFrozen = true
         })
@@ -872,8 +858,6 @@ if SERVER then
         local delta = endPos - startPos
         local distHoriz = isNorthSouth and math.abs(delta.y) or math.abs(delta.x)
         local distVert  = math.abs(delta.z)
-        
-        -- Slope angle: length of plate4x8 = 380.1 units
         local numRamps = math.max(1, math.ceil(distVert / 190.0))
 
         for i = 1, numRamps do
@@ -889,7 +873,7 @@ if SERVER then
                 pos = midPos,
                 ang = rampAng,
                 model = CONFIG.RAMP_MODEL,
-                mat = CONFIG.MAT_CONCRETE_FLR,
+                mat = CONFIG.MAT_CONCRETE,
                 tint = wallTint or CONFIG.TINT_CONCRETE,
                 category = "ramp",
                 keepFrozen = true
@@ -901,7 +885,8 @@ if SERVER then
                 pos = midPos + sideOffset,
                 ang = isNorthSouth and Angle(90, 90, 0) or Angle(90, 0, 0),
                 model = CONFIG.RAIL_MODEL,
-                mat = wallMat or CONFIG.MAT_STRIPES,
+                mat = wallMat or CONFIG.MAT_WALL_PANEL,
+                tint = wallTint or CONFIG.TINT_MONO_YELLOW,
                 category = "wall",
                 keepFrozen = true
             })
@@ -909,7 +894,8 @@ if SERVER then
                 pos = midPos - sideOffset,
                 ang = isNorthSouth and Angle(90, 90, 0) or Angle(90, 0, 0),
                 model = CONFIG.RAIL_MODEL,
-                mat = wallMat or CONFIG.MAT_STRIPES,
+                mat = wallMat or CONFIG.MAT_WALL_PANEL,
+                tint = wallTint or CONFIG.TINT_MONO_YELLOW,
                 category = "wall",
                 keepFrozen = true
             })
@@ -1021,20 +1007,28 @@ if SERVER then
         print("[Cognitive Decay Engine] Synthesizing top-to-bottom megastructure across airspace...")
 
         -- TIER 0: HIGH MEZZANINE / INGRESS (Z = -12,700) Near Corner 1
-        -- Spans X = 6,800 to 7,560, Y = -4,500 to -5,260 (4x4 cells)
         local t0Origin = Vector(6800.0, -4500.0, CONFIG.Z_TIER_0)
         for gx = 0, 3 do
             for gy = 0, 3 do
                 local cPos = t0Origin + Vector(gx * CONFIG.CELL_SIZE, -gy * CONFIG.CELL_SIZE, 0)
-                queueEnclosedCell(cPos, CONFIG.MAT_CARPET, CONFIG.MAT_CEILING, "carpet", "ceiling", CONFIG.TINT_CARPET, CONFIG.TINT_CEILING)
+                queueEnclosedCell(cPos, CONFIG.MAT_FLOOR_CARPET, CONFIG.MAT_CEILING_PANEL, "carpet", "ceiling", CONFIG.TINT_CARPET, CONFIG.TINT_CEILING)
 
                 -- Outer Perimeter Walls
-                if gx == 0 then queueWall(cPos - Vector(HALF_CELL, 0, -HALF_CELL), true, CONFIG.MAT_WALL_YELLOW, "wallpaper", CONFIG.TINT_YELLOW_WALL) end
-                if gx == 3 then queueWall(cPos + Vector(HALF_CELL, 0, HALF_CELL), true, CONFIG.MAT_WALL_YELLOW, "wallpaper", CONFIG.TINT_YELLOW_WALL) end
-                if gy == 0 then queueWall(cPos + Vector(0, HALF_CELL, HALF_CELL), false, CONFIG.MAT_WALL_YELLOW, "wallpaper", CONFIG.TINT_YELLOW_WALL) end
+                if gx == 0 then queueWall(cPos - Vector(HALF_CELL, 0, -HALF_CELL), true, CONFIG.MAT_WALL_PANEL, "wallpaper", CONFIG.TINT_MONO_YELLOW) end
+                if gx == 3 then queueWall(cPos + Vector(HALF_CELL, 0, HALF_CELL), true, CONFIG.MAT_WALL_PANEL, "wallpaper", CONFIG.TINT_MONO_YELLOW) end
+                
+                -- Entrance Doorway at gy == 0, gx == 1 (Enter from outside!)
+                if gy == 0 then
+                    if gx == 1 then
+                        queueFramedDoor(cPos, false, CONFIG.MAT_WALL_PANEL, CONFIG.TINT_MONO_YELLOW)
+                    else
+                        queueWall(cPos + Vector(0, HALF_CELL, HALF_CELL), false, CONFIG.MAT_WALL_PANEL, "wallpaper", CONFIG.TINT_MONO_YELLOW)
+                    end
+                end
+
                 -- gy == 3 has open exit to Ramp 1!
                 if gy == 3 and gx ~= 2 then
-                    queueWall(cPos - Vector(0, HALF_CELL, -HALF_CELL), false, CONFIG.MAT_WALL_YELLOW, "wallpaper", CONFIG.TINT_YELLOW_WALL)
+                    queueWall(cPos - Vector(0, HALF_CELL, -HALF_CELL), false, CONFIG.MAT_WALL_PANEL, "wallpaper", CONFIG.TINT_MONO_YELLOW)
                 end
 
                 -- Ceiling Lights
@@ -1054,20 +1048,17 @@ if SERVER then
         end
 
         -- RAMP HIGHWAY 1 (Connecting Tier 0 at -12,700 to Tier 1 at -13,840)
-        -- Starts at cell (gx=2, gy=3): (7180, -5070, -12700)
-        -- Descends South-East toward Tier 1
         local r1Start = t0Origin + Vector(2 * CONFIG.CELL_SIZE, -3 * CONFIG.CELL_SIZE, 0)
         local r1MidLanding = r1Start + Vector(2 * CONFIG.CELL_SIZE, -3 * CONFIG.CELL_SIZE, -570.0)
         local r1End = r1Start + Vector(4 * CONFIG.CELL_SIZE, -6 * CONFIG.CELL_SIZE, -1140.0) -- Hits Z_TIER_1 (-13,840)!
 
-        queueWalkableRampCorridor(r1Start, r1MidLanding, true, CONFIG.MAT_WALL_YELLOW, CONFIG.TINT_YELLOW_WALL)
+        queueWalkableRampCorridor(r1Start, r1MidLanding, true, CONFIG.MAT_WALL_PANEL, CONFIG.TINT_MONO_YELLOW)
         -- Mid-flight Observation Landing with an open pit hole!
-        queueEnclosedCell(r1MidLanding, CONFIG.MAT_CONCRETE_FLR, CONFIG.MAT_CEILING, "concrete", "ceiling", CONFIG.TINT_CONCRETE, CONFIG.TINT_CEILING)
+        queueEnclosedCell(r1MidLanding, CONFIG.MAT_CONCRETE, CONFIG.MAT_CEILING_PANEL, "concrete", "ceiling", CONFIG.TINT_CONCRETE, CONFIG.TINT_CEILING)
         queueCeilingLight(r1MidLanding, MODEL_POOLS.ceiling_lights[1])
-        queueWalkableRampCorridor(r1MidLanding, r1End, true, CONFIG.MAT_WALL_YELLOW, CONFIG.TINT_YELLOW_WALL)
+        queueWalkableRampCorridor(r1MidLanding, r1End, true, CONFIG.MAT_WALL_PANEL, CONFIG.TINT_MONO_YELLOW)
 
         -- TIER 1: MID LIMINAL SUB-OFFICES (Z = -13,840)
-        -- Positioned at r1End
         local t1Origin = r1End
         for gx = 0, 3 do
             for gy = 0, 3 do
@@ -1075,12 +1066,11 @@ if SERVER then
 
                 -- Pit Hole in cell (1, 1): floor omitted! Looking down into the darkness!
                 if gx == 1 and gy == 1 then
-                    -- Only ceiling plate, no floor plate! A hole into the abyss!
                     table.insert(spawnQueue, {
                         pos = cPos + Vector(0, 0, CONFIG.WALL_HEIGHT),
                         ang = Angle(180, 0, 0),
                         model = CONFIG.FLOOR_MODEL,
-                        mat = CONFIG.MAT_CEILING,
+                        mat = CONFIG.MAT_CEILING_PANEL,
                         tint = CONFIG.TINT_CEILING,
                         category = "ceiling",
                         keepFrozen = true
@@ -1090,26 +1080,26 @@ if SERVER then
                         pos = cPos - Vector(HALF_CELL, 0, -30),
                         ang = Angle(90, 90, 0),
                         model = CONFIG.RAIL_MODEL,
-                        mat = CONFIG.MAT_STRIPES,
+                        mat = CONFIG.MAT_WALL_PANEL,
+                        tint = CONFIG.TINT_MONO_YELLOW,
                         category = "wall",
                         keepFrozen = true
                     })
                 else
-                    queueEnclosedCell(cPos, CONFIG.MAT_CARPET, CONFIG.MAT_CEILING, "carpet", "ceiling", CONFIG.TINT_CARPET, CONFIG.TINT_CEILING)
+                    queueEnclosedCell(cPos, CONFIG.MAT_FLOOR_CARPET, CONFIG.MAT_CEILING_PANEL, "carpet", "ceiling", CONFIG.TINT_CARPET, CONFIG.TINT_CEILING)
                 end
 
                 -- Outer Perimeter Walls
-                if gx == 0 then queueWall(cPos - Vector(HALF_CELL, 0, -HALF_CELL), true, CONFIG.MAT_WALL_YELLOW_2, "wallpaper", CONFIG.TINT_YELLOW_WALL) end
-                if gx == 3 then queueWall(cPos + Vector(HALF_CELL, 0, HALF_CELL), true, CONFIG.MAT_WALL_YELLOW_2, "wallpaper", CONFIG.TINT_YELLOW_WALL) end
-                if gy == 0 and gx ~= 0 then queueWall(cPos + Vector(0, HALF_CELL, HALF_CELL), false, CONFIG.MAT_WALL_YELLOW_2, "wallpaper", CONFIG.TINT_YELLOW_WALL) end
-                if gy == 3 and gx ~= 2 then queueWall(cPos - Vector(0, HALF_CELL, -HALF_CELL), false, CONFIG.MAT_WALL_YELLOW_2, "wallpaper", CONFIG.TINT_YELLOW_WALL) end
+                if gx == 0 then queueWall(cPos - Vector(HALF_CELL, 0, -HALF_CELL), true, CONFIG.MAT_WALL_PANEL, "wallpaper", CONFIG.TINT_MONO_YELLOW) end
+                if gx == 3 then queueWall(cPos + Vector(HALF_CELL, 0, HALF_CELL), true, CONFIG.MAT_WALL_PANEL, "wallpaper", CONFIG.TINT_MONO_YELLOW) end
+                if gy == 0 and gx ~= 0 then queueWall(cPos + Vector(0, HALF_CELL, HALF_CELL), false, CONFIG.MAT_WALL_PANEL, "wallpaper", CONFIG.TINT_MONO_YELLOW) end
+                if gy == 3 and gx ~= 2 then queueWall(cPos - Vector(0, HALF_CELL, -HALF_CELL), false, CONFIG.MAT_WALL_PANEL, "wallpaper", CONFIG.TINT_MONO_YELLOW) end
 
                 -- Interior Partition Walls & Framed Doors
                 if gx == 2 and gy == 1 then
-                    -- Realistic Interactive Door (Elevated +54.3, opens on E, wood creak sound)
-                    queueFramedDoor(cPos, true, CONFIG.MAT_WALL_YELLOW_2, CONFIG.TINT_YELLOW_WALL)
+                    queueFramedDoor(cPos, true, CONFIG.MAT_WALL_PANEL, CONFIG.TINT_MONO_YELLOW)
                 elseif gx == 1 and gy == 2 then
-                    queueFramedDoor(cPos, false, CONFIG.MAT_WALL_YELLOW_2, CONFIG.TINT_YELLOW_WALL)
+                    queueFramedDoor(cPos, false, CONFIG.MAT_WALL_PANEL, CONFIG.TINT_MONO_YELLOW)
                 end
 
                 -- Ceiling Lights
@@ -1121,9 +1111,9 @@ if SERVER then
                 if gx == 0 and gy == 3 then
                     queueDeskWorkstation(cPos, CONFIG.Z_TIER_1, false)
                 elseif gx == 3 and gy == 3 then
-                    queueProp(cPos, Angle(0, 90, 0), MODEL_POOLS.office_props[3], "furniture", false) -- Display cooler
+                    queueProp(cPos, Angle(0, 90, 0), MODEL_POOLS.office_props[3], "furniture", false)
                 elseif gx == 2 and gy == 3 then
-                    queueProp(cPos, Angle(0, 0, 0), MODEL_POOLS.office_storage[2], "furniture", (math.random() < 0.15)) -- Potential anomaly
+                    queueProp(cPos, Angle(0, 0, 0), MODEL_POOLS.office_storage[2], "furniture", (math.random() < 0.15))
                 end
             end
         end
@@ -1133,23 +1123,23 @@ if SERVER then
         local r2MidLanding = r2Start + Vector(2 * CONFIG.CELL_SIZE, -3 * CONFIG.CELL_SIZE, -570.0)
         local r2End = r2Start + Vector(4 * CONFIG.CELL_SIZE, -6 * CONFIG.CELL_SIZE, -1140.0) -- Hits Z_TIER_2 (-14,980)!
 
-        queueWalkableRampCorridor(r2Start, r2MidLanding, true, CONFIG.MAT_CONCRETE_WALL, CONFIG.TINT_CONCRETE)
-        queueEnclosedCell(r2MidLanding, CONFIG.MAT_CONCRETE_FLR, CONFIG.MAT_CEILING, "concrete", "ceiling", CONFIG.TINT_CONCRETE, CONFIG.TINT_CEILING)
+        queueWalkableRampCorridor(r2Start, r2MidLanding, true, CONFIG.MAT_CONCRETE, CONFIG.TINT_CONCRETE)
+        queueEnclosedCell(r2MidLanding, CONFIG.MAT_CONCRETE, CONFIG.MAT_CEILING_PANEL, "concrete", "ceiling", CONFIG.TINT_CONCRETE, CONFIG.TINT_CEILING)
         queueCeilingLight(r2MidLanding, MODEL_POOLS.cage_lights[1])
-        queueWalkableRampCorridor(r2MidLanding, r2End, true, CONFIG.MAT_CONCRETE_WALL, CONFIG.TINT_CONCRETE)
+        queueWalkableRampCorridor(r2MidLanding, r2End, true, CONFIG.MAT_CONCRETE, CONFIG.TINT_CONCRETE)
 
         -- TIER 2: INDUSTRIAL WAREHOUSE / HABITABLE ZONE (Z = -14,980)
         local t2Origin = r2End
         for gx = 0, 3 do
             for gy = 0, 3 do
                 local cPos = t2Origin + Vector(gx * CONFIG.CELL_SIZE, -gy * CONFIG.CELL_SIZE, 0)
-                queueEnclosedCell(cPos, CONFIG.MAT_CONCRETE_FLR, CONFIG.MAT_INTERIOR_TOP, "concrete", "ceiling", CONFIG.TINT_CONCRETE, CONFIG.TINT_DARK_CRYPT)
+                queueEnclosedCell(cPos, CONFIG.MAT_CONCRETE, CONFIG.MAT_CEILING_PANEL, "concrete", "ceiling", CONFIG.TINT_CONCRETE, CONFIG.TINT_DARK_CRYPT)
 
                 -- Concrete Perimeter Walls
-                if gx == 0 then queueWall(cPos - Vector(HALF_CELL, 0, -HALF_CELL), true, CONFIG.MAT_CONCRETE_WALL, "concrete", CONFIG.TINT_CONCRETE) end
-                if gx == 3 then queueWall(cPos + Vector(HALF_CELL, 0, HALF_CELL), true, CONFIG.MAT_CONCRETE_WALL, "concrete", CONFIG.TINT_CONCRETE) end
-                if gy == 0 and gx ~= 0 then queueWall(cPos + Vector(0, HALF_CELL, HALF_CELL), false, CONFIG.MAT_CONCRETE_WALL, "concrete", CONFIG.TINT_CONCRETE) end
-                if gy == 3 and gx ~= 2 then queueWall(cPos - Vector(0, HALF_CELL, -HALF_CELL), false, CONFIG.MAT_CONCRETE_WALL, "concrete", CONFIG.TINT_CONCRETE) end
+                if gx == 0 then queueWall(cPos - Vector(HALF_CELL, 0, -HALF_CELL), true, CONFIG.MAT_CONCRETE, "concrete", CONFIG.TINT_CONCRETE) end
+                if gx == 3 then queueWall(cPos + Vector(HALF_CELL, 0, HALF_CELL), true, CONFIG.MAT_CONCRETE, "concrete", CONFIG.TINT_CONCRETE) end
+                if gy == 0 and gx ~= 0 then queueWall(cPos + Vector(0, HALF_CELL, HALF_CELL), false, CONFIG.MAT_CONCRETE, "concrete", CONFIG.TINT_CONCRETE) end
+                if gy == 3 and gx ~= 2 then queueWall(cPos - Vector(0, HALF_CELL, -HALF_CELL), false, CONFIG.MAT_CONCRETE, "concrete", CONFIG.TINT_CONCRETE) end
 
                 -- Industrial Cage Lights
                 if (gx == 1 and gy == 1) or (gx == 2 and gy == 2) then
@@ -1158,10 +1148,10 @@ if SERVER then
 
                 -- Warehouse Pallets, Oil Drums, and Storage Crates
                 if gx == 1 and gy == 2 then
-                    queueProp(cPos, Angle(0, 45, 0), MODEL_POOLS.warehouse_props[1], "furniture", false) -- Pallet
-                    queueProp(cPos + Vector(0, 0, 9), Angle(0, 15, 0), MODEL_POOLS.warehouse_props[3], "furniture", false) -- Crate on pallet
+                    queueProp(cPos, Angle(0, 45, 0), MODEL_POOLS.warehouse_props[1], "furniture", false)
+                    queueProp(cPos + Vector(0, 0, 9), Angle(0, 15, 0), MODEL_POOLS.warehouse_props[3], "furniture", false)
                 elseif gx == 0 and gy == 2 then
-                    queueProp(cPos, Angle(0, 0, 0), MODEL_POOLS.warehouse_props[2], "furniture", (math.random() < 0.10)) -- Oil drum
+                    queueProp(cPos, Angle(0, 0, 0), MODEL_POOLS.warehouse_props[2], "furniture", (math.random() < 0.10))
                 end
             end
         end
@@ -1171,23 +1161,23 @@ if SERVER then
         local r3MidLanding = r3Start + Vector(2 * CONFIG.CELL_SIZE, -3 * CONFIG.CELL_SIZE, -635.0)
         local r3End = r3Start + Vector(4 * CONFIG.CELL_SIZE, -6 * CONFIG.CELL_SIZE, -1270.0) -- Hits Z_TIER_3 (-16,250 Bedrock Floor)!
 
-        queueWalkableRampCorridor(r3Start, r3MidLanding, true, CONFIG.MAT_CONCRETE_WALL, CONFIG.TINT_DARK_CRYPT)
-        queueEnclosedCell(r3MidLanding, CONFIG.MAT_CONCRETE_FLR, CONFIG.MAT_INTERIOR_TOP, "concrete", "ceiling", CONFIG.TINT_DARK_CRYPT, CONFIG.TINT_DARK_CRYPT)
+        queueWalkableRampCorridor(r3Start, r3MidLanding, true, CONFIG.MAT_CONCRETE, CONFIG.TINT_DARK_CRYPT)
+        queueEnclosedCell(r3MidLanding, CONFIG.MAT_CONCRETE, CONFIG.MAT_CEILING_PANEL, "concrete", "ceiling", CONFIG.TINT_DARK_CRYPT, CONFIG.TINT_DARK_CRYPT)
         queueCeilingLight(r3MidLanding, MODEL_POOLS.cage_lights[1])
-        queueWalkableRampCorridor(r3MidLanding, r3End, true, CONFIG.MAT_CONCRETE_WALL, CONFIG.TINT_DARK_CRYPT)
+        queueWalkableRampCorridor(r3MidLanding, r3End, true, CONFIG.MAT_CONCRETE, CONFIG.TINT_DARK_CRYPT)
 
         -- TIER 3: THE DEEP CRYPT & PIPE DREAMS (Z = -16,250 - Bedrock Floor of Corner 2!)
         local t3Origin = r3End
         for gx = 0, 3 do
             for gy = 0, 3 do
                 local cPos = t3Origin + Vector(gx * CONFIG.CELL_SIZE, -gy * CONFIG.CELL_SIZE, 0)
-                queueEnclosedCell(cPos, CONFIG.MAT_CONCRETE_FLR, CONFIG.MAT_INTERIOR_TOP, "concrete", "ceiling", CONFIG.TINT_DARK_CRYPT, CONFIG.TINT_DARK_CRYPT)
+                queueEnclosedCell(cPos, CONFIG.MAT_CONCRETE, CONFIG.MAT_CEILING_PANEL, "concrete", "ceiling", CONFIG.TINT_DARK_CRYPT, CONFIG.TINT_DARK_CRYPT)
 
                 -- Heavy Concrete Walls
-                if gx == 0 then queueWall(cPos - Vector(HALF_CELL, 0, -HALF_CELL), true, CONFIG.MAT_CONCRETE_WALL, "concrete", CONFIG.TINT_DARK_CRYPT) end
-                if gx == 3 then queueWall(cPos + Vector(HALF_CELL, 0, HALF_CELL), true, CONFIG.MAT_CONCRETE_WALL, "concrete", CONFIG.TINT_DARK_CRYPT) end
-                if gy == 0 and gx ~= 0 then queueWall(cPos + Vector(0, HALF_CELL, HALF_CELL), false, CONFIG.MAT_CONCRETE_WALL, "concrete", CONFIG.TINT_DARK_CRYPT) end
-                if gy == 3 then queueWall(cPos - Vector(0, HALF_CELL, -HALF_CELL), false, CONFIG.MAT_CONCRETE_WALL, "concrete", CONFIG.TINT_DARK_CRYPT) end
+                if gx == 0 then queueWall(cPos - Vector(HALF_CELL, 0, -HALF_CELL), true, CONFIG.MAT_CONCRETE, "concrete", CONFIG.TINT_DARK_CRYPT) end
+                if gx == 3 then queueWall(cPos + Vector(HALF_CELL, 0, HALF_CELL), true, CONFIG.MAT_CONCRETE, "concrete", CONFIG.TINT_DARK_CRYPT) end
+                if gy == 0 and gx ~= 0 then queueWall(cPos + Vector(0, HALF_CELL, HALF_CELL), false, CONFIG.MAT_CONCRETE, "concrete", CONFIG.TINT_DARK_CRYPT) end
+                if gy == 3 then queueWall(cPos - Vector(0, HALF_CELL, -HALF_CELL), false, CONFIG.MAT_CONCRETE, "concrete", CONFIG.TINT_DARK_CRYPT) end
 
                 -- Maintenance Cage Lights
                 if (gx == 1 and gy == 2) or (gx == 2 and gy == 1) then
@@ -1248,9 +1238,7 @@ if SERVER then
         d.nextUse = timer.curtime() + 1.0
 
         local dPos = d.ent:getPos()
-        -- Play latch sound on trigger
         pcall(sound.play, "doors/door_latch1.wav", dPos, 70, 100)
-        -- Play wood move sound
         pcall(sound.play, "doors/door_wood_move1.wav", dPos, 65, 100)
     end
 
@@ -1273,7 +1261,6 @@ if SERVER then
                         d.moving = false
                         pcall(d.ent.setAngles, d.ent, d.targetAng)
                         if not d.isOpen then
-                            -- Close thud
                             pcall(sound.play, "doors/door_wood_close1.wav", d.ent:getPos(), 70, 100)
                         end
                     end
