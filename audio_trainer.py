@@ -11,6 +11,7 @@ import re
 from typing import List, Dict
 from dataclasses import dataclass
 from token_registry import TokenRegistry, EnvironmentToken
+from audio_weight_scorer import AudioWeightScorer
 
 # Acoustic tag dictionary mapping common sound indicators
 SOUND_KEYWORDS = {
@@ -72,10 +73,16 @@ class AudioTrainer:
 
         detected_tags = list(set(detected_tags))
 
-        # 2. Build official Starfall-whitelisted URL (raw.githubusercontent.com)
+        # 2. Evaluate Audio Weight & Eeriness
+        weight_data = AudioWeightScorer.evaluate_audio_weight(filename)
+        detected_tags.append(weight_data["priority_tag"])
+        detected_tags.extend(weight_data.get("tags", []))
+        detected_tags = list(set(detected_tags))
+
+        # 3. Build official Starfall-whitelisted URL (raw.githubusercontent.com)
         github_raw_url = f"https://raw.githubusercontent.com/{self.github_repo}/{self.branch}/audio/{filename}"
 
-        # 3. Register into unified TokenRegistry
+        # 4. Register into unified TokenRegistry
         is_ambient = any(t in detected_tags for t in ["drone", "hum", "loop", "ambient", "static"])
         token = EnvironmentToken(
             id=github_raw_url,
