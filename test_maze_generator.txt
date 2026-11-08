@@ -1,0 +1,146 @@
+--@name Backrooms Test Maze Generator (Collidable, Open Roof)
+--@author Cognitive Decay Project
+--@server
+
+-- Generates a procedural single-level Backrooms maze with:
+-- 1. Full Player Collision (models/hunter/plates/plate1x2.mdl & plate2x2.mdl)
+-- 2. Open Roof (players can look up at the endless void / airspace)
+-- 3. Pristine Level 0 Yellow Wallpaper + Damp Carpet textures
+-- 4. Safe spawn origin tuned to your gm_functional_flatgrass airspace
+
+local origin = chip():getPos()
+local cellSize = 120 -- Source units per corridor cell (comfortably wide for players)
+local wallHeight = 110 -- Classic Backrooms wall height (tall, claustrophobic)
+
+-- Maze Grid Settings (8x8 test grid)
+local gridW = 8
+local gridH = 8
+
+local spawnedWalls = {}
+local spawnedFloors = {}
+
+print("[Maze Generator] Building Backrooms Level 0 Test Maze at " .. tostring(origin))
+
+-- 1. Generate Maze Grid Data (Depth-First Recursive Backtracker)
+local grid = {}
+for x = 1, gridW do
+    grid[x] = {}
+    for y = 1, gridH do
+        grid[x][y] = { visited = false, north = true, south = true, east = true, west = true }
+    end
+end
+
+local function carveMaze(cx, cy)
+    grid[cx][cy].visited = true
+    local directions = {
+        { dx = 0, dy = 1, wall = "north", opp = "south" },
+        { dx = 0, dy = -1, wall = "south", opp = "north" },
+        { dx = 1, dy = 0, wall = "east", opp = "west" },
+        { dx = -1, dy = 0, wall = "west", opp = "east" }
+    }
+    -- Shuffle directions randomly
+    for i = #directions, 2, -1 do
+        local j = math.random(1, i)
+        directions[i], directions[j] = directions[j], directions[i]
+    end
+
+    for _, dir in ipairs(directions) do
+        local nx, ny = cx + dir.dx, cy + dir.dy
+        if nx >= 1 and nx <= gridW and ny >= 1 and ny <= gridH and not grid[nx][ny].visited then
+            grid[cx][cy][dir.wall] = false
+            grid[nx][ny][dir.opp] = false
+            carveMaze(nx, ny)
+        end
+    end
+end
+
+-- Start maze from (1, 1)
+carveMaze(1, 1)
+
+-- 2. Materialize Physical Floors with Collision
+-- Uses plate2x2 / plate3x3 with damp carpet texture
+local floorMat = "materials/carpet/office_carpet_damp_01"
+local wallMat  = "materials/plaster/office_wallpaper_yellow"
+
+local function buildFloor()
+    for x = 1, gridW, 2 do
+        for y = 1, gridH, 2 do
+            local floorPos = origin + Vector((x - 1) * cellSize + (cellSize * 0.5), (y - 1) * cellSize + (cellSize * 0.5), 0)
+            -- Spawn frozen collidable floor plate
+            local fl = prop.create(floorPos, Angle(0, 0, 0), "models/hunter/plates/plate2x2.mdl", true)
+            if isValid(fl) then
+                fl:setMaterial(floorMat)
+                table.insert(spawnedFloors, fl)
+            end
+        end
+    end
+end
+
+-- 3. Materialize Physical Walls (Open Roof - No Ceilings Spawned!)
+local function buildWalls()
+    local wallModel = "models/hunter/plates/plate1x2.mdl" -- Perfect 48x96 Source plate
+
+    for x = 1, gridW do
+        for y = 1, gridH do
+            local cellCenter = origin + Vector((x - 1) * cellSize, (y - 1) * cellSize, 0)
+            local cellData = grid[x][y]
+
+            -- North Wall
+            if cellData.north then
+                local wPos = cellCenter + Vector(0, cellSize * 0.5, wallHeight * 0.5)
+                local w = prop.create(wPos, Angle(90, 0, 0), wallModel, true)
+                if isValid(w) then
+                    w:setMaterial(wallMat)
+                    table.insert(spawnedWalls, w)
+                end
+            end
+
+            -- South Wall (Boundary check)
+            if y == 1 and cellData.south then
+                local wPos = cellCenter + Vector(0, -cellSize * 0.5, wallHeight * 0.5)
+                local w = prop.create(wPos, Angle(90, 0, 0), wallModel, true)
+                if isValid(w) then
+                    w:setMaterial(wallMat)
+                    table.insert(spawnedWalls, w)
+                end
+            end
+
+            -- East Wall
+            if cellData.east then
+                local wPos = cellCenter + Vector(cellSize * 0.5, 0, wallHeight * 0.5)
+                local w = prop.create(wPos, Angle(90, 90, 0), wallModel, true)
+                if isValid(w) then
+                    w:setMaterial(wallMat)
+                    table.insert(spawnedWalls, w)
+                end
+            end
+
+            -- West Wall (Boundary check)
+            if x == 1 and cellData.west then
+                local wPos = cellCenter + Vector(-cellSize * 0.5, 0, wallHeight * 0.5)
+                local w = prop.create(wPos, Angle(90, 90, 0), wallModel, true)
+                if isValid(w) then
+                    w:setMaterial(wallMat)
+                    table.insert(spawnedWalls, w)
+                end
+            end
+        end
+    end
+end
+
+-- Build sequentially with short timer to prevent CPU quota burst
+timer.simple(0.1, function()
+    buildFloor()
+    print("[Maze Generator] Floor materialized with collision!")
+end)
+
+timer.simple(0.3, function()
+    buildWalls()
+    print("[Maze Generator] Maze completed! Walls: " .. #spawnedWalls .. " | Open roof ceiling clear.")
+end)
+
+-- Clean-up on chip remove
+hook.add("Removed", "ClearMazeProps", function()
+    for _, p in ipairs(spawnedWalls) do if isValid(p) then p:remove() end end
+    for _, p in ipairs(spawnedFloors) do if isValid(p) then p:remove() end end
+end)
