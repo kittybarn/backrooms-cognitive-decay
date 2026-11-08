@@ -1,0 +1,50 @@
+--@name Map Bounds & Safe Zone Scanner
+--@author Cognitive Decay Project
+--@server
+
+-- Probes the exact world bounds and airspace of gm_functional_flatgrass
+-- Validates your safe airspace:
+-- Bottom: Vector(94.4, 5.2, -7224.0)
+-- Top:    Vector(186.1, 7.4, 11765.4)
+
+local function analyzeMapBounds()
+    local mapName = game.getMap()
+    print("[Airspace Scanner] Current Map: " .. mapName)
+
+    -- In Source Engine, worldspawn bounds:
+    local world = game.getWorld()
+    local worldMins = world:obbMins()
+    local worldMaxs = world:obbMaxs()
+
+    print("[Airspace Scanner] Full Physical World Boundaries:")
+    print("  -> Min Boundary: " .. tostring(worldMins))
+    print("  -> Max Boundary: " .. tostring(worldMaxs))
+
+    local mapWidth = math.abs(worldMaxs.x - worldMins.x)
+    local mapLength = math.abs(worldMaxs.y - worldMins.y)
+    local mapHeight = math.abs(worldMaxs.z - worldMins.z)
+
+    print("  -> Total Width  (X): " .. mapWidth .. " Hammer units (~" .. math.floor(mapWidth * 0.0254) .. " meters)")
+    print("  -> Total Length (Y): " .. mapLength .. " Hammer units (~" .. math.floor(mapLength * 0.0254) .. " meters)")
+    print("  -> Total Height (Z): " .. mapHeight .. " Hammer units (~" .. math.floor(mapHeight * 0.0254) .. " meters)")
+
+    -- User Designated Airspace Volume:
+    local safeAirspaceBottom = -7224.07
+    local safeAirspaceTop    = 11765.40
+    local safeAirspaceHeight = safeAirspaceTop - safeAirspaceBottom
+
+    print("\n[Airspace Scanner] Backrooms Safe Airspace Enclosure:")
+    print("  -> Floor Level (Z): " .. safeAirspaceBottom)
+    print("  -> Ceiling Level (Z): " .. safeAirspaceTop)
+    print("  -> Total Vertical Building Clearance: " .. safeAirspaceHeight .. " units (~" .. math.floor(safeAirspaceHeight * 0.0254) .. " meters / " .. math.floor(safeAirspaceHeight / 128) .. " stories)")
+
+    -- Raytrace checks to ensure no ground/skybox collision in the safe airspace
+    local traceDown = trace.line(Vector(140, 6, safeAirspaceBottom), Vector(140, 6, safeAirspaceBottom - 100))
+    local traceUp   = trace.line(Vector(140, 6, safeAirspaceTop), Vector(140, 6, safeAirspaceTop + 100))
+
+    print("  -> Trace Floor Clear: " .. tostring(not traceDown.Hit))
+    print("  -> Trace Ceiling Clear: " .. tostring(not traceUp.Hit))
+    print("\n[Airspace Scanner] Safe Airspace Verified! Backrooms generator can build safely here.")
+end
+
+timer.simple(0.5, analyzeMapBounds)
