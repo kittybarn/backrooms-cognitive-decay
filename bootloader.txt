@@ -1,0 +1,254 @@
+--@name cognitive-decay/loader
+--@author kittybarn & Antigravity
+--@shared
+-- ==============================================================================
+-- PROJECT COGNITIVE DECAY - LIVE GITHUB HTTP BOOTLOADER
+-- 
+-- Paste this chip ONCE into your Starfall editor.
+-- It automatically downloads, compiles, executes, and hot-reloads the latest
+-- engine from:
+--   https://github.com/kittybarn/backrooms-cognitive-decay
+-- 
+-- Chat Commands:
+--   !decay reload    - Dematerializes existing props and hot-loads fresh code
+--   !reload          - Quick shortcut to hot-reload
+--   !decay status    - Displays current engine metrics and generation status
+-- ==============================================================================
+
+local GITHUB_MAIN_URL = "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/cognitive-decay/core/main.lua"
+local NET_CODE_STREAM = "CognitiveDecay_Stream"
+local NET_CLIENT_READY = "CognitiveDecay_Ready"
+local NET_STATUS_SYNC = "CognitiveDecay_Status"
+
+if SERVER then
+    local cachedSource = nil
+    local isFetching = false
+    local lastFetchTime = 0
+    local engineState = "BOOTING"
+    local loadCount = 0
+
+    local function notifyOwner(msg)
+        local o = owner()
+        if isValid(o) then
+            pcall(o.chatPrint, o, "[Cognitive Decay] " .. msg)
+        end
+        print("[Cognitive Decay] " .. msg)
+    end
+
+    local function broadcastCode(code, targetPly)
+        net.start(NET_CODE_STREAM)
+        net.writeStream(code)
+        if targetPly and isValid(targetPly) then
+            net.send(targetPly)
+        else
+            net.send()
+        end
+    end
+
+    local function executeEngine(sourceCode, isReload)
+        -- 1. If previous instance was running, invoke its dematerialize hook
+        if _G.CognitiveDecay_Cleanup then
+            pcall(_G.CognitiveDecay_Cleanup)
+        end
+
+        -- 2. Compile source string in Starfall environment
+        local compiledFn, compileErr = loadstring(sourceCode, "cognitive-decay/core/main")
+        if not compiledFn then
+            engineState = "COMPILE_ERROR"
+            notifyOwner("ERROR: Engine compilation failed: " .. tostring(compileErr))
+            return false
+        end
+
+        -- 3. Execute safely
+        local success, runErr = pcall(compiledFn)
+        if not success then
+            engineState = "RUNTIME_ERROR"
+            notifyOwner("ERROR: Engine runtime failure: " .. tostring(runErr))
+            return false
+        end
+
+        loadCount = loadCount + 1
+        engineState = "OPERATIONAL"
+        cachedSource = sourceCode
+        lastFetchTime = timer.realtime()
+
+        -- 4. Stream fresh code to all connected clients
+        broadcastCode(sourceCode)
+
+        -- 5. Attempt local backup write if permissions are available
+        pcall(function()
+            if not file.isDir("cognitive-decay") then file.createDir("cognitive-decay") end
+            if not file.isDir("cognitive-decay/core") then file.createDir("cognitive-decay/core") end
+            file.write("cognitive-decay/core/main.txt", sourceCode)
+        end)
+
+        local modeStr = isReload and "Hot-Reload #" .. tostring(loadCount) or "Initial Load"
+        notifyOwner(modeStr .. " Complete! Engine online (" .. math.floor(#sourceCode / 1024) .. " KB).")
+        return true
+    end
+
+    local function fetchFromGitHub(plyTrigger, isReload)
+        if isFetching then
+            if isValid(plyTrigger) then
+                pcall(plyTrigger.chatPrint, plyTrigger, "[Cognitive Decay] A download is already in progress, please wait...")
+            end
+            return
+        end
+
+        if not http.canRequest() then
+            notifyOwner("HTTP rate limit reached. Retrying in 2 seconds...")
+            timer.simple(2, function() fetchFromGitHub(plyTrigger, isReload) end)
+            return
+        end
+
+        isFetching = true
+        engineState = "DOWNLOADING"
+        notifyOwner("Fetching latest engine build from GitHub...")
+
+        local cacheBuster = "?t=" .. math.floor(timer.realtime() * 1000) .. "_" .. math.random(10000, 99999)
+        local fullUrl = GITHUB_MAIN_URL .. cacheBuster
+
+        http.get(fullUrl, function(body, len, headers, code)
+            isFetching = false
+            if code ~= 200 or not body or #body < 200 then
+                notifyOwner("HTTP failed with status code " .. tostring(code) .. ". Checking local fallback...")
+                -- Fallback to local or cached
+                if cachedSource then
+                    notifyOwner("Reverting to cached engine instance.")
+                    executeEngine(cachedSource, isReload)
+                else
+                    pcall(function()
+                        local localCode = file.read("cognitive-decay/core/main.txt")
+                        if localCode and #localCode > 200 then
+                            notifyOwner("Loaded from local backup storage.")
+                            executeEngine(localCode, isReload)
+                        end
+                    end)
+                end
+                return
+            end
+
+            executeEngine(body, isReload)
+        end, function(failReason)
+            isFetching = false
+            notifyOwner("HTTP Connection Error: " .. tostring(failReason))
+            if cachedSource then
+                notifyOwner("Reverting to cached engine instance.")
+                executeEngine(cachedSource, isReload)
+            end
+        end)
+    end
+
+    -- Chat Command Listener
+    hook.add("PlayerSay", "CognitiveDecay_ChatCommands", function(ply, text)
+        if ply == owner() then
+            local cmd = string.lower(string.trim(text))
+            if cmd == "!decay reload" or cmd == "!reload" or cmd == "!decay" or cmd == "!reboot" then
+                pcall(ply.chatPrint, ply, "[Cognitive Decay] Manual hot-reload command received from " .. ply:getName() .. ".")
+                fetchFromGitHub(ply, true)
+                return ""
+            elseif cmd == "!decay status" then
+                local kb = cachedSource and math.floor(#cachedSource / 1024) or 0
+                pcall(ply.chatPrint, ply, string.format("[Cognitive Decay Status] State: %s | Reloads: %d | Code: %d KB", engineState, loadCount, kb))
+                return ""
+            end
+        end
+    end)
+
+    -- Client Handshake
+    net.receive(NET_CLIENT_READY, function(len, ply)
+        if cachedSource and isValid(ply) then
+            broadcastCode(cachedSource, ply)
+        end
+    end)
+
+    -- Clean Dematerialization on Chip Removal
+    hook.add("Removed", "CognitiveDecay_LoaderRemoved", function()
+        if _G.CognitiveDecay_Cleanup then
+            pcall(_G.CognitiveDecay_Cleanup)
+        end
+        notifyOwner("Bootloader terminated. Sector entities purged.")
+    end)
+
+    -- Initial Boot on Spawn
+    timer.simple(0.3, function()
+        fetchFromGitHub(owner(), false)
+    end)
+
+else
+    -- ==========================================================================
+    -- CLIENT: CODE RECEPTION & DIAGNOSTIC HUD
+    -- ==========================================================================
+    local clientLoaded = false
+    local lastStatusMsg = "Connecting..."
+    local statusColor = Color(240, 200, 60)
+    local hudAlpha = 255
+    local spawnTime = timer.realtime()
+
+    -- Notify server client is ready
+    hook.add("Initialize", "CognitiveDecay_ClientInit", function()
+        timer.simple(0.5, function()
+            net.start(NET_CLIENT_READY)
+            net.send()
+        end)
+    end)
+
+    -- Streamed Code Receiver
+    net.receive(NET_CODE_STREAM, function()
+        net.readStream(function(sourceCode)
+            if not sourceCode or #sourceCode < 100 then return end
+
+            if _G.CognitiveDecay_ClientCleanup then
+                pcall(_G.CognitiveDecay_ClientCleanup)
+            end
+
+            local compiledFn, compileErr = loadstring(sourceCode, "cognitive-decay/core/main")
+            if compiledFn then
+                local ok, runErr = pcall(compiledFn)
+                if ok then
+                    clientLoaded = true
+                    lastStatusMsg = "HOT-RELOAD SYNCHRONIZED"
+                    statusColor = Color(60, 255, 90)
+                    hudAlpha = 255
+                else
+                    lastStatusMsg = "CLIENT RUNTIME ERROR"
+                    statusColor = Color(255, 70, 70)
+                    print("[Cognitive Decay Client Error] " .. tostring(runErr))
+                end
+            else
+                lastStatusMsg = "CLIENT COMPILE ERROR"
+                statusColor = Color(255, 70, 70)
+                print("[Cognitive Decay Client Compile Error] " .. tostring(compileErr))
+            end
+        end)
+    end)
+
+    -- Tasteful Terminal Diagnostic HUD
+    hook.add("drawhud", "CognitiveDecay_LoaderHUD", function()
+        local elapsed = timer.realtime() - spawnTime
+        if elapsed > 12 and hudAlpha > 0 then
+            hudAlpha = math.max(0, hudAlpha - (render.getFrameTime() * 80))
+        end
+        if hudAlpha <= 0 then return end
+
+        local sw, sh = render.getGameResolution()
+        local boxW, boxH = 280, 52
+        local x = sw - boxW - 24
+        local y = 24
+
+        render.setColor(Color(10, 12, 14, math.min(hudAlpha, 210)))
+        render.drawRect(x, y, boxW, boxH)
+
+        render.setColor(Color(45, 255, 65, math.min(hudAlpha, 180)))
+        render.drawRectOutline(x, y, boxW, boxH, 1)
+
+        render.setColor(Color(255, 255, 255, hudAlpha))
+        render.drawText(x + 12, y + 8, "COGNITIVE DECAY // BOOTLOADER", 0)
+
+        render.setColor(statusColor.r, statusColor.g, statusColor.b, hudAlpha)
+        render.drawText(x + 12, y + 24, "● " .. lastStatusMsg, 0)
+
+        render.setColor(Color(180, 180, 180, math.min(hudAlpha, 160)))
+        render.drawText(x + 12, y + 38, "Type '!decay reload' in chat to update", 0)
+    end)
+end
