@@ -4,27 +4,30 @@
 -- ==============================================================================
 -- THE ULTIMATE BACKROOMS PROCEDURAL GENERATOR FOR GARRY'S MOD (STARFALL EX)
 -- 
--- Key Highlights in this Engine Build:
---  1. Rule-Based Spatial Affordance (Objects Find Their Home):
---     Props no longer spawn as generic sets. Each object independently finds a home:
---      - Desks seek flat backing walls facing outward.
---      - Filing cabinets seek 2-wall corners.
---      - Chairs attach to desks OR spawn solitary against walls or overturned.
---      - CRT monitors sit on desk tops OR sit abandoned on the floor in dead ends.
---  2. Bounding Box Collision Clearance:
---     Rigorous geometric clearance checks against cell walls and neighboring props.
+-- Key Features:
+--  1. 100% Non-UV-Sensitive Matte Drywall:
+--     All walls use flat diffuse shaders (models/debug/debugwhite) with uniform
+--     Backrooms yellow tints. Zero UV stretching, zero seams, zero keypad repeats.
+--  2. CRT TV Analog Static & Emergency Broadcast Screens:
+--     Interactive 3D2D screens projected onto TV tubes (models/props_c17/tv_monitor01).
+--     - Exactly bounded & parented to the TV (moves dynamically with physgun).
+--     - Automatic garbage collection (vanishes immediately if TV is removed).
+--     - Strict distance culling (450 units) & angle culling (front face only).
+--     - Analog noise, scanlines, and flashing "NO SIGNAL" emergency broadcasts.
+--  3. Rule-Based Spatial Affordance (Objects Find Their Home):
+--     Desks back up against flat walls. Filing cabinets seek 2-wall corners.
+--     Chairs pull up to desks or stand solitary. TVs perch on desks or dead-end floors.
+--  4. Bounding Box Collision Clearance:
+--     Physical clearance checks against cell walls and adjacent props.
 --     Zero unintentional wall clipping!
---  3. Deliberate Rare Dimensional Clipping (3% Chance):
---     Only props explicitly flagged as dimensional glitches are allowed to clip,
---     fused sideways into walls at dramatic angles.
---  4. Clean Non-Repeating Walls (Zero UV Stretching):
---     Smooth matte yellow drywall with zero repeating debris stripes.
---  5. 100% Sealed Perimeter & Pitch-Black Void Gateways:
+--  5. Rare Reality Decay Clipping (3%):
+--     Only props explicitly chosen as anomalies fuse diagonally into walls.
+--  6. 100% Sealed Perimeter & Pitch-Black Void Gateways:
 --     No skybox/flatgrass leaks. Openings terminate in pure black Void portals.
---  6. Half-Life 1 Xen Green Zappy Particle Materialization:
+--  7. Half-Life 1 Xen Green Zappy Particle Materialization:
 --     Proximity to Void Gateways triggers crackling green lightning arcs (sprites/physbeam)
 --     and zapping audio, smoothly materializing new extension sectors.
---  7. 100% Burst-Safe FIFO Queue & Protected pcall Calls.
+--  8. 100% Burst-Safe FIFO Queue & Protected pcall Calls.
 -- ==============================================================================
 
 if SERVER then
@@ -46,30 +49,31 @@ if SERVER then
         SPAWN_INTERVAL = 0.25, -- 4 props per second (matches Starfall token regen)
         
         -- Probabilities (Liminal, eerie, and uncluttered)
-        DESK_CHANCE     = 0.10,  -- 10% chance for a desk
-        CABINET_CHANCE  = 0.08,  -- 8% chance for a corner filing cabinet
-        SOLO_CHAIR_CHANCE = 0.07, -- 7% chance for solitary liminal chair
-        GLITCH_CHANCE   = 0.03,  -- 3% chance for rare wall-clipped anomaly
-        NPC_CHANCE      = 0.07,  -- 7% chance for uncanny entity in dead-ends
+        DESK_CHANCE       = 0.10,  -- 10% chance for a desk
+        CABINET_CHANCE    = 0.08,  -- 8% chance for a corner filing cabinet
+        SOLO_CHAIR_CHANCE = 0.07,  -- 7% chance for solitary liminal chair
+        GLITCH_CHANCE     = 0.03,  -- 3% chance for rare wall-clipped anomaly
+        NPC_CHANCE        = 0.07,  -- 7% chance for uncanny entity in dead-ends
         
         -- Void & Materialization Settings
         VOID_TRIGGER_DIST = 260, -- Distance in units to trigger Xen lightning sequence
-        BASE_ALTITUDE = 0
+        BASE_ALTITUDE     = 0
     }
 
     -- --------------------------------------------------------------------------
-    -- 2. VERIFIED MATERIALS (Smooth Matte Yellow Drywall & Damp Carpet)
+    -- 2. NON-UV-SENSITIVE MATERIALS (Zero Repeating Seams, Stripes or Keypads)
     -- --------------------------------------------------------------------------
-    -- Clean, non-repeating matte drywall prevents UV stretching & stripes
+    -- models/debug/debugwhite is a flat, untextured diffuse shader.
+    -- It has 0 UV coordinates, completely preventing UV stretching & repeats!
     local WALL_PRESETS = {
-        { mat = "models/debug/debugwhite", color = Color(228, 214, 148) }, -- Smooth Level 0 yellow drywall
-        { mat = "models/debug/debugwhite", color = Color(222, 208, 142) }, -- Slightly darker aged tone
-        { mat = "models/debug/debugwhite", color = Color(234, 220, 154) }  -- Warm hallway plaster
+        { mat = "models/debug/debugwhite", color = Color(228, 214, 148) }, -- Authentic Level 0 matte yellow drywall
+        { mat = "models/debug/debugwhite", color = Color(222, 208, 142) }, -- Aged plaster tint
+        { mat = "models/debug/debugwhite", color = Color(234, 220, 154) }  -- Hallway drywall tint
     }
 
     local FLOOR_PRESETS = {
         { mat = "models/props_c17/furniturefabric001a", color = Color(135, 120, 75) }, -- Damp woven carpet fiber
-        { mat = "models/props_c17/furniturefabric002a", color = Color(118, 105, 62) }, -- Musty mildew carpet
+        { mat = "models/props_c17/furniturefabric002a", color = Color(118, 105, 62) }, -- Mildew carpet
         { mat = "models/props_debris/tilefloor001c",    color = Color(175, 170, 150) }  -- Liminal hospital tile
     }
 
@@ -82,8 +86,7 @@ if SERVER then
             "models/props_c17/FurnitureChair001a.mdl"
         },
         electronics = {
-            "models/props_c17/tv_monitor01.mdl",
-            "models/props_lab/monitor01a.mdl"
+            "models/props_c17/tv_monitor01.mdl"
         },
         storage = {
             "models/props_wasteland/controlroom_filecabinet002a.mdl"
@@ -144,14 +147,12 @@ if SERVER then
     -- --------------------------------------------------------------------------
     local HALF_CELL = CONFIG.CELL_SIZE * 0.5 -- 94.9 units
     local function checkClearance(localPos, radius, cell, existingProps)
-        -- 1. Wall clearance checks (keeps props completely inside walls)
         local margin = 3
         if cell.north and (localPos.y + radius > HALF_CELL - margin) then return false end
         if cell.south and (localPos.y - radius < -HALF_CELL + margin) then return false end
         if cell.east  and (localPos.x + radius > HALF_CELL - margin) then return false end
         if cell.west  and (localPos.x - radius < -HALF_CELL + margin) then return false end
 
-        -- 2. Prop-to-prop clearance checks
         for _, ep in ipairs(existingProps) do
             local dx = localPos.x - ep.pos.x
             local dy = localPos.y - ep.pos.y
@@ -171,6 +172,7 @@ if SERVER then
     local spawnQueue = {}
     local activeEntities = {}
     local voidGateways = {}
+    local activeTVs = {}
     local chipOrigin = chip():getPos() + Vector(0, 0, CONFIG.BASE_ALTITUDE)
 
     -- --------------------------------------------------------------------------
@@ -377,7 +379,7 @@ if SERVER then
             -- ------------------------------------------------------------------
             -- C. RULE-BASED INDIVIDUAL OBJECT PLACEMENT (Spatial Affordance)
             -- ------------------------------------------------------------------
-            local cellProps = {} -- Tracks placed items in this cell for collision clearance
+            local cellProps = {}
 
             -- Rule 1: A Desk seeks a flat backing wall
             local deskSpawned = nil
@@ -430,7 +432,6 @@ if SERVER then
 
             -- Rule 3: Chair (Drawn to an existing desk OR solitary against a wall)
             if deskSpawned and math.random() < 0.70 then
-                -- Drawn to desk
                 local chairDist = math.random(-44, -38)
                 local chairOffset = deskSpawned.ang:getForward() * chairDist + deskSpawned.ang:getRight() * math.random(-8, 8)
                 local localChairPos = deskSpawned.pos + chairOffset
@@ -447,13 +448,11 @@ if SERVER then
                     })
                 end
             elseif not deskSpawned and math.random() < CONFIG.SOLO_CHAIR_CHANCE then
-                -- Solitary chair in hallway / room (liminal trope!)
                 local localChairPos = Vector(math.random(-40, 40), math.random(-40, 40), 0)
                 if checkClearance(localChairPos, 14, cell, cellProps) then
                     local worldChairPos = cCenter + localChairPos
                     worldChairPos.z = chipOrigin.z + 20.1
                     local chairAng = Angle(0, math.random(0, 360), 0)
-                    -- 15% chance it's tipped over on its side
                     if math.random() < 0.15 then
                         chairAng = Angle(80, math.random(0, 360), 0)
                         worldChairPos.z = chipOrigin.z + 10
@@ -468,19 +467,24 @@ if SERVER then
                 end
             end
 
-            -- Rule 4: Monitor / CRT TV (Sits on top of desk OR sits unplugged on dead-end floor)
+            -- Rule 4: CRT TV Monitor (Perched on desk OR solitary floor TV in dead end)
             if deskSpawned and math.random() < 0.65 then
-                -- Perched realistically on desk surface
                 local monWorldPos = deskSpawned.worldPos + Vector(math.random(-6, 6), math.random(-4, 4), 27.1)
                 local monAng = Angle(0, deskSpawned.ang.yaw + math.random(-15, 15), 0)
                 table.insert(spawnQueue, {
                     pos = monWorldPos,
                     ang = monAng,
                     model = PROP_PRESETS.electronics[1],
-                    category = "furniture"
+                    category = "furniture",
+                    onSpawn = function(ent)
+                        -- Register active TV on clients for 3D2D analog static rendering
+                        table.insert(activeTVs, ent)
+                        net.start("BackroomsTVSpawn")
+                        net.writeEntity(ent)
+                        net.send()
+                    end
                 })
             elseif cell.isDeadEnd and math.random() < 0.20 then
-                -- Unplugged floor monitor in dead end corner
                 local localMonPos = Vector(math.random(-30, 30), math.random(-30, 30), 0)
                 if checkClearance(localMonPos, 12, cell, cellProps) then
                     local monWorldPos = cCenter + localMonPos
@@ -490,13 +494,18 @@ if SERVER then
                         pos = monWorldPos,
                         ang = Angle(0, math.random(0, 360), 0),
                         model = PROP_PRESETS.electronics[1],
-                        category = "furniture"
+                        category = "furniture",
+                        onSpawn = function(ent)
+                            table.insert(activeTVs, ent)
+                            net.start("BackroomsTVSpawn")
+                            net.writeEntity(ent)
+                            net.send()
+                        end
                     })
                 end
             end
 
             -- Rule 5: Rare Reality Decay Clipping Anomaly (Only 3% chance!)
-            -- ONLY this deliberate glitch is allowed to penetrate walls!
             if math.random() < CONFIG.GLITCH_CHANCE then
                 local glitchPos = cCenter + Vector(math.random(-50, 50), math.random(-50, 50), 18.2)
                 local glitchAng = Angle(math.random(-25, 25), math.random(0, 360), math.random(-20, 20))
@@ -544,7 +553,8 @@ if SERVER then
                             safeSetSubMaterial(ent, 0, "models/debug/debugwhite")
                             safeSetColor(ent, Color(0, 0, 0))
                         else
-                            safeSetSubMaterial(ent, 1, "phoenix_storms/pack2/panel")
+                            safeSetSubMaterial(ent, 1, "models/debug/debugwhite")
+                            safeSetColor(ent, Color(228, 214, 148))
                         end
 
                         print("[Backrooms Engine] ⚠️ Entity Manifested: " .. (isStillLife and "'Still Life'" or "'Stalker'") .. " at " .. tostring(npcPos))
@@ -565,27 +575,23 @@ if SERVER then
         gate.materialized = true
         print("[Backrooms Engine] ⚡ Void Threshold Activated! Materializing sector at " .. tostring(gate.pos))
 
-        -- 1. Broadcast HL1 Xen Green Zap Sequence to all clients
         net.start("BackroomsVoidZap")
         net.writeVector(gate.pos)
         net.writeAngle(gate.ang)
         net.send()
 
-        -- 2. Delay for 0.45s of violent crackling lightning, then dematerialize barrier & expand
         timer.simple(0.45, function()
             if isValid(gate.barrier) then
                 pcall(gate.barrier.remove, gate.barrier)
                 gate.barrier = nil
             end
 
-            -- Enqueue New Corridor Extension continuing through the gateway
             local stepVec = gate.extDir * CONFIG.CELL_SIZE
             local curCenter = gate.pos - Vector(0, 0, CONFIG.WALL_HEIGHT * 0.5)
 
             for step = 1, 3 do
                 local extCell = curCenter + (stepVec * step)
                 
-                -- Floor plate for new hallway
                 table.insert(spawnQueue, {
                     pos = extCell,
                     ang = Angle(0, 0, 0),
@@ -595,7 +601,6 @@ if SERVER then
                     category = "floor"
                 })
 
-                -- Flanking walls
                 local rightOffset = Angle(0, gate.ang.yaw, 0):getRight() * (CONFIG.CELL_SIZE * 0.5)
                 table.insert(spawnQueue, {
                     pos = extCell + rightOffset + Vector(0, 0, CONFIG.WALL_HEIGHT * 0.5),
@@ -614,7 +619,6 @@ if SERVER then
                     category = "wall"
                 })
 
-                -- Terminal Wall at end of extension
                 if step == 3 then
                     table.insert(spawnQueue, {
                         pos = extCell + (gate.extDir * (CONFIG.CELL_SIZE * 0.5)) + Vector(0, 0, CONFIG.WALL_HEIGHT * 0.5),
@@ -629,7 +633,6 @@ if SERVER then
         end)
     end
 
-    -- Monitor player distance to active Void Gateways every 0.35s
     timer.create("VoidGatewayMonitor", 0.35, 0, function()
         local plys = getAllPlayers()
         for _, gate in ipairs(voidGateways) do
@@ -645,14 +648,14 @@ if SERVER then
     end)
 
     -- --------------------------------------------------------------------------
-    -- 9. ASYNCHRONOUS BURST-REGULATED FIFO SPAWNER WITH PCALL PROTECTION
+    -- 9. ASYNCHRONOUS BURST-REGULATED FIFO SPAWNER
     -- --------------------------------------------------------------------------
     local spawnIndex = 1
     local spawnedCount = 0
 
     timer.create("BackroomsSafeSpawner", CONFIG.SPAWN_INTERVAL, 0, function()
         if spawnIndex > #spawnQueue then
-            return -- Continues listening as new extensions are enqueued
+            return
         end
 
         if prop.canSpawn() then
@@ -695,9 +698,10 @@ if SERVER then
 
 else
     -- ==========================================================================
-    -- CLIENT: AUDIO, REALITY PULSES & HL1 XEN GREEN ZAPPY PARTICLES
+    -- CLIENT: 3D2D CRT TV SCREENS, HL1 XEN LIGHTNING & AUDIO
     -- ==========================================================================
     local activeZaps = {}
+    local activeTVs = {}
     local pulseAlpha = 0
     local pulseColor = Color(20, 255, 60, 0)
     local xenBeamMat = material.load("sprites/physbeam") or material.load("sprites/lgtning")
@@ -712,12 +716,19 @@ else
         end)
     end)
 
+    -- Receive TV Monitor Registration
+    net.receive("BackroomsTVSpawn", function()
+        local tv = net.readEntity()
+        if isValid(tv) then
+            table.insert(activeTVs, tv)
+        end
+    end)
+
     -- Receive Void Threshold Materialization Trigger
     net.receive("BackroomsVoidZap", function()
         local gatePos = net.readVector()
         local gateAng = net.readAngle()
 
-        -- Half-Life 1 & Source Energy Audio Blast
         pcall(sound.playFile, "ambient/energy/zap1.wav", "3d", function(st)
             if isValid(st) then
                 pcall(st.setPos, st, gatePos)
@@ -733,7 +744,6 @@ else
             end
         end)
 
-        -- Register Active Xen Electric Lightning Storm
         table.insert(activeZaps, {
             pos = gatePos,
             ang = gateAng,
@@ -742,35 +752,78 @@ else
         })
     end)
 
-    -- 3D Rendering Hook: Half-Life 1 Xen Green Zappy Beams
-    hook.add("render", "BackroomsRenderXenBeams", function()
+    -- 3D Rendering Hook: Xen Beams & Parented 3D2D CRT Static Screens
+    hook.add("render", "BackroomsClientRender", function()
         local now = timer.curtime()
+        local plyPos = player():getPos()
+
+        -- 1. Half-Life 1 Xen Green Zappy Beams
         for i = #activeZaps, 1, -1 do
             local zap = activeZaps[i]
             if now > zap.dieTime then
                 table.remove(activeZaps, i)
             else
                 render.setColor(Color(45, 255, 65, 240))
-                if xenBeamMat then
-                    render.setMaterial(xenBeamMat)
-                end
+                if xenBeamMat then render.setMaterial(xenBeamMat) end
 
                 local right = zap.ang:getRight()
                 local halfW = 90
 
-                -- Render 8 branching, jagged electric lightning arcs
                 for b = 1, zap.bolts do
                     local lateral = (b / zap.bolts - 0.5) * (halfW * 1.8)
                     local top = zap.pos + (right * lateral) + Vector(0, 0, 95)
                     local bottom = zap.pos + (right * (lateral + math.random(-25, 25))) - Vector(0, 0, 95)
-
                     local mid1 = top + Vector(math.random(-18, 18), math.random(-18, 18), -55)
                     local mid2 = bottom + Vector(math.random(-18, 18), math.random(-18, 18), 55)
-
                     local w = math.random(8, 16)
                     render.draw3DBeam(top, mid1, w, 0, 1)
                     render.draw3DBeam(mid1, mid2, w * 0.8, 0, 1)
                     render.draw3DBeam(mid2, bottom, w, 0, 1)
+                end
+            end
+        end
+
+        -- 2. Parented CRT TV Analog Static & Emergency Broadcast Screens
+        for i = #activeTVs, 1, -1 do
+            local tv = activeTVs[i]
+            if not isValid(tv) then
+                table.remove(activeTVs, i)
+            else
+                -- Screen center on the front curved glass of tv_monitor01
+                local screenPos = tv:localToWorld(Vector(7.35, 0, 0.45))
+                local dist = plyPos:getDistance(screenPos)
+
+                -- Distance Culling: Only render when within 450 units!
+                if dist < 450 then
+                    local screenAng = tv:localToWorldAngles(Angle(0, 90, 90))
+
+                    -- Frustum Culling: Only render when facing the front of the screen
+                    if (plyPos - screenPos):dot(screenAng:getUp()) > 0 then
+                        render.start3D2D(screenPos, screenAng, 0.055)
+                            -- CRT Screen Background
+                            render.setColor(Color(12, 16, 14, 255))
+                            render.drawRect(-175, -125, 350, 250)
+
+                            -- Analog Static & Scanlines
+                            for row = -115, 115, 14 do
+                                local scanNoise = math.sin(row * 0.35 + now * 16) * 60 + math.random(-25, 45)
+                                local bright = math.clamp(55 + scanNoise, 25, 210)
+                                render.setColor(Color(bright * 0.8, bright, bright * 0.75, 160))
+                                render.drawRect(-165, row, 330, 8)
+                            end
+
+                            -- Intermittent Emergency Broadcast Glitch
+                            if (math.floor(now * 1.5) % 3) ~= 0 then
+                                render.setFont("DermaDefault")
+                                render.setColor(Color(35, 255, 55, 230))
+                                render.drawText(0, -35, "NO SIGNAL", 1, 1)
+                                render.setColor(Color(240, 240, 240, 190))
+                                render.drawText(0, 0, "EMERGENCY BROADCAST", 1, 1)
+                                render.setColor(Color(200, 190, 120, 160))
+                                render.drawText(0, 30, "SECTOR: LEVEL 0 [CORRUPT]", 1, 1)
+                            end
+                        render.end3D2D()
+                    end
                 end
             end
         end
