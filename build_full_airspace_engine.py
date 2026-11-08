@@ -74,26 +74,32 @@ lua_audio_str = "\n".join(lua_audio_lines)
 with open(os.path.join(WORKSPACE, 'cognitive-decay', 'core', 'main.lua'), 'r', encoding='utf-8') as f:
     current_code = f.read()
 
-parts = current_code.split('if SERVER then')
-dataset_head = parts[0]
-audio_start = dataset_head.find('AUDIO = {')
-audio_end = dataset_head.find('NPCS = {', audio_start)
-new_dataset_head = dataset_head[:audio_start] + lua_audio_str + "\n\n    " + dataset_head[audio_end:]
+# Extract ONLY the clean DATASET table without any trailing blocks
+d_start = current_code.find('local DATASET = {')
+d_end = current_code.find('\n}\n', d_start) + 3
+clean_head = current_code[:d_end]
+
+audio_start = clean_head.find('AUDIO = {')
+audio_end = clean_head.find('NPCS = {', audio_start)
+new_dataset_head = clean_head[:audio_start] + lua_audio_str + "\n\n    " + clean_head[audio_end:]
 
 # Now build the full airspace procedural engine
 master_engine_body = r'''
 -- --------------------------------------------------------------------------
--- 0. HIGH-ENTROPY DYNAMIC PROCEDURAL SEEDING
+-- 0. HIGH-ENTROPY DYNAMIC PROCEDURAL SEEDING (STARFALL SAFE)
 -- --------------------------------------------------------------------------
 local function seedEntropy()
-    local t = os.time()
-    local rt = math.floor(timer.realtime() * 10000)
-    local seed = (t * 1103515245 + rt + math.random(1, 999999)) % 2147483647
-    math.randomseed(seed)
-    for i = 1, 10 do math.random() end
-    print("[Cognitive Decay Engine] Procedural seed initialized: " .. tostring(seed))
+    pcall(function()
+        local t = (os.time and os.time()) or 0
+        local ct = (timer.curtime and math.floor(timer.curtime() * 1000)) or 0
+        local seed = (t * 1103515245 + ct + math.random(1, 999999)) % 2147483647
+        if math.randomseed then
+            pcall(math.randomseed, seed)
+        end
+        print("[Cognitive Decay Engine] Procedural seed initialized: " .. tostring(seed))
+    end)
 end
-seedEntropy()
+pcall(seedEntropy)
 
 if SERVER then
     -- Dematerialize any previous instance on hot-reload
@@ -408,8 +414,6 @@ if SERVER then
         
         -- Slope angle: length of plate4x8 = 380.1 units
         local numRamps = math.max(1, math.ceil(distVert / 190.0))
-        local stepZ = delta.z / numRamps
-        local stepHoriz = distHoriz / numRamps
 
         for i = 1, numRamps do
             local frac = (i - 0.5) / numRamps
@@ -989,7 +993,7 @@ with open(root_lua_path, 'w', encoding='utf-8') as f:
 with open(root_txt_path, 'w', encoding='utf-8') as f:
     f.write(full_code)
 
-print("Saved files to workspace successfully!")
+print("Saved clean engine to workspace successfully!")
 
 # Write to GMod Starfall directory
 if os.path.exists(GMOD_DIR):
@@ -1007,4 +1011,4 @@ if os.path.exists(GMOD_DIR):
         f.write(full_code)
     with open(gmod_root_txt, 'w', encoding='utf-8') as f:
         f.write(full_code)
-    print("Synchronized files to GMod Starfall directory successfully!")
+    print("Synchronized clean engine to GMod Starfall directory successfully!")

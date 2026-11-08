@@ -343,7 +343,7 @@ local DATASET = {
     },
 
     -- Audio Tracks & Soundscapes (by Cognitive Decay Stage)
-                AUDIO = {
+                    AUDIO = {
         music = {
             { name = "Backrooms (Original Score), Vol. 1 - Async Research Institute.mp3", url = "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms%20%28Original%20Score%29%2C%20Vol.%201%20-%20Async%20Research%20Institute.mp3", is_music = true, category = "music", weight = 8.5, eeriness = 8.5 },
             { name = "Backrooms (Original Score), Vol. 1 - Auditory Guidepost.mp3", url = "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms%20%28Original%20Score%29%2C%20Vol.%201%20-%20Auditory%20Guidepost.mp3", is_music = true, category = "music", weight = 8.5, eeriness = 8.5 },
@@ -551,46 +551,20 @@ local DATASET = {
 
 
 -- --------------------------------------------------------------------------
--- 0. HIGH-ENTROPY DYNAMIC RANDOM SEEDING
+-- 0. HIGH-ENTROPY DYNAMIC PROCEDURAL SEEDING (STARFALL SAFE)
 -- --------------------------------------------------------------------------
 local function seedEntropy()
-    local t = os.time()
-    local rt = math.floor(timer.realtime() * 10000)
-    local seed = (t * 1103515245 + rt + math.random(1, 999999)) % 2147483647
-    math.randomseed(seed)
-    for i = 1, 10 do math.random() end
-    print("[Cognitive Decay Engine] High-entropy seed initialized: " .. tostring(seed))
+    pcall(function()
+        local t = (os.time and os.time()) or 0
+        local ct = (timer.curtime and math.floor(timer.curtime() * 1000)) or 0
+        local seed = (t * 1103515245 + ct + math.random(1, 999999)) % 2147483647
+        if math.randomseed then
+            pcall(math.randomseed, seed)
+        end
+        print("[Cognitive Decay Engine] Procedural seed initialized: " .. tostring(seed))
+    end)
 end
-seedEntropy()
-
-
--- --------------------------------------------------------------------------
--- 0. HIGH-ENTROPY DYNAMIC RANDOM SEEDING
--- --------------------------------------------------------------------------
-local function seedEntropy()
-    local t = os.time()
-    local rt = math.floor(timer.realtime() * 10000)
-    local seed = (t * 1103515245 + rt + math.random(1, 999999)) % 2147483647
-    math.randomseed(seed)
-    for i = 1, 10 do math.random() end
-    print("[Cognitive Decay Engine] High-entropy seed initialized: " .. tostring(seed))
-end
-seedEntropy()
-
-
-
--- --------------------------------------------------------------------------
--- 0. HIGH-ENTROPY DYNAMIC PROCEDURAL SEEDING
--- --------------------------------------------------------------------------
-local function seedEntropy()
-    local t = os.time()
-    local rt = math.floor(timer.realtime() * 10000)
-    local seed = (t * 1103515245 + rt + math.random(1, 999999)) % 2147483647
-    math.randomseed(seed)
-    for i = 1, 10 do math.random() end
-    print("[Cognitive Decay Engine] Procedural seed initialized: " .. tostring(seed))
-end
-seedEntropy()
+pcall(seedEntropy)
 
 if SERVER then
     -- Dematerialize any previous instance on hot-reload
@@ -905,8 +879,6 @@ if SERVER then
         
         -- Slope angle: length of plate4x8 = 380.1 units
         local numRamps = math.max(1, math.ceil(distVert / 190.0))
-        local stepZ = delta.z / numRamps
-        local stepHoriz = distHoriz / numRamps
 
         for i = 1, numRamps do
             local frac = (i - 0.5) / numRamps
