@@ -1,0 +1,129 @@
+--@name Synchronized Deterministic Audio Engine
+--@author Cognitive Decay Project
+--@shared
+
+-- ZERO TICK NETWORKING ARCHITECTURE:
+-- Instead of spamming net.send() or calculating random values per-client in Think:
+-- 1. Server broadcasts ONE single time-sync event: (url, originPos, startCurTime, sharedSeed, isKnown)
+-- 2. Every client calculates pitch sags, tape skips, and stutters DETERMINISTICALLY
+--    using (timer.curtime() - startCurTime) + pseudo-random hash functions.
+-- Result:
+-- - Zero network lag / zero net quota usage.
+-- - Every player in the room hears the EXACT same tape jump and voice glitch at the EXACT same millisecond.
+
+if SERVER then
+    util.addNetworkString("SyncAudioEvent")
+
+    -- Call this on the server whenever an audio source is materialized
+    function broadcastSyncedAudio(url, pos, isKnown, soundClass, customGain)
+        net.start("SyncAudioEvent")
+        net.writeString(url)
+        net.writeVector(pos)
+        net.writeFloat(timer.curtime())        -- Universal time reference
+        net.writeUInt(math.random(1, 65535), 16) -- Synchronized deterministic seed
+        net.writeBool(isKnown or false)
+        net.writeString(soundClass or "ambient")
+        net.writeFloat(customGain or 0.5)
+        net.send() -- Sent once over reliable net channel, then silent!
+    end
+
+    -- Example test trigger
+    hook.add("ClientInitialized", "SendInitialSounds", function(ply)
+        -- Can send current active audio state to newly connecting players
+    end)
+end
+
+if CLIENT then
+    local activeSyncedStreams = {}
+
+    -- Deterministic Pseudo-Random Generator (Seed + Time Step)
+    -- Generates identical random numbers across all clients without networking
+    local function deterministicRandom(seed, step)
+        local n = math.sin(seed * 12.9898 + step * 78.233) * 43758.5453
+        return n - math.floor(n)
+    end
+
+    net.receive("SyncAudioEvent", function()
+        local url        = net.readString()
+        local pos        = net.readVector()
+        local startTime  = net.readFloat()
+        local sharedSeed = net.readUInt(16)
+        local isKnown    = net.readBool()
+        local soundClass = net.readString()
+        local baseVol    = net.readFloat()
+
+        -- "3d noblock": Positional 3D audio, asynchronous loading
+        bass.loadURL(url, "3d noblock", function(snd, err, errtxt)
+            if isValid(snd) then
+                -- Calibrated Acoustic Falloff
+                local fadeMin = (soundClass == "impact" or soundClass == "alarm") and 200 or 80
+                local fadeMax = (soundClass == "impact" or soundClass == "alarm") and 1500 or 450
+                
+                snd:setPos(pos)
+                snd:setVolume(baseVol)
+                snd:setFade(fadeMin, fadeMax)
+                pcall(snd.setLooping, snd, (soundClass == "ambient" or soundClass == "hum"))
+                snd:play()
+
+                -- Synchronize playback position if player joined late
+                local elapsed = timer.curtime() - startTime
+                local len = snd:getLength()
+                if len and len > 0 and elapsed > 0 then
+                    snd:setTime(elapsed % len)
+                end
+
+                table.insert(activeSyncedStreams, {
+                    snd        = snd,
+                    startTime  = startTime,
+                    seed       = sharedSeed,
+                    isKnown    = isKnown,
+                    soundClass = soundClass,
+                    baseVol    = baseVol
+                })
+            end
+        end)
+    end)
+
+    -- Client Think Loop: Pure Mathematical Local Computation (0 Net Traffic)
+    hook.add("think", "DeterministicAudioSync", function()
+        local now = timer.curtime()
+
+        for i = #activeSyncedStreams, 1, -1 do
+            local item = activeSyncedStreams[i]
+            local snd = item.snd
+
+            if isValid(snd) then
+                local t = now - item.startTime
+                local seed = item.seed
+
+                -- 1. DETERMINISTIC PITCH DRIFT
+                -- Sinusoidal carrier wave seeded identically for all players
+                local pitchMod = 1.0
+                if not item.isKnown then
+                    -- Unfamiliar / hallucinated sound drags in pitch
+                    local wobble = math.sin(t * 0.4 + (seed % 10)) * 0.18
+                    pitchMod = math.Clamp(0.85 - (math.sin(t * 0.1) * 0.25) + wobble, 0.35, 1.1)
+                else
+                    -- Known sound (e.g. 60Hz hum): subtle harmonic drift
+                    pitchMod = 1.0 + (math.sin(t * 0.05) * 0.03)
+                end
+
+                -- 2. DETERMINISTIC TAPE HICCUP (Every ~15 seconds based on seed)
+                local timeWindow = math.floor(t / 14.0)
+                local glitchRoll = deterministicRandom(seed, timeWindow)
+                
+                if glitchRoll > 0.65 then
+                    local glitchPhase = t % 14.0
+                    if glitchPhase > 12.0 and glitchPhase < 12.35 then
+                        -- All players experience a 0.35s voltage sag simultaneously!
+                        pitchMod = pitchMod * 0.45
+                    end
+                end
+
+                snd:setPitch(pitchMod)
+            else
+                table.remove(activeSyncedStreams, i)
+            end
+        end
+    end)
+end
