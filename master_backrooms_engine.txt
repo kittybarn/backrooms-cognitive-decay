@@ -4,25 +4,25 @@
 -- ==============================================================================
 -- THE ULTIMATE BACKROOMS PROCEDURAL GENERATOR FOR GARRY'S MOD (STARFALL EX)
 -- 
--- Key Highlights in this Test Version:
---  1. Retains 100% Default Textures on Furniture:
---     Desks, chairs, CRT monitors, and electronics spawn with their native,
---     authentic Half-Life 2 wood, plastic, metal, and glass textures.
---  2. Liminal Spatial Density:
---     Reduced clutter. The Backrooms is primarily vast, eerie, empty hallways.
---     Furniture clusters are sparse (8-10% of cells), making encounters memorable.
---  3. Natural Human Offsets & Angles:
---     Chairs are slid out, angled sideways (+/- 25 deg), and offset as though
---     someone hurriedly abandoned them. Monitors are positioned askew on desks.
---  4. Grounded Physics vs. Rare Uncanny Wall Clipping:
---     Normal furniture sits completely flush on the floor (exact Source hull Z math).
---     Rare context-decay anomalies (4% chance) feature desks/chairs partially 
---     fused sideways into walls at dramatic angles (authentic noclip glitches).
---  5. Smooth Drywall Wallpaper & Carpet:
---     Eliminated repeating debris stripes on walls; features smooth matte yellow
---     plaster drywall and damp woven office carpet.
---  6. Burst-Safe Prop Architecture with 100% pcall Protection:
---     Zero crashes from burst limits or invalid engine calls.
+-- Key Features:
+--  1. Fully Sealed Perimeter (Zero Open Skybox / Map Leaks):
+--     Every single outer border is enclosed. No outside skybox or flatgrass visible.
+--  2. The Void & Dynamic Proximity Materialization:
+--     Border openings terminate in pitch-black Void Gateways. When a player
+--     approaches within 260 units, the sector materializing sequence fires!
+--  3. Half-Life 1 Xen Green Electric Zappy Particles:
+--     Violent crackling green lightning beams (sprites/physbeam) arc between 
+--     ceiling and floor across the gateway with authentic electric zap audio.
+--  4. Continuous Procedural Extension:
+--     The Void barrier dematerializes and enqueues a new extension corridor 
+--     materializing directly out of the green lightning.
+--  5. Authentic Prop Textures & Human Angles:
+--     Furniture retains default Half-Life 2 wood/plastic/CRT textures.
+--     Chairs are slid out and angled; monitors sit askew on desks.
+--  6. Grounded Physics vs. Rare Wall Clipping (4%):
+--     Exact Z hull math sits normal props flush on the floor.
+--     Rare anomalies feature desks/chairs fused into drywall at sharp angles.
+--  7. 100% Burst-Safe & pcall Protected.
 -- ==============================================================================
 
 if SERVER then
@@ -43,13 +43,14 @@ if SERVER then
         -- Spawning Throttle (Guarantees zero burst limit overflow)
         SPAWN_INTERVAL = 0.25, -- 4 props per second (matches Starfall token regen)
         
-        -- Gameplay Chances (Dialed for authentic liminal Backrooms feel)
-        FURNITURE_CHANCE = 0.09,  -- 9% of cells have furniture (rare & eerie)
-        GLITCH_CHANCE    = 0.04,  -- 4% chance for rare wall-fused clipping anomaly
-        NPC_CHANCE       = 0.07,  -- 7% chance to spawn an uncanny entity in dead-ends
+        -- Gameplay Chances
+        FURNITURE_CHANCE = 0.09,  -- 9% of cells have furniture (liminal & sparse)
+        GLITCH_CHANCE    = 0.04,  -- 4% chance for wall-fused clipping anomaly
+        NPC_CHANCE       = 0.07,  -- 7% chance to spawn uncanny entity in dead-ends
         
-        -- Elevation Offset (Safe airspace on gm_functional_flatgrass)
-        BASE_ALTITUDE = 0      -- Relative to chip location
+        -- Void & Materialization Settings
+        VOID_TRIGGER_DIST = 260,  -- Distance in units to trigger Xen lightning sequence
+        BASE_ALTITUDE = 0
     }
 
     -- --------------------------------------------------------------------------
@@ -131,15 +132,22 @@ if SERVER then
         pcall(ent.manipulateBoneAngles, ent, bone, ang)
     end
 
+    local function getAllPlayers()
+        local ok, plys = pcall(find.allPlayers)
+        if ok and type(plys) == "table" then return plys end
+        return { owner() }
+    end
+
     -- --------------------------------------------------------------------------
-    -- 4. STATE & SPAWN QUEUE
+    -- 4. STATE & QUEUES
     -- --------------------------------------------------------------------------
     local spawnQueue = {}
     local activeEntities = {}
+    local voidGateways = {} -- Active boundary doorways leading into the Void
     local chipOrigin = chip():getPos() + Vector(0, 0, CONFIG.BASE_ALTITUDE)
 
     -- --------------------------------------------------------------------------
-    -- 5. MAZE SOLVER (Recursive Backtracker with Looping Corridors)
+    -- 5. MAZE GENERATION & PERIMETER SEALING
     -- --------------------------------------------------------------------------
     local grid = {}
     for x = 1, CONFIG.GRID_W do
@@ -151,7 +159,6 @@ if SERVER then
                 south = true,
                 east = true,
                 west = true,
-                hasFurniture = false,
                 isDeadEnd = false
             }
         end
@@ -166,7 +173,6 @@ if SERVER then
             { x = -1, y = 0, wall = "west", opp = "east" }
         }
 
-        -- Shuffle directions
         for i = #directions, 2, -1 do
             local j = math.random(i)
             directions[i], directions[j] = directions[j], directions[i]
@@ -180,7 +186,6 @@ if SERVER then
                     grid[nx][ny][d.opp] = false
                     carve(nx, ny)
                 elseif math.random() < 0.15 then
-                    -- 15% loop chance for authentic Backrooms looping corridors
                     grid[cx][cy][d.wall] = false
                     grid[nx][ny][d.opp] = false
                 end
@@ -194,20 +199,18 @@ if SERVER then
     for x = 1, CONFIG.GRID_W do
         for y = 1, CONFIG.GRID_H do
             local c = grid[x][y]
-            local wallCount = (c.north and 1 or 0) + (c.south and 1 or 0) + (c.east and 1 or 0) + (c.west and 1 or 0)
-            if wallCount >= 3 then
-                c.isDeadEnd = true
-            end
+            local count = (c.north and 1 or 0) + (c.south and 1 or 0) + (c.east and 1 or 0) + (c.west and 1 or 0)
+            if count >= 3 then c.isDeadEnd = true end
         end
     end
 
     -- --------------------------------------------------------------------------
-    -- 6. GREEDY ENQUEUING: FLOORS, WALLS, FURNITURE & NPCS
+    -- 6. ENQUEUE INITIAL SECTOR (Sealed Perimeter & Pitch-Black Void Gates)
     -- --------------------------------------------------------------------------
-    print("[Backrooms Engine] Synthesizing structural layout...")
+    print("[Backrooms Engine] Sealing perimeter and establishing Void Gateways...")
 
-    -- A. Large Modular Floor Plates (plate16x16 covers 759x759 units)
-    local floorStep = 4 -- Covers 4 cells x 4 cells = 759 units
+    -- A. Floor Plates
+    local floorStep = 4
     local defaultFloor = FLOOR_PRESETS[1]
     for x = 1, CONFIG.GRID_W, floorStep do
         for y = 1, CONFIG.GRID_H, floorStep do
@@ -224,17 +227,52 @@ if SERVER then
         end
     end
 
-    -- B. Wall Partitions (Open Roof, 100% Solid Hunter Plate Collisions)
+    -- B. Wall Partitions & Exterior Boundary Enclosure
+    local designatedGateways = 0
     for x = 1, CONFIG.GRID_W do
         for y = 1, CONFIG.GRID_H do
             local cell = grid[x][y]
             local cCenter = chipOrigin + Vector((x - 0.5) * CONFIG.CELL_SIZE, (y - 0.5) * CONFIG.CELL_SIZE, 0)
-            
-            -- Slight wallpaper variation per zone
             local wallPreset = WALL_PRESETS[(x + y) % #WALL_PRESETS + 1]
 
-            -- North Wall
-            if cell.north then
+            -- 1. North Wall / Boundary
+            if y == CONFIG.GRID_H then
+                -- At outer North boundary: Check if carved path leads here
+                if not cell.north and designatedGateways < 4 and math.random() < 0.5 then
+                    -- Void Gateway Threshold!
+                    designatedGateways = designatedGateways + 1
+                    local gatePos = cCenter + Vector(0, CONFIG.CELL_SIZE * 0.5, CONFIG.WALL_HEIGHT * 0.5)
+                    local gateAng = Angle(90, 0, 0)
+                    local gateObj = {
+                        pos = gatePos,
+                        ang = gateAng,
+                        extDir = Vector(0, 1, 0),
+                        materialized = false,
+                        barrier = nil
+                    }
+                    table.insert(voidGateways, gateObj)
+                    -- Spawn Pitch Black Void Barrier
+                    table.insert(spawnQueue, {
+                        pos = gatePos,
+                        ang = gateAng,
+                        model = CONFIG.WALL_MODEL,
+                        mat = "models/debug/debugwhite",
+                        color = Color(0, 0, 0), -- Pure light-absorbing Void
+                        category = "void_barrier",
+                        onSpawn = function(ent) gateObj.barrier = ent end
+                    })
+                else
+                    -- Solid Enclosed Boundary Wall (100% blocks skybox)
+                    table.insert(spawnQueue, {
+                        pos = cCenter + Vector(0, CONFIG.CELL_SIZE * 0.5, CONFIG.WALL_HEIGHT * 0.5),
+                        ang = Angle(90, 0, 0),
+                        model = CONFIG.WALL_MODEL,
+                        mat = wallPreset.mat,
+                        color = wallPreset.color,
+                        category = "wall"
+                    })
+                end
+            elseif cell.north then
                 table.insert(spawnQueue, {
                     pos = cCenter + Vector(0, CONFIG.CELL_SIZE * 0.5, CONFIG.WALL_HEIGHT * 0.5),
                     ang = Angle(90, 0, 0),
@@ -245,8 +283,8 @@ if SERVER then
                 })
             end
 
-            -- South Outer Boundary
-            if y == 1 and cell.south then
+            -- 2. South Outer Boundary (Always fully sealed)
+            if y == 1 then
                 table.insert(spawnQueue, {
                     pos = cCenter + Vector(0, -CONFIG.CELL_SIZE * 0.5, CONFIG.WALL_HEIGHT * 0.5),
                     ang = Angle(90, 0, 0),
@@ -257,8 +295,40 @@ if SERVER then
                 })
             end
 
-            -- East Wall
-            if cell.east then
+            -- 3. East Wall / Boundary
+            if x == CONFIG.GRID_W then
+                if not cell.east and designatedGateways < 4 and math.random() < 0.5 then
+                    designatedGateways = designatedGateways + 1
+                    local gatePos = cCenter + Vector(CONFIG.CELL_SIZE * 0.5, 0, CONFIG.WALL_HEIGHT * 0.5)
+                    local gateAng = Angle(90, 90, 0)
+                    local gateObj = {
+                        pos = gatePos,
+                        ang = gateAng,
+                        extDir = Vector(1, 0, 0),
+                        materialized = false,
+                        barrier = nil
+                    }
+                    table.insert(voidGateways, gateObj)
+                    table.insert(spawnQueue, {
+                        pos = gatePos,
+                        ang = gateAng,
+                        model = CONFIG.WALL_MODEL,
+                        mat = "models/debug/debugwhite",
+                        color = Color(0, 0, 0),
+                        category = "void_barrier",
+                        onSpawn = function(ent) gateObj.barrier = ent end
+                    })
+                else
+                    table.insert(spawnQueue, {
+                        pos = cCenter + Vector(CONFIG.CELL_SIZE * 0.5, 0, CONFIG.WALL_HEIGHT * 0.5),
+                        ang = Angle(90, 90, 0),
+                        model = CONFIG.WALL_MODEL,
+                        mat = wallPreset.mat,
+                        color = wallPreset.color,
+                        category = "wall"
+                    })
+                end
+            elseif cell.east then
                 table.insert(spawnQueue, {
                     pos = cCenter + Vector(CONFIG.CELL_SIZE * 0.5, 0, CONFIG.WALL_HEIGHT * 0.5),
                     ang = Angle(90, 90, 0),
@@ -269,8 +339,8 @@ if SERVER then
                 })
             end
 
-            -- West Outer Boundary
-            if x == 1 and cell.west then
+            -- 4. West Outer Boundary (Always fully sealed)
+            if x == 1 then
                 table.insert(spawnQueue, {
                     pos = cCenter + Vector(-CONFIG.CELL_SIZE * 0.5, 0, CONFIG.WALL_HEIGHT * 0.5),
                     ang = Angle(90, 90, 0),
@@ -281,14 +351,13 @@ if SERVER then
                 })
             end
 
-            -- C. Spatial Affordance Interior Props (Furniture retains default Source materials!)
+            -- C. Spatial Furniture (Sparse, authentic liminal placement)
             if not cell.isDeadEnd and math.random() < CONFIG.FURNITURE_CHANCE then
                 local isWallGlitch = math.random() < CONFIG.GLITCH_CHANCE
                 
                 if isWallGlitch then
-                    -- RARE CONTEXT DECAY GLITCH: Table/Chair fused diagonally into the wall (noclip glitch)
+                    -- Fused diagonally into wall at sharp angle
                     local glitchPos = cCenter + Vector(math.random(-40, 40), math.random(-40, 40), 18.2)
-                    -- Dramatically angled clip (Pitch 25 deg, Roll -18 deg)
                     local glitchAng = Angle(math.random(-25, 25), math.random(0, 360), math.random(-20, 20))
                     
                     table.insert(spawnQueue, {
@@ -297,8 +366,6 @@ if SERVER then
                         model = PROP_PRESETS.desks[math.random(#PROP_PRESETS.desks)],
                         category = "furniture"
                     })
-
-                    -- Accompanying tilted chair fused nearby
                     table.insert(spawnQueue, {
                         pos = glitchPos + glitchAng:getForward() * -30 + Vector(0, 0, 10),
                         ang = glitchAng + Angle(15, -35, 10),
@@ -306,13 +373,11 @@ if SERVER then
                         category = "furniture"
                     })
                 else
-                    -- NORMAL GROUNDED FURNITURE (Exact Source Hull Math - Never Floats)
-                    -- Base desk model has hull min Z = -18.2, so Z = 18.2 places feet flush on floor!
+                    -- Flush Grounded Furniture (Retains native HL2 textures)
                     local deskPos = cCenter + Vector(math.random(-35, 35), math.random(-35, 35), 18.2)
-                    local deskYaw = math.random(0, 3) * 90 + math.random(-8, 8) -- Slight human imperfection
+                    local deskYaw = math.random(0, 3) * 90 + math.random(-8, 8)
                     local deskAng = Angle(0, deskYaw, 0)
 
-                    -- 1. Spawn Desk (Retains native Half-Life 2 wood texture!)
                     table.insert(spawnQueue, {
                         pos = deskPos,
                         ang = deskAng,
@@ -320,11 +385,9 @@ if SERVER then
                         category = "furniture"
                     })
 
-                    -- 2. Spawn Monitor perched realistically ON TOP of the desk
-                    -- Desk surface is at Z = 37.0; monitor hull min is -8.3; total Z = 45.3
+                    -- Monitor askew on desk
                     local monitorPos = deskPos + Vector(math.random(-8, 8), math.random(-4, 4), 27.1)
-                    local monitorAng = Angle(0, deskYaw + math.random(-18, 18), 0) -- Angled slightly askew
-                    
+                    local monitorAng = Angle(0, deskYaw + math.random(-18, 18), 0)
                     table.insert(spawnQueue, {
                         pos = monitorPos,
                         ang = monitorAng,
@@ -332,27 +395,20 @@ if SERVER then
                         category = "furniture"
                     })
 
-                    -- 3. Spawn Chair naturally pulled out and angled
-                    -- Chair hull min is -20.1, so Z = 20.1 puts legs flush on floor
-                    local chairDistance = math.random(-45, -38)
-                    local chairLateralJitter = deskAng:getRight() * math.random(-10, 10)
-                    local chairPos = deskPos + (deskAng:getForward() * chairDistance) + chairLateralJitter
-                    chairPos.z = chipOrigin.z + 20.1 -- Perfectly grounded!
-
-                    -- Human angle: rotated slightly sideways (+/- 25 deg) as if recently abandoned
-                    local chairYaw = deskYaw + math.random(-25, 25)
-                    local chairAng = Angle(0, chairYaw, 0)
+                    -- Chair slid back & angled (+/- 25 deg)
+                    local chairPos = deskPos + (deskAng:getForward() * math.random(-45, -38)) + (deskAng:getRight() * math.random(-10, 10))
+                    chairPos.z = chipOrigin.z + 20.1
 
                     table.insert(spawnQueue, {
                         pos = chairPos,
-                        ang = chairAng,
+                        ang = Angle(0, deskYaw + math.random(-25, 25), 0),
                         model = PROP_PRESETS.chairs[1],
                         category = "furniture"
                     })
                 end
             end
 
-            -- D. Rare NPC Entities ("Still Life" & "Stalkers")
+            -- D. Rare NPCs in Dead Ends
             if cell.isDeadEnd and math.random() < CONFIG.NPC_CHANCE then
                 local isStillLife = math.random() < 0.60
                 local npcPos = cCenter + Vector(0, 0, 10)
@@ -364,10 +420,8 @@ if SERVER then
                     model = NPC_MODELS[math.random(#NPC_MODELS)],
                     category = "npc",
                     onSpawn = function(ent)
-                        -- Freeze Still Life entities
                         pcall(ent.setFrozen, ent, true)
 
-                        -- 1. Facial Flex Deformations (Wide staring eyes, uncanny jaw drop)
                         local okNum, flexCount = pcall(ent.getFlexNum, ent)
                         if okNum and type(flexCount) == "number" then
                             for f = 0, math.min(flexCount - 1, 16) do
@@ -377,7 +431,6 @@ if SERVER then
                             end
                         end
 
-                        -- 2. Bone Skeletons Glitch (Twisted neck, elongated spine)
                         local okBone1, neckBone = pcall(ent.lookupBone, ent, "ValveBiped.Bip01_Head1")
                         if okBone1 and neckBone then
                             safeManipulateBoneAngles(ent, neckBone, Angle(math.random(-25, 25), math.random(30, 75), 0))
@@ -387,13 +440,10 @@ if SERVER then
                             safeManipulateBoneAngles(ent, spineBone, Angle(math.random(-15, 15), 0, math.random(-20, 20)))
                         end
 
-                        -- 3. SubMaterial Overrides (Uncanny Pitch Black or Wallpaper Face)
                         if math.random() < 0.5 then
-                            -- Static TV face / pitch black void
                             safeSetSubMaterial(ent, 0, "models/debug/debugwhite")
                             safeSetColor(ent, Color(0, 0, 0))
                         else
-                            -- Wallpaper clothes
                             safeSetSubMaterial(ent, 1, "phoenix_storms/pack2/panel")
                         end
 
@@ -405,36 +455,114 @@ if SERVER then
     end
 
     local totalQueued = #spawnQueue
-    print("[Backrooms Engine] Queue compiled: " .. totalQueued .. " total components.")
-    print("[Backrooms Engine] Rate-regulated spawn initiated (0 burst risk)...")
+    print("[Backrooms Engine] Initial sector compiled: " .. totalQueued .. " components.")
+    print("[Backrooms Engine] " .. #voidGateways .. " active Void Gateways established.")
 
     -- --------------------------------------------------------------------------
-    -- 7. ASYNCHRONOUS BURST-REGULATED FIFO SPAWNER WITH PCALL PROTECTION
+    -- 7. PROXIMITY-TRIGGERED VOID MATERIALIZATION SEQUENCE
+    -- --------------------------------------------------------------------------
+    local function triggerMaterialize(gate)
+        gate.materialized = true
+        print("[Backrooms Engine] ⚡ Void Threshold Activated! Materializing sector at " .. tostring(gate.pos))
+
+        -- 1. Broadcast HL1 Xen Green Zap Sequence to all clients
+        net.start("BackroomsVoidZap")
+        net.writeVector(gate.pos)
+        net.writeAngle(gate.ang)
+        net.send()
+
+        -- 2. Delay for 0.45s of violent crackling lightning, then dematerialize barrier & expand
+        timer.simple(0.45, function()
+            if isValid(gate.barrier) then
+                pcall(gate.barrier.remove, gate.barrier)
+                gate.barrier = nil
+            end
+
+            -- Enqueue New Corridor Extension continuing through the gateway
+            local stepVec = gate.extDir * CONFIG.CELL_SIZE
+            local curCenter = gate.pos - Vector(0, 0, CONFIG.WALL_HEIGHT * 0.5)
+
+            for step = 1, 3 do
+                local extCell = curCenter + (stepVec * step)
+                
+                -- Floor plate for new hallway
+                table.insert(spawnQueue, {
+                    pos = extCell,
+                    ang = Angle(0, 0, 0),
+                    model = "models/hunter/plates/plate4x4.mdl",
+                    mat = FLOOR_PRESETS[1].mat,
+                    color = FLOOR_PRESETS[1].color,
+                    category = "floor"
+                })
+
+                -- Flanking walls
+                local rightOffset = Angle(0, gate.ang.yaw, 0):getRight() * (CONFIG.CELL_SIZE * 0.5)
+                table.insert(spawnQueue, {
+                    pos = extCell + rightOffset + Vector(0, 0, CONFIG.WALL_HEIGHT * 0.5),
+                    ang = Angle(90, gate.ang.yaw + 90, 0),
+                    model = CONFIG.WALL_MODEL,
+                    mat = WALL_PRESETS[1].mat,
+                    color = WALL_PRESETS[1].color,
+                    category = "wall"
+                })
+                table.insert(spawnQueue, {
+                    pos = extCell - rightOffset + Vector(0, 0, CONFIG.WALL_HEIGHT * 0.5),
+                    ang = Angle(90, gate.ang.yaw + 90, 0),
+                    model = CONFIG.WALL_MODEL,
+                    mat = WALL_PRESETS[1].mat,
+                    color = WALL_PRESETS[1].color,
+                    category = "wall"
+                })
+
+                -- Terminal Wall at end of extension
+                if step == 3 then
+                    table.insert(spawnQueue, {
+                        pos = extCell + (gate.extDir * (CONFIG.CELL_SIZE * 0.5)) + Vector(0, 0, CONFIG.WALL_HEIGHT * 0.5),
+                        ang = Angle(90, gate.ang.yaw, 0),
+                        model = CONFIG.WALL_MODEL,
+                        mat = WALL_PRESETS[1].mat,
+                        color = WALL_PRESETS[1].color,
+                        category = "wall"
+                    })
+                end
+            end
+        end)
+    end
+
+    -- Monitor player distance to active Void Gateways every 0.35s
+    timer.create("VoidGatewayMonitor", 0.35, 0, function()
+        local plys = getAllPlayers()
+        for _, gate in ipairs(voidGateways) do
+            if not gate.materialized then
+                for _, ply in ipairs(plys) do
+                    if isValid(ply) and ply:getPos():getDistance(gate.pos) <= CONFIG.VOID_TRIGGER_DIST then
+                        triggerMaterialize(gate)
+                        break
+                    end
+                end
+            end
+        end
+    end)
+
+    -- --------------------------------------------------------------------------
+    -- 8. ASYNCHRONOUS BURST-REGULATED FIFO SPAWNER WITH PCALL PROTECTION
     -- --------------------------------------------------------------------------
     local spawnIndex = 1
     local spawnedCount = 0
 
     timer.create("BackroomsSafeSpawner", CONFIG.SPAWN_INTERVAL, 0, function()
         if spawnIndex > #spawnQueue then
-            timer.remove("BackroomsSafeSpawner")
-            print("[Backrooms Engine] ✅ SECTOR FULLY MATERIALIZED! Active entities: " .. spawnedCount)
-            return
+            return -- Continues listening as new extensions are enqueued
         end
 
-        -- Check StarfallEx Burst Quota before EVERY spawn
         if prop.canSpawn() then
             local item = spawnQueue[spawnIndex]
-            
-            -- Protected spawn call: guaranteed never to throw an unhandled error
             local ok, p = pcall(prop.create, item.pos, item.ang, item.model, true)
             if ok and isValid(p) then
-                -- CRITICAL: Only walls and floors have materials applied!
-                -- Furniture props RETAIN their authentic native Half-Life 2 materials!
-                if item.category == "wall" or item.category == "floor" then
+                if item.category == "wall" or item.category == "floor" or item.category == "void_barrier" then
                     safeSetMaterial(p, item.mat, item.color)
                 end
 
-                -- Safely execute custom entity callbacks with pcall
                 if item.onSpawn then
                     pcall(item.onSpawn, p)
                 end
@@ -443,38 +571,38 @@ if SERVER then
                 spawnedCount = spawnedCount + 1
                 spawnIndex = spawnIndex + 1
 
-                if spawnedCount % 20 == 0 or spawnedCount == totalQueued then
-                    local pct = math.floor((spawnedCount / totalQueued) * 100)
-                    print("[Backrooms Engine] Progress: " .. spawnedCount .. "/" .. totalQueued .. " (" .. pct .. "%)")
+                if spawnedCount % 20 == 0 or spawnedCount == #spawnQueue then
+                    local pct = math.floor((spawnedCount / #spawnQueue) * 100)
+                    print("[Backrooms Engine] Materializing: " .. spawnedCount .. "/" .. #spawnQueue .. " (" .. pct .. "%)")
                 end
             else
-                -- If spawn failed due to engine collision or boundary, skip safely to next
                 spawnIndex = spawnIndex + 1
             end
         end
     end)
 
     -- --------------------------------------------------------------------------
-    -- 8. CLEANUP ON REMOVAL
+    -- 9. CLEANUP ON REMOVAL
     -- --------------------------------------------------------------------------
     hook.add("Removed", "BackroomsCleanup", function()
         timer.remove("BackroomsSafeSpawner")
+        timer.remove("VoidGatewayMonitor")
         for _, ent in ipairs(activeEntities) do
-            if isValid(ent) then 
-                pcall(ent.remove, ent)
-            end
+            if isValid(ent) then pcall(ent.remove, ent) end
         end
         print("[Backrooms Engine] All sector entities dematerialized.")
     end)
 
 else
     -- ==========================================================================
-    -- CLIENT: AUDIO & VISUAL REALITY PULSE
+    -- CLIENT: AUDIO, REALITY PULSES & HL1 XEN GREEN ZAPPY PARTICLES
     -- ==========================================================================
+    local activeZaps = {}
     local pulseAlpha = 0
     local pulseColor = Color(20, 255, 60, 0)
+    local xenBeamMat = material.load("sprites/physbeam") or material.load("sprites/lgtning")
 
-    -- Ambient Zero-Net-Overhead Sound
+    -- Ambient Loop
     hook.add("Initialize", "BackroomsClientInit", function()
         pcall(sound.playFile, "ambient/levels/labs/equipment_printer_loop1.wav", "noplay", function(station)
             if isValid(station) then
@@ -484,12 +612,78 @@ else
         end)
     end)
 
-    -- Periodic Reality Shift Pulse Effect
-    timer.create("RealityPulseTimer", 120, 0, function()
-        pulseAlpha = 220
-        pcall(sound.playFile, "ambient/levels/citadel/portal_beam_shoot1.wav", "2d", function(st)
+    -- Receive Void Threshold Materialization Trigger
+    net.receive("BackroomsVoidZap", function()
+        local gatePos = net.readVector()
+        local gateAng = net.readAngle()
+
+        -- Half-Life 1 & Source Energy Audio Blast
+        pcall(sound.playFile, "ambient/energy/zap1.wav", "3d", function(st)
             if isValid(st) then
-                pcall(st.setVolume, st, 0.4)
+                pcall(st.setPos, st, gatePos)
+                pcall(st.setVolume, st, 1.0)
+                pcall(st.play, st)
+            end
+        end)
+        pcall(sound.playFile, "ambient/levels/citadel/portal_beam_shoot1.wav", "3d", function(st)
+            if isValid(st) then
+                pcall(st.setPos, st, gatePos)
+                pcall(st.setVolume, st, 0.7)
+                pcall(st.play, st)
+            end
+        end)
+
+        -- Register Active Xen Electric Lightning Storm
+        table.insert(activeZaps, {
+            pos = gatePos,
+            ang = gateAng,
+            dieTime = timer.curtime() + 1.2, -- 1.2s violent crackle
+            bolts = 8
+        })
+    end)
+
+    -- 3D Rendering Hook: Half-Life 1 Xen Green Zappy Beams
+    hook.add("render", "BackroomsRenderXenBeams", function()
+        local now = timer.curtime()
+        for i = #activeZaps, 1, -1 do
+            local zap = activeZaps[i]
+            if now > zap.dieTime then
+                table.remove(activeZaps, i)
+            else
+                -- Intense Xen Green Glow
+                render.setColor(Color(45, 255, 65, 240))
+                if xenBeamMat then
+                    render.setMaterial(xenBeamMat)
+                end
+
+                local right = zap.ang:getRight()
+                local halfW = 90
+
+                -- Render 8 branching, jagged electric lightning arcs
+                for b = 1, zap.bolts do
+                    local lateral = (b / zap.bolts - 0.5) * (halfW * 1.8)
+                    local top = zap.pos + (right * lateral) + Vector(0, 0, 95)
+                    local bottom = zap.pos + (right * (lateral + math.random(-25, 25))) - Vector(0, 0, 95)
+
+                    -- Jagged mid-air arcing points that jump every frame
+                    local mid1 = top + Vector(math.random(-18, 18), math.random(-18, 18), -55)
+                    local mid2 = bottom + Vector(math.random(-18, 18), math.random(-18, 18), 55)
+
+                    local w = math.random(8, 16)
+                    render.draw3DBeam(top, mid1, w, 0, 1)
+                    render.draw3DBeam(mid1, mid2, w * 0.8, 0, 1)
+                    render.draw3DBeam(mid2, bottom, w, 0, 1)
+                end
+            end
+        end
+    end)
+
+    -- Reality Shift Pulse
+    timer.create("RealityPulseTimer", 150, 0, function()
+        pulseAlpha = 220
+        pcall(sound.playFile, "weapons/physcannon/energy_sing_explosion2.wav", "2d", function(st)
+            if isValid(st) then
+                pcall(st.setVolume, st, 0.45)
                 pcall(st.play, st)
             end
         end)
