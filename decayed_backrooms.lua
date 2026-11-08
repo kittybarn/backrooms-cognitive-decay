@@ -28,17 +28,17 @@ if SERVER then
       },
       {
         "type": "light",
-        "id": "models/props_c17/light_fluorescent01a.mdl",
-        "name": "Fluorescent Ceiling Light Fixture"
+        "id": "models/props_wasteland/light_caged01a.mdl",
+        "name": "Industrial Caged Lamp"
       },
       {
         "type": "primary_furniture",
-        "id": "models/props_c17/FurnitureDesk001a.mdl",
-        "name": "Office Desk",
+        "id": "models/props_wasteland/controlroom_desk001b.mdl",
+        "name": "Control Terminal",
         "dimensions": [
-          64.0,
+          72.0,
           36.0,
-          30.0
+          48.0
         ]
       },
       {
@@ -65,8 +65,8 @@ if SERVER then
     "logs": [
       "NORMAL: Matched Yellow Mono Wallpaper for biome office.",
       "NORMAL: Matched Damp Commercial Carpet for biome office.",
-      "NORMAL: Matched Fluorescent Ceiling Light Fixture for biome office.",
-      "TAG_COLLISION: Looked for ['flat_surface', 'furniture', 'work'], but locked onto 'work' -> grabbed Office Desk!",
+      "TAG_COLLISION: Looked for ['light_source', 'ceiling_anchored'], but locked onto 'light_source' -> grabbed Industrial Caged Lamp!",
+      "TAG_COLLISION: Looked for ['flat_surface', 'furniture', 'work'], but locked onto 'flat_surface' -> grabbed Control Terminal!",
       "NORMAL: Matched Office Chair for biome office.",
       "NORMAL: Matched CRT Computer Monitor for biome office."
     ]
@@ -134,22 +134,22 @@ if SERVER then
   {
     "room_index": 3,
     "confusion_level": 0.6,
-    "biome_state": "STABLE (office)",
+    "biome_state": "BIOME_DRIFT (office -> archive)",
     "elements": [
       {
         "type": "wall",
-        "id": "materials/plaster/office_wallpaper_yellow",
-        "name": "Yellow Mono Wallpaper"
+        "id": "models/props_c17/FurnitureDesk001a.mdl",
+        "name": "Office Desk"
       },
       {
         "type": "floor",
-        "id": "materials/carpet/office_carpet_damp_01",
-        "name": "Damp Commercial Carpet"
+        "id": "materials/concrete/floor_concrete01",
+        "name": "Stained Concrete Floor"
       },
       {
         "type": "light",
-        "id": "models/props_c17/light_fluorescent01a.mdl",
-        "name": "Fluorescent Ceiling Light Fixture"
+        "id": "models/props_c17/FurnitureDesk001a.mdl",
+        "name": "Office Desk"
       },
       {
         "type": "primary_furniture",
@@ -173,38 +173,98 @@ if SERVER then
       },
       {
         "type": "tech_accessory",
-        "id": "models/props_lab/monitor02.mdl",
-        "name": "CRT Computer Monitor",
+        "id": "models/props_wasteland/controlroom_desk001b.mdl",
+        "name": "Control Terminal",
         "dimensions": [
-          18.0,
-          18.0,
-          16.0
+          72.0,
+          36.0,
+          48.0
         ]
       }
     ],
     "logs": [
-      "NORMAL: Matched Yellow Mono Wallpaper for biome office.",
-      "TAG_COLLISION: Looked for ['floor_covering', 'horizontal'], but locked onto 'floor_covering' -> grabbed Damp Commercial Carpet!",
-      "NORMAL: Matched Fluorescent Ceiling Light Fixture for biome office.",
-      "TAG_COLLISION: Looked for ['flat_surface', 'furniture', 'work'], but locked onto 'work' -> grabbed Office Desk!",
-      "NORMAL: Matched Office Chair for biome office.",
-      "NORMAL: Matched CRT Computer Monitor for biome office."
+      "MEMORY_STUCK: Reused Office Desk due to token fixation.",
+      "TAG_COLLISION: Looked for ['floor_covering', 'horizontal'], but locked onto 'floor_covering' -> grabbed Stained Concrete Floor!",
+      "MEMORY_STUCK: Reused Office Desk due to token fixation.",
+      "NORMAL: Matched Office Desk for biome archive.",
+      "NORMAL: Matched Office Chair for biome archive.",
+      "TAG_COLLISION: Looked for ['technology', 'box', 'electronic'], but locked onto 'electronic' -> grabbed Control Terminal!"
     ]
   },
   {
     "room_index": 4,
     "confusion_level": 0.8,
-    "biome_state": "BIOME_DRIFT (office -> subway)",
+    "biome_state": "STABLE (archive)",
     "elements": [
       {
         "type": "wall",
-        "id": "models/props_wasteland/controlroom_desk001b.mdl",
-        "name": "Control Terminal"
+        "id": "materials/plaster/office_wallpaper_yellow",
+        "name": "Yellow Mono Wallpaper"
       },
       {
         "type": "floor",
-        "id": "materials/carpet/office_carpet_damp_01",
-        "name": "Damp Commercial Carpet"
+        "id": "materials/concrete/floor_concrete01",
+        "name": "Stained Concrete Floor"
+      },
+      {
+        "type": "light",
+        "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Car Skidding Sound Effect.mp3",
+        "name": "Audio: car skidding sound effect"
+      },
+      {
+        "type": "primary_furniture",
+        "id": "models/props_c17/FurnitureDesk001a.mdl",
+        "name": "Office Desk",
+        "dimensions": [
+          64.0,
+          36.0,
+          30.0
+        ]
+      },
+      {
+        "type": "secondary_furniture",
+        "id": "models/props_c17/FurnitureChair001a.mdl",
+        "name": "Office Chair",
+        "dimensions": [
+          24.0,
+          24.0,
+          36.0
+        ]
+      },
+      {
+        "type": "tech_accessory",
+        "id": "models/props_c17/filecabinet02.mdl",
+        "name": "Filing Cabinet",
+        "dimensions": [
+          24.0,
+          30.0,
+          54.0
+        ]
+      }
+    ],
+    "logs": [
+      "NORMAL: Matched Yellow Mono Wallpaper for biome archive.",
+      "TAG_COLLISION: Looked for ['floor_covering', 'horizontal'], but locked onto 'floor_covering' -> grabbed Stained Concrete Floor!",
+      "MEMORY_STUCK: Reused Audio: car skidding sound effect due to token fixation.",
+      "NORMAL: Matched Office Desk for biome archive.",
+      "NORMAL: Matched Office Chair for biome archive.",
+      "TAG_COLLISION: Looked for ['technology', 'box', 'electronic'], but locked onto 'box' -> grabbed Filing Cabinet!"
+    ]
+  },
+  {
+    "room_index": 5,
+    "confusion_level": 1.0,
+    "biome_state": "BIOME_DRIFT (archive -> basement)",
+    "elements": [
+      {
+        "type": "wall",
+        "id": "materials/plaster/office_wallpaper_yellow",
+        "name": "Yellow Mono Wallpaper"
+      },
+      {
+        "type": "floor",
+        "id": "materials/plaster/office_wallpaper_yellow",
+        "name": "Yellow Mono Wallpaper"
       },
       {
         "type": "light",
@@ -213,102 +273,42 @@ if SERVER then
       },
       {
         "type": "primary_furniture",
-        "id": "materials/carpet/office_carpet_damp_01",
-        "name": "Damp Commercial Carpet",
+        "id": "models/props_c17/FurnitureDesk001a.mdl",
+        "name": "Office Desk",
         "dimensions": [
-          128.0,
-          128.0,
-          8.0
+          64.0,
+          36.0,
+          30.0
         ]
       },
       {
         "type": "secondary_furniture",
-        "id": "models/props_lab/monitor02.mdl",
-        "name": "CRT Computer Monitor",
+        "id": "models/props_c17/FurnitureChair001a.mdl",
+        "name": "Office Chair",
         "dimensions": [
-          18.0,
-          18.0,
-          16.0
-        ]
-      },
-      {
-        "type": "tech_accessory",
-        "id": "models/props_wasteland/light_caged01a.mdl",
-        "name": "Industrial Caged Lamp",
-        "dimensions": [
-          16.0,
-          16.0,
-          16.0
-        ]
-      }
-    ],
-    "logs": [
-      "MEMORY_STUCK: Reused Control Terminal due to token fixation.",
-      "NORMAL: Matched Damp Commercial Carpet for biome subway.",
-      "TAG_COLLISION: Looked for ['light_source', 'ceiling_anchored'], but locked onto 'light_source' -> grabbed Industrial Caged Lamp!",
-      "MEMORY_STUCK: Reused Damp Commercial Carpet due to token fixation.",
-      "MEMORY_STUCK: Reused CRT Computer Monitor due to token fixation.",
-      "MEMORY_STUCK: Reused Industrial Caged Lamp due to token fixation."
-    ]
-  },
-  {
-    "room_index": 5,
-    "confusion_level": 1.0,
-    "biome_state": "BIOME_DRIFT (subway -> subway)",
-    "elements": [
-      {
-        "type": "wall",
-        "id": "materials/concrete/warehouse_wall_c17",
-        "name": "Raw Concrete Wall"
-      },
-      {
-        "type": "floor",
-        "id": "materials/carpet/office_carpet_damp_01",
-        "name": "Damp Commercial Carpet"
-      },
-      {
-        "type": "light",
-        "id": "models/props_c17/light_fluorescent01a.mdl",
-        "name": "Fluorescent Ceiling Light Fixture"
-      },
-      {
-        "type": "primary_furniture",
-        "id": "models/props_junk/wood_pallet001a.mdl",
-        "name": "Wood Pallet",
-        "dimensions": [
-          48.0,
-          48.0,
-          8.0
-        ]
-      },
-      {
-        "type": "secondary_furniture",
-        "id": "models/props_interiors/Bed_Hospital.mdl",
-        "name": "Hospital Bed",
-        "dimensions": [
-          40.0,
-          80.0,
+          24.0,
+          24.0,
           36.0
         ]
       },
       {
         "type": "tech_accessory",
-        "id": "models/props_junk/wood_pallet001a.mdl",
-        "name": "Wood Pallet",
+        "id": "models/props_c17/filecabinet02.mdl",
+        "name": "Filing Cabinet",
         "dimensions": [
-          48.0,
-          48.0,
-          8.0
+          24.0,
+          30.0,
+          54.0
         ]
       }
     ],
     "logs": [
-      "TAG_COLLISION: Looked for ['wall_covering', 'vertical'], but locked onto 'wall_covering' -> grabbed Raw Concrete Wall!",
-      "TAG_COLLISION: Looked for ['floor_covering', 'horizontal'], but locked onto 'floor_covering' -> grabbed Damp Commercial Carpet!",
-      "MEMORY_STUCK: Reused Fluorescent Ceiling Light Fixture due to token fixation.",
-      "TAG_COLLISION: Looked for ['flat_surface', 'furniture', 'work'], but locked onto 'flat_surface' -> grabbed Wood Pallet!",
-      "TAG_COLLISION: Looked for ['seating', 'furniture', 'rest'], but locked onto 'seating' -> grabbed Hospital Bed!",
-      "MEMORY_STUCK: Reused Wood Pallet due to token fixation."
+      "TAG_COLLISION: Looked for ['wall_covering', 'vertical'], but locked onto 'wall_covering' -> grabbed Yellow Mono Wallpaper!",
+      "MEMORY_STUCK: Reused Yellow Mono Wallpaper due to token fixation.",
+      "TAG_COLLISION: Looked for ['light_source', 'ceiling_anchored'], but locked onto 'light_source' -> grabbed Industrial Caged Lamp!",
+      "TAG_COLLISION: Looked for ['flat_surface', 'furniture', 'work'], but locked onto 'work' -> grabbed Office Desk!",
+      "TAG_COLLISION: Looked for ['seating', 'furniture', 'rest'], but locked onto 'rest' -> grabbed Office Chair!",
+      "TAG_COLLISION: Looked for ['technology', 'box', 'electronic'], but locked onto 'box' -> grabbed Filing Cabinet!"
     ]
   }
 ]
@@ -345,21 +345,60 @@ if SERVER then
             table.insert(spawnedHolograms, wallHolo)
         end
 
-        -- Spawn Props
+        -- Spawn Props with Spatial Affordance & Rare Anomalies
         for i = 4, #room.elements do
             local elem = room.elements[i]
             if elem and string.find(elem.id, ".mdl") then
                 local propPos = origin + roomOffset + Vector(math.random(-80, 80), math.random(-80, 80), 0)
                 local propAng = Angle(0, math.random(0, 360), 0)
-                
-                -- Severe confusion glitch: inverted or sideways props
-                if room.confusion_level > 0.7 and math.random() > 0.5 then
-                    propAng = propAng + Angle(180, 0, 0)
-                    propPos = propPos + Vector(0, 0, 40)
+                local propScale = Vector(1, 1, 1)
+                local propColor = Color(255, 255, 255, 255)
+                local renderFx = 0
+
+                -- 1. SPATIAL AFFORDANCES: If it's a TV/Radio, place it ON the desk/table surface
+                if elem.anchor == "on_top_of" or string.find(elem.id, "tv") or string.find(elem.id, "monitor") or string.find(elem.id, "reciever") then
+                    propPos.z = propPos.z + 30.0 -- Sit on desk height
                 end
 
-                local pHolo = holograms.create(propPos, propAng, elem.id, Vector(1,1,1))
-                table.insert(spawnedHolograms, pHolo)
+                -- 2. UNCOMMON SCALE ANOMALY (~8-20% chance)
+                if math.random() < (0.08 + (room.confusion_level * 0.15)) then
+                    local scaleType = math.random(1, 4)
+                    if scaleType == 1 then
+                        propScale = Vector(1, 1, math.Rand(2.0, 3.5)) -- Stretched vertically (uncanny tall chair/TV)
+                    elseif scaleType == 2 then
+                        propScale = Vector(math.Rand(1.5, 2.2), 0.3, 1) -- Flattened sideways like a paper cutout
+                    elseif scaleType == 3 then
+                        propScale = Vector(0.3, 0.3, 0.3) -- Miniature prop
+                    elseif scaleType == 4 then
+                        propScale = Vector(2.8, 2.8, 2.8) -- Giant oversized anomaly
+                    end
+                end
+
+                -- 3. RARE COLOR CORRUPTION (~4-10% chance)
+                if math.random() < (0.04 + (room.confusion_level * 0.08)) then
+                    local colorRoll = math.random(1, 3)
+                    if colorRoll == 1 then
+                        propColor = Color(30, 255, 90, 255) -- Radioactive decay green
+                    elseif colorRoll == 2 then
+                        propColor = Color(30, 30, 30, 255)   -- Scorched void black
+                    elseif colorRoll == 3 then
+                        propColor = Color(20, 220, 255, 255) -- Inverted negative cyan
+                    end
+                end
+
+                -- 4. ULTRA-RARE RENDER FX GLITCH (~2-5% chance)
+                if math.random() < (0.02 + (room.confusion_level * 0.05)) then
+                    renderFx = math.random(1, 2) == 1 and 16 or 3 -- 16: PulseFast, 3: Hologram shimmer
+                end
+
+                local pHolo = holograms.create(propPos, propAng, elem.id, propScale)
+                if pHolo then
+                    pHolo:setColor(propColor)
+                    if renderFx > 0 then
+                        pcall(pHolo.setRenderFX, pHolo, renderFx)
+                    end
+                    table.insert(spawnedHolograms, pHolo)
+                end
             end
         end
     end
