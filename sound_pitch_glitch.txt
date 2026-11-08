@@ -10,30 +10,47 @@ local activeStreams = {}
 local globalConfusion = 0.0 -- Driven by the brain (0.0 = pristine, 1.0 = total breakdown)
 
 -- Connects to audio and applies dynamic distortion
--- Reasonable volume & acoustic falloff bounds:
--- Sound stays contained within the local room (audible within ~150-300 Source units),
--- gently fading away so it doesn't blast or ear-rape across the whole map.
-local function playDecayingAudio(url, pos, isWidelyKnown, customVolume)
+-- Dynamic Acoustic Intent:
+-- If a sound is naturally heavy/loud (e.g. door slam, breaker pop, pipe burst, scream),
+-- it dynamically scales up its volume and expands its acoustic falloff distance so it echoes.
+-- Ambient loops (e.g. 60Hz hum, computer fan) stay subtle and room-contained.
+local function playDecayingAudio(url, pos, isWidelyKnown, soundClass, customGain)
     bass.loadURL(url, "3d noblock", function(snd, err, errtxt)
         if isValid(snd) then
-            -- Reasonable Volume: 0.35 to 0.55 max (comfortably ambient, not deafening)
-            local baseVolume = math.Clamp(customVolume or 0.45, 0.1, 0.65)
+            -- Class-based volume & acoustic range scaling
+            local volume = 0.5
+            local fadeMin = 80
+            local fadeMax = 450
+
+            if soundClass == "impact" or soundClass == "burst" or soundClass == "slam" or soundClass == "alarm" then
+                -- Loud acoustic event: let it boom and echo down the hallway!
+                volume = math.Clamp(customGain or 1.0, 0.7, 1.0)
+                fadeMin = 200   -- Full blast for ~12 feet
+                fadeMax = 1500  -- Can be heard down long corridors (~90 feet)
+            elseif soundClass == "ambient" or soundClass == "hum" then
+                -- Background hum: quiet and contained
+                volume = math.Clamp(customGain or 0.35, 0.2, 0.5)
+                fadeMin = 60
+                fadeMax = 400
+            else
+                -- Standard interactive / prop sound
+                volume = math.Clamp(customGain or 0.7, 0.4, 0.85)
+                fadeMin = 100
+                fadeMax = 650
+            end
             
             snd:setPos(pos)
-            snd:setVolume(baseVolume)
+            snd:setVolume(volume)
+            snd:setFade(fadeMin, fadeMax)
             
-            -- Room-scale Falloff Range (Source Units):
-            -- 80 units: Starts at full volume within immediate standing distance (~5 feet)
-            -- 450 units: Completely drops to silence by the end of the corridor (~28 feet)
-            snd:setFade(80, 450)
-            
-            pcall(snd.setLooping, snd, true)
+            pcall(snd.setLooping, snd, (soundClass == "ambient" or soundClass == "hum"))
             snd:play()
 
             table.insert(activeStreams, {
                 snd = snd,
                 isKnown = isWidelyKnown or false,
-                baseVolume = baseVolume,
+                soundClass = soundClass or "generic",
+                baseVolume = volume,
                 basePitch = 1.0,
                 currentPitch = 1.0,
                 targetPitch = 1.0,
