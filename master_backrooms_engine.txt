@@ -1,7 +1,6 @@
 --@name Master Backrooms Procedural Generation Engine
 --@author Antigravity & USER
 --@shared
---@server
 -- ==============================================================================
 -- THE ULTIMATE BACKROOMS PROCEDURAL GENERATOR FOR GARRY'S MOD (STARFALL EX)
 -- 
