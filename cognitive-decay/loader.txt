@@ -73,7 +73,7 @@ if SERVER then
         loadCount = loadCount + 1
         engineState = "OPERATIONAL"
         cachedSource = sourceCode
-        lastFetchTime = timer.realtime()
+        lastFetchTime = timer.curtime()
 
         -- 4. Stream fresh code to all connected clients
         broadcastCode(sourceCode)
@@ -91,6 +91,7 @@ if SERVER then
     end
 
     local function fetchFromGitHub(plyTrigger, isReload)
+        if isReload then cachedSource = nil end
         if isFetching then
             if isValid(plyTrigger) then
                 pcall(plyTrigger.chatPrint, plyTrigger, "[Cognitive Decay] A download is already in progress, please wait...")
@@ -108,7 +109,7 @@ if SERVER then
         engineState = "DOWNLOADING"
         notifyOwner("Fetching latest engine build from GitHub...")
 
-        local cacheBuster = "?t=" .. math.floor(timer.realtime() * 1000) .. "_" .. math.random(10000, 99999)
+        local cacheBuster = "?t=" .. math.floor(timer.curtime() * 1000) .. "_" .. math.random(10000, 99999)
         local fullUrl = GITHUB_MAIN_URL .. cacheBuster
 
         http.get(fullUrl, function(body, len, headers, code)
@@ -189,7 +190,7 @@ else
     local lastStatusMsg = "Connecting..."
     local statusColor = Color(240, 200, 60)
     local hudAlpha = 255
-    local spawnTime = timer.realtime()
+    local spawnTime = timer.curtime()
 
     -- Notify server client is ready
     hook.add("Initialize", "CognitiveDecay_ClientInit", function()
@@ -231,7 +232,7 @@ else
 
     -- Tasteful Terminal Diagnostic HUD
     hook.add("drawhud", "CognitiveDecay_LoaderHUD", function()
-        local elapsed = timer.realtime() - spawnTime
+        local elapsed = timer.curtime() - spawnTime
         if elapsed > 12 and hudAlpha > 0 then
             hudAlpha = math.max(0, hudAlpha - (render.getFrameTime() * 80))
         end

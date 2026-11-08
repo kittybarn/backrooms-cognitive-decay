@@ -343,7 +343,7 @@ local DATASET = {
     },
 
     -- Audio Tracks & Soundscapes (by Cognitive Decay Stage)
-                    AUDIO = {
+                        AUDIO = {
         music = {
             { name = "Backrooms (Original Score), Vol. 1 - Async Research Institute.mp3", url = "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms%20%28Original%20Score%29%2C%20Vol.%201%20-%20Async%20Research%20Institute.mp3", is_music = true, category = "music", weight = 8.5, eeriness = 8.5 },
             { name = "Backrooms (Original Score), Vol. 1 - Auditory Guidepost.mp3", url = "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms%20%28Original%20Score%29%2C%20Vol.%201%20-%20Auditory%20Guidepost.mp3", is_music = true, category = "music", weight = 8.5, eeriness = 8.5 },
@@ -551,20 +551,16 @@ local DATASET = {
 
 
 -- --------------------------------------------------------------------------
--- 0. HIGH-ENTROPY DYNAMIC PROCEDURAL SEEDING (STARFALL SAFE)
+-- 0. HIGH-ENTROPY PROCEDURAL SEED GENERATOR (ZERO FORBIDDEN GLOBALS)
 -- --------------------------------------------------------------------------
-local function seedEntropy()
-    pcall(function()
-        local t = (os.time and os.time()) or 0
-        local ct = (timer.curtime and math.floor(timer.curtime() * 1000)) or 0
-        local seed = (t * 1103515245 + ct + math.random(1, 999999)) % 2147483647
-        if math.randomseed then
-            pcall(math.randomseed, seed)
-        end
-        print("[Cognitive Decay Engine] Procedural seed initialized: " .. tostring(seed))
-    end)
+local function getProceduralSeed()
+    local t = (os.time and os.time()) or 0
+    local ct = (timer.curtime and math.floor(timer.curtime() * 1000)) or 0
+    local seed = (t * 1103515245 + ct + math.random(1, 999999)) % 2147483647
+    print("[Cognitive Decay Engine] Procedural seed initialized: " .. tostring(seed))
+    return seed
 end
-pcall(seedEntropy)
+pcall(getProceduralSeed)
 
 if SERVER then
     -- Dematerialize any previous instance on hot-reload

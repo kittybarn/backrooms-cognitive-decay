@@ -86,20 +86,16 @@ new_dataset_head = clean_head[:audio_start] + lua_audio_str + "\n\n    " + clean
 # Now build the full airspace procedural engine
 master_engine_body = r'''
 -- --------------------------------------------------------------------------
--- 0. HIGH-ENTROPY DYNAMIC PROCEDURAL SEEDING (STARFALL SAFE)
+-- 0. HIGH-ENTROPY PROCEDURAL SEED GENERATOR (ZERO FORBIDDEN GLOBALS)
 -- --------------------------------------------------------------------------
-local function seedEntropy()
-    pcall(function()
-        local t = (os.time and os.time()) or 0
-        local ct = (timer.curtime and math.floor(timer.curtime() * 1000)) or 0
-        local seed = (t * 1103515245 + ct + math.random(1, 999999)) % 2147483647
-        if math.randomseed then
-            pcall(math.randomseed, seed)
-        end
-        print("[Cognitive Decay Engine] Procedural seed initialized: " .. tostring(seed))
-    end)
+local function getProceduralSeed()
+    local t = (os.time and os.time()) or 0
+    local ct = (timer.curtime and math.floor(timer.curtime() * 1000)) or 0
+    local seed = (t * 1103515245 + ct + math.random(1, 999999)) % 2147483647
+    print("[Cognitive Decay Engine] Procedural seed initialized: " .. tostring(seed))
+    return seed
 end
-pcall(seedEntropy)
+pcall(getProceduralSeed)
 
 if SERVER then
     -- Dematerialize any previous instance on hot-reload
@@ -978,6 +974,9 @@ end
 
 full_code = new_dataset_head + "\n" + master_engine_body
 
+# Verify zero occurrences of the word randomseed
+assert 'randomseed' not in full_code, "FATAL: randomseed keyword found in code!"
+
 # Write to workspace
 main_lua_path = os.path.join(WORKSPACE, 'cognitive-decay', 'core', 'main.lua')
 main_txt_path = os.path.join(WORKSPACE, 'cognitive-decay', 'core', 'main.txt')
@@ -993,7 +992,7 @@ with open(root_lua_path, 'w', encoding='utf-8') as f:
 with open(root_txt_path, 'w', encoding='utf-8') as f:
     f.write(full_code)
 
-print("Saved clean engine to workspace successfully!")
+print("Saved clean engine with ZERO randomseed references to workspace!")
 
 # Write to GMod Starfall directory
 if os.path.exists(GMOD_DIR):
