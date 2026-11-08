@@ -2,78 +2,106 @@
 --@author Antigravity & USER
 --@shared
 -- ==============================================================================
--- THE ULTIMATE BACKROOMS PROCEDURAL GENERATOR FOR GARRY'S MOD (STARFALL EX)
+-- THE ULTIMATE MULTI-TIER BACKROOMS PROCEDURAL GENERATION ENGINE (STARFALL EX)
 -- 
--- Key Features & Architectural Enhancements:
---  1. Fully Enclosed Ceiling (Zero Skybox/Daylight Leaks):
---     Spawns an inverted ceiling canopy at z = CONFIG.WALL_HEIGHT (189.8 units)
---     using modular plates tinted with off-white acoustic tile finish.
---     Completely traps the player inside the claustrophobic Backrooms.
---  2. Seamless Matte Yellow Drywall (Zero Tiling/UV Banding):
---     Flat diffuse vertex-lit shader prevents horizontal stripes, metal borders,
---     and texture seams. Clean, continuous Backrooms Level 0 wallpaper.
---  3. Native Valve Textures on All Props & Furniture:
---     Desks, chairs, monitors, file cabinets, and PC towers NEVER have white
---     debug materials applied; they retain 100% of their rich dark wood,
---     matte plastic, and vintage chassis materials.
---  4. The Signature Liminal Reality Glitch (Image 2 Aesthetic):
---     94%+ of rooms are orderly and pristine, but rare cells manifest the
---     authentic dreamcore anomaly: a vintage wooden drop-leaf table partially
---     embedded halfway into the drywall at an angle, holding an old PC tower.
---  5. The Liminal Vibe & Functioning Radios (90% Normal, 10% Glitched):
---     Citizen radios (models/props_lab/citizenradio.mdl) spawn in offices and hallways.
---     - 90% are FUNCTIONING VIBE RADIOS: Play smooth, warm, nostalgic ballroom/lo-fi
---       tunes with optional smooth permanent pitch, zero stutters.
---     - 10% are SUPER GLITCHY ANOMALIES: Rare corrupted radios with pitch waver & flutter.
---  6. Half-Life 1 Xen Green Zappy Particle Storm:
---     Active materializing sectors burst with branching Xen green lightning
---     arcs (sprites/physbeam) and spatialized zaps.
---  7. Atmospheric World Darkness & Fluorescent Lighting Pools:
---     Enclosed fog and dimming smother daylight; ceiling fluorescent fixtures
---     cast soft pools of light down onto the damp carpet.
---  8. Distance-Culled Parented CRT TV Screens:
---     Powered-on CRT monitors display 3D2D analog static and emergency broadcasts.
---  9. 100% Burst-Safe FIFO Queue & Protected pcall Calls.
+-- Targeted Spatial Volume:
+--   Corner 1: Vector(6441.24, -4107.08, -12576.3)
+--   Corner 2: Vector(16306.5, -16307.3, -16255.7)
+--   Spanning: X = 9,865 units | Y = 12,200 units | Z = 3,679 units
+-- 
+-- Key Features & Architectural Dynamics:
+--  1. Sprawling Non-Squished Multi-Sector Facility:
+--     Uses the vast designated volume efficiently with expansive corridor wings,
+--     grand office suites, and atmospheric negative void spacing so it feels
+--     endlessly vast rather than cramped into a tight local box.
+--  2. Multi-Level Vertical Tiers:
+--     - Level -1 (The Sub-Basement / Damp Crypt): Z = -16,250 (bottom of map volume)
+--     - Level  0 (The Main Liminal Complex):      Z = -16,060 (primary office floor)
+--     - Level +1 (The Upper Mezzanine / Crawlway): Z = -15,870 (elevated balconies)
+--  3. The "Weirdness of the Backrooms" Dynamics:
+--     - Sudden Drop Pitfalls: Unannounced floor collapse holes where players drop
+--       190 units through the floor into the dark lower tier below!
+--     - Transit Ramps (Up & Down): Inclined 26.5° corridors connecting floors smoothly.
+--     - Ramp Holes (Wall Breaches): Holes in walls penetrated by angled ramps that
+--       players can fit and walk through into adjacent lower sectors!
+--  4. Fully Enclosed Ceilings on All Tiers:
+--     Inverted acoustic ceilings completely seal the complex. Zero skybox, zero daylight.
+--  5. Seamless Matte Yellow Wallpaper (Zero Tiling/Banding):
+--     Flat diffuse vertex-lit shading guarantees pristine Level 0 drywall.
+--  6. Native Valve Textures on All Props:
+--     Desks, chairs, PC towers, CRT monitors, and file cabinets retain 100% of their
+--     authentic HL2 dark varnished wood, metal, and retro beige chassis textures.
+--  7. The Image 2 Wall-Phased Drop-Leaf Table Anomaly:
+--     A vintage wooden half-table embedded 50% into drywall holding an old PC tower.
+--  8. The Liminal Vibe & Functioning Radios (90% Normal, 10% Glitched):
+--     Citizen radios playing nostalgic ballroom tunes (music/radio1.mp3) with 3D follow.
+--  9. Half-Life 1 Xen Green Zappy Particle Storm:
+--     Active materializing sectors burst with branching Xen green lightning (sprites/physbeam).
+-- 10. 100% Burst-Safe FIFO Queue & Protected pcall Calls.
 -- ==============================================================================
 
 if SERVER then
     -- --------------------------------------------------------------------------
-    -- 1. CONFIGURATION & TUNING
+    -- 1. SPATIAL VOLUME & CONFIGURATION
     -- --------------------------------------------------------------------------
+    local BOUNDS = {
+        MIN = Vector(6441.24, -16307.3, -16255.7),
+        MAX = Vector(16306.5, -4107.08, -12576.3),
+        CENTER = Vector(11373.87, -10207.19, -16255.7)
+    }
+
     local CONFIG = {
-        GRID_W = 10,
-        GRID_H = 10,
-        CELL_SIZE = 189.8,     -- Matches plate4x4: 4 * 47.45 = 189.8
-        WALL_HEIGHT = 189.8,   -- Solid high partitions, fully enclosed ceiling
+        CELL_SIZE   = 189.8,     -- Matches plate4x4: 4 * 47.45 = 189.8
+        WALL_HEIGHT = 189.8,     -- Exactly matches standard wall plate
+        
+        -- Multi-Tier Elevations
+        Z_TIER_SUB   = -16250.0, -- Level -1: Sub-Basement / Damp Crypt (bottom bound)
+        Z_TIER_MAIN  = -16060.2, -- Level  0: Main Liminal Complex
+        Z_TIER_UPPER = -15870.4, -- Level +1: Upper Mezzanine / Elevated Crawlway
         
         -- Models
         FLOOR_MODEL_LARGE   = "models/hunter/plates/plate16x16.mdl",
-        CEILING_MODEL_LARGE = "models/hunter/plates/plate16x16.mdl",
+        FLOOR_MODEL_MED     = "models/hunter/plates/plate8x8.mdl",
+        FLOOR_MODEL_STD     = "models/hunter/plates/plate4x4.mdl",
         WALL_MODEL          = "models/hunter/plates/plate4x4.mdl",
+        RAMP_MODEL          = "models/hunter/plates/plate4x8.mdl",
         LIGHT_MODEL         = "models/props_c17/light_fluorescent01a.mdl",
         RADIO_MODEL         = "models/props_lab/citizenradio.mdl",
         
         -- Spawning Throttle
         SPAWN_INTERVAL = 0.22,
         
-        -- Probabilities (Liminal Order & Subtle Vibes)
-        DESK_CHANCE         = 0.08, -- 8% chance for an orderly desk
-        PHASED_TABLE_CHANCE = 0.06, -- 6% chance for Image 2's signature wall-clipped table anomaly!
-        CABINET_CHANCE      = 0.05, -- 5% chance for a neat corner cabinet
-        SOLO_CHAIR_CHANCE   = 0.04, -- 4% chance for solitary liminal chair
-        RADIO_CHANCE        = 0.06, -- 6% chance for a desktop or hallway radio
-        GLITCH_RADIO_RATE   = 0.10, -- Only 10% of radios glitch; 90% are smooth vibe radios!
-        TIPPED_CHAIR_RATE   = 0.01, -- 1% chance for tipped chair (99% upright & neat)
-        FLOOR_TV_CHANCE     = 0.03, -- 3% chance for rare unplugged floor CRT
-        LIGHT_CHANCE        = 0.35, -- 35% of corridors have fluorescent ceiling lights
-        NPC_CHANCE          = 0.02, -- 2% in dead ends only (extremely rare entity!)
+        -- Probabilities
+        DESK_CHANCE         = 0.08,
+        PHASED_TABLE_CHANCE = 0.06, -- Image 2 signature wall-phased table anomaly!
+        CABINET_CHANCE      = 0.05,
+        SOLO_CHAIR_CHANCE   = 0.04,
+        RADIO_CHANCE        = 0.06,
+        GLITCH_RADIO_RATE   = 0.10, -- 90% smooth vibe radios, 10% glitch!
+        TIPPED_CHAIR_RATE   = 0.01,
+        FLOOR_TV_CHANCE     = 0.03,
+        LIGHT_CHANCE        = 0.35,
+        NPC_CHANCE          = 0.02,
         
-        VOID_TRIGGER_DIST   = 260,
-        BASE_ALTITUDE       = 0
+        VOID_TRIGGER_DIST   = 280
     }
 
+    -- Determine Anchor Position:
+    -- If chip is placed within the bounding box, anchor to chip; otherwise anchor at exact center!
+    local chipPos = chip():getPos()
+    local ANCHOR_POS
+    if chipPos.x >= BOUNDS.MIN.x and chipPos.x <= BOUNDS.MAX.x and
+       chipPos.y >= BOUNDS.MIN.y and chipPos.y <= BOUNDS.MAX.y and
+       chipPos.z >= BOUNDS.MIN.z and chipPos.z <= BOUNDS.MAX.z then
+        ANCHOR_POS = Vector(chipPos.x, chipPos.y, CONFIG.Z_TIER_MAIN)
+        print("[Backrooms Engine] Anchored to chip coordinates inside designated volume.")
+    else
+        ANCHOR_POS = Vector(BOUNDS.CENTER.x, BOUNDS.CENTER.y, CONFIG.Z_TIER_MAIN)
+        print("[Backrooms Engine] Anchored directly to designated map bounds center: " .. tostring(ANCHOR_POS))
+    end
+
     -- --------------------------------------------------------------------------
-    -- 2. NON-UV-SENSITIVE MATERIALS (Zero Repeating Seams or Keypads)
+    -- 2. NON-UV-SENSITIVE MATERIALS (Zero Repeating Seams, Pure Liminal Tones)
     -- --------------------------------------------------------------------------
     local WALL_PRESETS = {
         { mat = "models/debug/debugwhite", color = Color(228, 214, 148) },
@@ -81,15 +109,24 @@ if SERVER then
         { mat = "models/debug/debugwhite", color = Color(234, 220, 154) }
     }
 
-    local FLOOR_PRESETS = {
-        { mat = "models/props_c17/furniturefabric001a", color = Color(145, 128, 75) },
-        { mat = "models/props_c17/furniturefabric002a", color = Color(125, 110, 65) },
-        { mat = "models/props_debris/tilefloor001c",    color = Color(175, 170, 150) }
+    local FLOOR_MAIN = {
+        mat = "models/props_c17/furniturefabric001a",
+        color = Color(145, 128, 75) -- Classic Level 0 damp gold carpet
+    }
+
+    local FLOOR_SUB = {
+        mat = "models/props_c17/furniturefabric002a",
+        color = Color(95, 88, 55)   -- Dark flooded mildew carpet in sub-basement
+    }
+
+    local FLOOR_UPPER = {
+        mat = "models/props_debris/tilefloor001c",
+        color = Color(175, 170, 150) -- Industrial concrete/tile mezzanine
     }
 
     local CEILING_PRESET = {
         mat = "models/debug/debugwhite",
-        color = Color(242, 238, 228)
+        color = Color(242, 238, 228) -- Acoustic off-white office drop tiles
     }
 
     local PROP_PRESETS = {
@@ -162,9 +199,15 @@ if SERVER then
     end
 
     -- --------------------------------------------------------------------------
-    -- 4. BOUNDING BOX COLLISION CLEARANCE SOLVER
+    -- 4. STATE & QUEUES
     -- --------------------------------------------------------------------------
+    local spawnQueue = {}
+    local activeEntities = {}
+    local voidGateways = {}
+    local activeLights = {}
+
     local HALF_CELL = CONFIG.CELL_SIZE * 0.5 -- 94.9 units
+
     local function checkClearance(localPos, radius, cell, existingProps)
         local margin = 14
         if cell.north and (localPos.y + radius > HALF_CELL - margin) then return false end
@@ -186,238 +229,218 @@ if SERVER then
     end
 
     -- --------------------------------------------------------------------------
-    -- 5. STATE & QUEUES
+    -- 5. ARCHITECTURAL BUILDERS: ROOMS, RAMPS, PITFALLS & WALL BREACHES
     -- --------------------------------------------------------------------------
-    local spawnQueue = {}
-    local activeEntities = {}
-    local voidGateways = {}
-    local activeLights = {}
-    local chipOrigin = chip():getPos() + Vector(0, 0, CONFIG.BASE_ALTITUDE)
+    
+    -- Queue a Floor + Ceiling Pair
+    local function queueEnclosedCell(pos, floorPreset)
+        -- Floor
+        table.insert(spawnQueue, {
+            pos = pos,
+            ang = Angle(0, 0, 0),
+            model = CONFIG.FLOOR_MODEL_STD,
+            mat = floorPreset.mat,
+            color = floorPreset.color,
+            category = "floor"
+        })
+        -- Ceiling (fully seals against skybox)
+        table.insert(spawnQueue, {
+            pos = pos + Vector(0, 0, CONFIG.WALL_HEIGHT),
+            ang = Angle(180, 0, 0),
+            model = CONFIG.FLOOR_MODEL_STD,
+            mat = CEILING_PRESET.mat,
+            color = CEILING_PRESET.color,
+            category = "ceiling"
+        })
+    end
+
+    -- Queue a Wall Partition
+    local function queueWall(pos, ang, preset)
+        table.insert(spawnQueue, {
+            pos = pos,
+            ang = ang,
+            model = CONFIG.WALL_MODEL,
+            mat = preset.mat,
+            color = preset.color,
+            category = "wall"
+        })
+    end
+
+    -- Feature A: Sudden Floor Drop Pitfall ("holes that go down to different levels")
+    -- Missing floor plate on Tier 0; player falls 190 units down onto Tier -1 sub-basement carpet!
+    local function queuePitfall(posMain)
+        local posSub = Vector(posMain.x, posMain.y, CONFIG.Z_TIER_SUB)
+        -- Tier -1 Floor receiving the player
+        table.insert(spawnQueue, {
+            pos = posSub,
+            ang = Angle(0, 0, 0),
+            model = CONFIG.FLOOR_MODEL_STD,
+            mat = FLOOR_SUB.mat,
+            color = FLOOR_SUB.color,
+            category = "floor"
+        })
+        -- Ceiling above Tier 0 (sealing the pit shaft)
+        table.insert(spawnQueue, {
+            pos = posMain + Vector(0, 0, CONFIG.WALL_HEIGHT),
+            ang = Angle(180, 0, 0),
+            model = CONFIG.FLOOR_MODEL_STD,
+            mat = CEILING_PRESET.mat,
+            color = CEILING_PRESET.color,
+            category = "ceiling"
+        })
+        -- Deep Shaft Enclosure Walls (surrounding the fall drop)
+        local shaftZ = (CONFIG.Z_TIER_MAIN + CONFIG.Z_TIER_SUB) * 0.5
+        local wallPreset = WALL_PRESETS[1]
+        queueWall(Vector(posMain.x, posMain.y + HALF_CELL, shaftZ), Angle(90, 0, 0), wallPreset)
+        queueWall(Vector(posMain.x, posMain.y - HALF_CELL, shaftZ), Angle(90, 0, 0), wallPreset)
+        queueWall(Vector(posMain.x + HALF_CELL, posMain.y, shaftZ), Angle(90, 90, 0), wallPreset)
+        -- An illuminated lone chair at the bottom of the drop!
+        table.insert(spawnQueue, {
+            pos = posSub + Vector(0, 0, 20.1),
+            ang = Angle(0, math.random(0, 360), 0),
+            model = PROP_PRESETS.chairs[1],
+            category = "furniture"
+        })
+        -- Fluorescent light illuminating the pit bottom
+        table.insert(spawnQueue, {
+            pos = posMain + Vector(0, 0, CONFIG.WALL_HEIGHT - 3),
+            ang = Angle(0, 0, 0),
+            model = CONFIG.LIGHT_MODEL,
+            category = "light",
+            onSpawn = function(ent)
+                safeSetMaterial(ent, "models/debug/debugwhite", Color(255, 250, 195))
+                table.insert(activeLights, ent)
+                net.start("BackroomsLightSpawn")
+                net.writeEntity(ent)
+                net.send()
+            end
+        })
+    end
+
+    -- Feature B: Transit Ramps (Smooth 26.5° Inclines Connecting Tiers)
+    -- Connects from upperLevel to lowerLevel over a 2-cell span
+    local function queueTransitRamp(startPos, endPos, zStart, zEnd, directionAngle)
+        local midPos = (startPos + endPos) * 0.5
+        local midZ = (zStart + zEnd) * 0.5
+        local pitch = math.deg(math.atan2(zStart - zEnd, CONFIG.CELL_SIZE * 2))
+
+        -- Inclined Ramp Plate (plate4x8 is 2 cells long, 1 cell wide)
+        table.insert(spawnQueue, {
+            pos = Vector(midPos.x, midPos.y, midZ),
+            ang = Angle(pitch, directionAngle.yaw, 0),
+            model = CONFIG.RAMP_MODEL,
+            mat = FLOOR_MAIN.mat,
+            color = FLOOR_MAIN.color,
+            category = "floor"
+        })
+
+        -- Inclined Ramp Ceiling (enclosed roof following the slope)
+        table.insert(spawnQueue, {
+            pos = Vector(midPos.x, midPos.y, midZ + CONFIG.WALL_HEIGHT),
+            ang = Angle(pitch + 180, directionAngle.yaw, 0),
+            model = CONFIG.RAMP_MODEL,
+            mat = CEILING_PRESET.mat,
+            color = CEILING_PRESET.color,
+            category = "ceiling"
+        })
+    end
+
+    -- Feature C: Ramp Hole / Wall Breach ("holes that are ramps that players can fit through")
+    -- A wall partition has a breach opening where an angled ramp penetrates through into a sunken sector!
+    local function queueRampBreach(wallPos, breachDir)
+        local wallPreset = WALL_PRESETS[2]
+        
+        -- Upper Wall Lintel (leaves lower 100-unit opening for player passage)
+        table.insert(spawnQueue, {
+            pos = wallPos + Vector(0, 0, CONFIG.WALL_HEIGHT * 0.75),
+            ang = Angle(90, breachDir.yaw + 90, 0),
+            model = "models/hunter/plates/plate2x4.mdl",
+            mat = wallPreset.mat,
+            color = wallPreset.color,
+            category = "wall"
+        })
+
+        -- The Angled Ramp Plate penetrating directly through the opening!
+        local rampCenter = wallPos - Vector(0, 0, (CONFIG.Z_TIER_MAIN - CONFIG.Z_TIER_SUB) * 0.25)
+        local pitch = 26.565
+        table.insert(spawnQueue, {
+            pos = rampCenter,
+            ang = Angle(pitch, breachDir.yaw, 0),
+            model = CONFIG.RAMP_MODEL,
+            mat = FLOOR_MAIN.mat,
+            color = FLOOR_MAIN.color,
+            category = "floor"
+        })
+    end
 
     -- --------------------------------------------------------------------------
-    -- 6. MAZE SOLVER (Recursive Backtracker with Looping Corridors)
+    -- 6. MULTI-SECTOR SPATIAL COMPILATION (Expansive, Non-Squished Layout)
     -- --------------------------------------------------------------------------
-    local grid = {}
-    for x = 1, CONFIG.GRID_W do
-        grid[x] = {}
-        for y = 1, CONFIG.GRID_H do
-            grid[x][y] = {
-                visited = false,
-                north = true,
-                south = true,
-                east = true,
-                west = true,
-                isDeadEnd = false
-            }
+    print("[Backrooms Engine] Compiling multi-tier spatial layout inside designated volume...")
+
+    -- SECTOR 1: CENTRAL LIMINAL HUB (Tier 0 at Z = -16,060)
+    -- 6x6 maze grid in the center of the bounding volume
+    local HUB_W, HUB_H = 6, 6
+    local hubOrigin = ANCHOR_POS - Vector(HUB_W * 0.5 * CONFIG.CELL_SIZE, HUB_H * 0.5 * CONFIG.CELL_SIZE, 0)
+    
+    local hubGrid = {}
+    for x = 1, HUB_W do
+        hubGrid[x] = {}
+        for y = 1, HUB_H do
+            hubGrid[x][y] = { visited = false, north = true, south = true, east = true, west = true, isDeadEnd = false }
         end
     end
 
-    local function carve(cx, cy)
-        grid[cx][cy].visited = true
-        local directions = {
+    local function carveHub(cx, cy)
+        hubGrid[cx][cy].visited = true
+        local dirs = {
             { x = 0, y = 1, wall = "north", opp = "south" },
             { x = 0, y = -1, wall = "south", opp = "north" },
             { x = 1, y = 0, wall = "east", opp = "west" },
             { x = -1, y = 0, wall = "west", opp = "east" }
         }
-
-        for i = #directions, 2, -1 do
+        for i = #dirs, 2, -1 do
             local j = math.random(i)
-            directions[i], directions[j] = directions[j], directions[i]
+            dirs[i], dirs[j] = dirs[j], dirs[i]
         end
-
-        for _, d in ipairs(directions) do
+        for _, d in ipairs(dirs) do
             local nx, ny = cx + d.x, cy + d.y
-            if nx >= 1 and nx <= CONFIG.GRID_W and ny >= 1 and ny <= CONFIG.GRID_H then
-                if not grid[nx][ny].visited then
-                    grid[cx][cy][d.wall] = false
-                    grid[nx][ny][d.opp] = false
-                    carve(nx, ny)
-                elseif math.random() < 0.15 then
-                    grid[cx][cy][d.wall] = false
-                    grid[nx][ny][d.opp] = false
+            if nx >= 1 and nx <= HUB_W and ny >= 1 and ny <= HUB_H then
+                if not hubGrid[nx][ny].visited then
+                    hubGrid[cx][cy][d.wall] = false
+                    hubGrid[nx][ny][d.opp] = false
+                    carveHub(nx, ny)
+                elseif math.random() < 0.20 then
+                    hubGrid[cx][cy][d.wall] = false
+                    hubGrid[nx][ny][d.opp] = false
                 end
             end
         end
     end
+    carveHub(1, 1)
 
-    carve(1, 1)
-
-    for x = 1, CONFIG.GRID_W do
-        for y = 1, CONFIG.GRID_H do
-            local c = grid[x][y]
-            local count = (c.north and 1 or 0) + (c.south and 1 or 0) + (c.east and 1 or 0) + (c.west and 1 or 0)
-            if count >= 3 then c.isDeadEnd = true end
-        end
-    end
-
-    -- --------------------------------------------------------------------------
-    -- 7. PHASE 1: FLOORS, CEILINGS & WALLS (Solid Structure Built FIRST)
-    -- --------------------------------------------------------------------------
-    print("[Backrooms Engine] Phase 1: Materializing solid floors, ceilings, and walls...")
-
-    local floorStep = 4
-    local defaultFloor = FLOOR_PRESETS[1]
-
-    -- A. Floor Plates
-    for x = 1, CONFIG.GRID_W, floorStep do
-        for y = 1, CONFIG.GRID_H, floorStep do
-            local fPos = chipOrigin + Vector((x - 1 + floorStep * 0.5) * CONFIG.CELL_SIZE, 
-                                            (y - 1 + floorStep * 0.5) * CONFIG.CELL_SIZE, 0)
-            table.insert(spawnQueue, {
-                pos = fPos,
-                ang = Angle(0, 0, 0),
-                model = CONFIG.FLOOR_MODEL_LARGE,
-                mat = defaultFloor.mat,
-                color = defaultFloor.color,
-                category = "floor"
-            })
-        end
-    end
-
-    -- B. Ceiling Plates (Complete Enclosed Roof - Zero Skybox/Daylight Leaks)
-    for x = 1, CONFIG.GRID_W, floorStep do
-        for y = 1, CONFIG.GRID_H, floorStep do
-            local cPos = chipOrigin + Vector((x - 1 + floorStep * 0.5) * CONFIG.CELL_SIZE, 
-                                            (y - 1 + floorStep * 0.5) * CONFIG.CELL_SIZE, CONFIG.WALL_HEIGHT)
-            table.insert(spawnQueue, {
-                pos = cPos,
-                ang = Angle(180, 0, 0), -- Face down into the room
-                model = CONFIG.CEILING_MODEL_LARGE,
-                mat = CEILING_PRESET.mat,
-                color = CEILING_PRESET.color,
-                category = "ceiling"
-            })
-        end
-    end
-
-    -- C. Wall Partitions & Exterior Boundary Enclosure
-    local designatedGateways = 0
-    for x = 1, CONFIG.GRID_W do
-        for y = 1, CONFIG.GRID_H do
-            local cell = grid[x][y]
-            local cCenter = chipOrigin + Vector((x - 0.5) * CONFIG.CELL_SIZE, (y - 0.5) * CONFIG.CELL_SIZE, 0)
+    -- Materialize Sector 1 (Central Hub)
+    for x = 1, HUB_W do
+        for y = 1, HUB_H do
+            local cell = hubGrid[x][y]
+            local cCenter = hubOrigin + Vector((x - 0.5) * CONFIG.CELL_SIZE, (y - 0.5) * CONFIG.CELL_SIZE, 0)
             local wallPreset = WALL_PRESETS[(x + y) % #WALL_PRESETS + 1]
 
-            -- North Boundary
-            if y == CONFIG.GRID_H then
-                if not cell.north and designatedGateways < 4 and math.random() < 0.5 then
-                    designatedGateways = designatedGateways + 1
-                    local gatePos = cCenter + Vector(0, CONFIG.CELL_SIZE * 0.5, CONFIG.WALL_HEIGHT * 0.5)
-                    local gateAng = Angle(90, 0, 0)
-                    local gateObj = {
-                        pos = gatePos,
-                        ang = gateAng,
-                        extDir = Vector(0, 1, 0),
-                        materialized = false,
-                        barrier = nil
-                    }
-                    table.insert(voidGateways, gateObj)
-                    table.insert(spawnQueue, {
-                        pos = gatePos,
-                        ang = gateAng,
-                        model = CONFIG.WALL_MODEL,
-                        mat = "models/debug/debugwhite",
-                        color = Color(0, 0, 0),
-                        category = "void_barrier",
-                        onSpawn = function(ent) gateObj.barrier = ent end
-                    })
-                else
-                    table.insert(spawnQueue, {
-                        pos = cCenter + Vector(0, CONFIG.CELL_SIZE * 0.5, CONFIG.WALL_HEIGHT * 0.5),
-                        ang = Angle(90, 0, 0),
-                        model = CONFIG.WALL_MODEL,
-                        mat = wallPreset.mat,
-                        color = wallPreset.color,
-                        category = "wall"
-                    })
-                end
-            elseif cell.north then
-                table.insert(spawnQueue, {
-                    pos = cCenter + Vector(0, CONFIG.CELL_SIZE * 0.5, CONFIG.WALL_HEIGHT * 0.5),
-                    ang = Angle(90, 0, 0),
-                    model = CONFIG.WALL_MODEL,
-                    mat = wallPreset.mat,
-                    color = wallPreset.color,
-                    category = "wall"
-                })
-            end
+            -- Regular Enclosed Office Cell
+            queueEnclosedCell(cCenter, FLOOR_MAIN)
 
-            -- South Boundary
-            if y == 1 then
-                table.insert(spawnQueue, {
-                    pos = cCenter + Vector(0, -CONFIG.CELL_SIZE * 0.5, CONFIG.WALL_HEIGHT * 0.5),
-                    ang = Angle(90, 0, 0),
-                    model = CONFIG.WALL_MODEL,
-                    mat = wallPreset.mat,
-                    color = wallPreset.color,
-                    category = "wall"
-                })
-            end
+            -- Walls
+            if cell.north then queueWall(cCenter + Vector(0, HALF_CELL, CONFIG.WALL_HEIGHT * 0.5), Angle(90, 0, 0), wallPreset) end
+            if cell.south and y == 1 then queueWall(cCenter + Vector(0, -HALF_CELL, CONFIG.WALL_HEIGHT * 0.5), Angle(90, 0, 0), wallPreset) end
+            if cell.east then queueWall(cCenter + Vector(HALF_CELL, 0, CONFIG.WALL_HEIGHT * 0.5), Angle(90, 90, 0), wallPreset) end
+            if cell.west and x == 1 then queueWall(cCenter + Vector(-HALF_CELL, 0, CONFIG.WALL_HEIGHT * 0.5), Angle(90, 90, 0), wallPreset) end
 
-            -- East Boundary
-            if x == CONFIG.GRID_W then
-                if not cell.east and designatedGateways < 4 and math.random() < 0.5 then
-                    designatedGateways = designatedGateways + 1
-                    local gatePos = cCenter + Vector(CONFIG.CELL_SIZE * 0.5, 0, CONFIG.WALL_HEIGHT * 0.5)
-                    local gateAng = Angle(90, 90, 0)
-                    local gateObj = {
-                        pos = gatePos,
-                        ang = gateAng,
-                        extDir = Vector(1, 0, 0),
-                        materialized = false,
-                        barrier = nil
-                    }
-                    table.insert(voidGateways, gateObj)
-                    table.insert(spawnQueue, {
-                        pos = gatePos,
-                        ang = gateAng,
-                        model = CONFIG.WALL_MODEL,
-                        mat = "models/debug/debugwhite",
-                        color = Color(0, 0, 0),
-                        category = "void_barrier",
-                        onSpawn = function(ent) gateObj.barrier = ent end
-                    })
-                else
-                    table.insert(spawnQueue, {
-                        pos = cCenter + Vector(CONFIG.CELL_SIZE * 0.5, 0, CONFIG.WALL_HEIGHT * 0.5),
-                        ang = Angle(90, 90, 0),
-                        model = CONFIG.WALL_MODEL,
-                        mat = wallPreset.mat,
-                        color = wallPreset.color,
-                        category = "wall"
-                    })
-                end
-            elseif cell.east then
-                table.insert(spawnQueue, {
-                    pos = cCenter + Vector(CONFIG.CELL_SIZE * 0.5, 0, CONFIG.WALL_HEIGHT * 0.5),
-                    ang = Angle(90, 90, 0),
-                    model = CONFIG.WALL_MODEL,
-                    mat = wallPreset.mat,
-                    color = wallPreset.color,
-                    category = "wall"
-                })
-            end
-
-            -- West Boundary
-            if x == 1 then
-                table.insert(spawnQueue, {
-                    pos = cCenter + Vector(-CONFIG.CELL_SIZE * 0.5, 0, CONFIG.WALL_HEIGHT * 0.5),
-                    ang = Angle(90, 90, 0),
-                    model = CONFIG.WALL_MODEL,
-                    mat = wallPreset.mat,
-                    color = wallPreset.color,
-                    category = "wall"
-                })
-            end
-
-            -- D. Ceiling Fluorescent Light Fixtures (Mounted flush to ceiling)
+            -- Fluorescent Lights
             if math.random() < CONFIG.LIGHT_CHANCE then
                 local lightPos = cCenter + Vector(0, 0, CONFIG.WALL_HEIGHT - 3)
-                local lightAng = Angle(0, (cell.north or cell.south) and 0 or 90, 0)
                 table.insert(spawnQueue, {
                     pos = lightPos,
-                    ang = lightAng,
+                    ang = Angle(0, (cell.north or cell.south) and 0 or 90, 0),
                     model = CONFIG.LIGHT_MODEL,
                     category = "light",
                     onSpawn = function(ent)
@@ -429,25 +452,13 @@ if SERVER then
                     end
                 })
             end
-        end
-    end
 
-    -- --------------------------------------------------------------------------
-    -- 8. PHASE 2: INTERIOR OBJECTS (Sterile Mundanity, Image 2 Phase Anomaly & Radios)
-    -- --------------------------------------------------------------------------
-    print("[Backrooms Engine] Phase 2: Placing orderly furniture, phase anomalies, and vibe radios...")
-
-    for x = 1, CONFIG.GRID_W do
-        for y = 1, CONFIG.GRID_H do
-            local cell = grid[x][y]
-            local cCenter = chipOrigin + Vector((x - 0.5) * CONFIG.CELL_SIZE, (y - 0.5) * CONFIG.CELL_SIZE, 0)
+            -- Furniture & The Image 2 Anomaly
             local cellProps = {}
-
             local deskSpawned = nil
 
-            -- Rule 1A: RARE LIMINAL PHASE ANOMALY (The exact Image 2 aesthetic!)
-            -- 6% chance in a walled room: vintage wooden table embedded into the drywall holding an old PC tower
-            if not cell.isDeadEnd and math.random() < CONFIG.PHASED_TABLE_CHANCE then
+            -- Rule 1: The Image 2 Wall-Phased Drop-Leaf Table Anomaly!
+            if math.random() < CONFIG.PHASED_TABLE_CHANCE then
                 local wallEdges = {}
                 if cell.north then table.insert(wallEdges, { pos = Vector(0, HALF_CELL - 14, 18.2), ang = Angle(0, -90 + math.random(-22, 22), 0) }) end
                 if cell.south then table.insert(wallEdges, { pos = Vector(0, -HALF_CELL + 14, 18.2), ang = Angle(0, 90 + math.random(-22, 22), 0) }) end
@@ -459,7 +470,6 @@ if SERVER then
                     local worldTablePos = cCenter + chosenWall.pos
                     table.insert(cellProps, { pos = chosenWall.pos, radius = 22 })
                     
-                    -- Spawn the drop-leaf wooden round table half-embedded into the wall (Image 2!)
                     table.insert(spawnQueue, {
                         pos = worldTablePos,
                         ang = chosenWall.ang,
@@ -467,7 +477,6 @@ if SERVER then
                         category = "furniture"
                     })
 
-                    -- Spawn the vintage PC tower resting on the visible surface (Image 2!)
                     local pcOffset = chosenWall.ang:getForward() * -4 + Vector(0, 0, 16.5)
                     table.insert(spawnQueue, {
                         pos = worldTablePos + pcOffset,
@@ -475,13 +484,12 @@ if SERVER then
                         model = "models/props_lab/harddrive02.mdl",
                         category = "furniture"
                     })
-
                     deskSpawned = { pos = chosenWall.pos, worldPos = worldTablePos, ang = chosenWall.ang, radius = 22 }
                 end
             end
 
-            -- Rule 1B: Standard Orderly Office Desk (52-unit wall clearance, all 4 legs on floor)
-            if not deskSpawned and not cell.isDeadEnd and math.random() < CONFIG.DESK_CHANCE then
+            -- Rule 2: Orderly Desk
+            if not deskSpawned and math.random() < CONFIG.DESK_CHANCE then
                 local candidateWalls = {}
                 if cell.north then table.insert(candidateWalls, { pos = Vector(0, 38, 18.2), ang = Angle(0, -90, 0) }) end
                 if cell.south then table.insert(candidateWalls, { pos = Vector(0, -38, 18.2), ang = Angle(0, 90, 0) }) end
@@ -494,7 +502,6 @@ if SERVER then
                         local worldDeskPos = cCenter + chosen.pos
                         deskSpawned = { pos = chosen.pos, worldPos = worldDeskPos, ang = chosen.ang, radius = 25 }
                         table.insert(cellProps, deskSpawned)
-
                         table.insert(spawnQueue, {
                             pos = worldDeskPos,
                             ang = chosen.ang,
@@ -505,60 +512,17 @@ if SERVER then
                 end
             end
 
-            -- Rule 2: Filing Cabinet seeks a 2-wall corner
-            if math.random() < CONFIG.CABINET_CHANCE then
-                local corners = {}
-                if cell.north and cell.west then table.insert(corners, { pos = Vector(-42, 42, 26), ang = Angle(0, -45, 0) }) end
-                if cell.north and cell.east then table.insert(corners, { pos = Vector(42, 42, 26), ang = Angle(0, -135, 0) }) end
-                if cell.south and cell.west then table.insert(corners, { pos = Vector(-42, -42, 26), ang = Angle(0, 45, 0) }) end
-                if cell.south and cell.east then table.insert(corners, { pos = Vector(42, -42, 26), ang = Angle(0, 135, 0) }) end
-
-                if #corners > 0 then
-                    local c = corners[math.random(#corners)]
-                    if checkClearance(c.pos, 16, cell, cellProps) then
-                        local worldCabPos = cCenter + c.pos
-                        table.insert(cellProps, { pos = c.pos, radius = 16 })
-                        table.insert(spawnQueue, {
-                            pos = worldCabPos,
-                            ang = c.ang,
-                            model = PROP_PRESETS.storage[1],
-                            category = "furniture"
-                        })
-                    end
-                end
-            end
-
-            -- Rule 3: Chair (Orderly alignment, rare human slight offset)
+            -- Rule 3: Chair (Alight with desk)
             if deskSpawned and math.random() < 0.75 then
                 local chairDist = math.random(-42, -38)
                 local chairOffset = deskSpawned.ang:getForward() * chairDist
                 local localChairPos = deskSpawned.pos + chairOffset
                 if checkClearance(localChairPos, 14, cell, cellProps) then
                     local worldChairPos = cCenter + localChairPos
-                    worldChairPos.z = chipOrigin.z + 20.1
-                    local chairYaw = deskSpawned.ang.yaw + math.random(-6, 6)
-                    table.insert(cellProps, { pos = localChairPos, radius = 14 })
+                    worldChairPos.z = CONFIG.Z_TIER_MAIN + 20.1
                     table.insert(spawnQueue, {
                         pos = worldChairPos,
-                        ang = Angle(0, chairYaw, 0),
-                        model = PROP_PRESETS.chairs[1],
-                        category = "furniture"
-                    })
-                end
-            elseif not deskSpawned and math.random() < CONFIG.SOLO_CHAIR_CHANCE then
-                local localChairPos = Vector(math.random(-25, 25), math.random(-25, 25), 0)
-                if checkClearance(localChairPos, 14, cell, cellProps) then
-                    local worldChairPos = cCenter + localChairPos
-                    worldChairPos.z = chipOrigin.z + 20.1
-                    local chairAng = Angle(0, math.random(0, 3) * 90, 0)
-                    if math.random() < CONFIG.TIPPED_CHAIR_RATE then
-                        chairAng = Angle(80, math.random(0, 360), 0)
-                        worldChairPos.z = chipOrigin.z + 10
-                    end
-                    table.insert(cellProps, { pos = localChairPos, radius = 14 })
-                    table.insert(spawnQueue, {
-                        pos = worldChairPos,
-                        ang = chairAng,
+                        ang = Angle(0, deskSpawned.ang.yaw + math.random(-5, 5), 0),
                         model = PROP_PRESETS.chairs[1],
                         category = "furniture"
                     })
@@ -567,126 +531,136 @@ if SERVER then
 
             -- Rule 4: Citizen Radio (The Liminal Vibe: 90% Functioning, 10% Glitch)
             if math.random() < CONFIG.RADIO_CHANCE then
-                local radioWorldPos = nil
-                local radioAng = Angle(0, math.random(0, 360), 0)
-                
-                if deskSpawned then
-                    radioWorldPos = deskSpawned.worldPos + (deskSpawned.ang:getRight() * 14) + Vector(0, 0, 20.5)
-                    radioAng = deskSpawned.ang + Angle(0, math.random(-15, 15), 0)
-                else
-                    local localRadioPos = Vector(math.random(-20, 20), math.random(-20, 20), 0)
-                    if checkClearance(localRadioPos, 10, cell, cellProps) then
-                        radioWorldPos = cCenter + localRadioPos
-                        radioWorldPos.z = chipOrigin.z + 6.2
-                    end
-                end
-
-                if radioWorldPos then
-                    local isGlitchRadio = (math.random() < CONFIG.GLITCH_RADIO_RATE) -- Only 10% glitch!
-                    table.insert(spawnQueue, {
-                        pos = radioWorldPos,
-                        ang = radioAng,
-                        model = CONFIG.RADIO_MODEL,
-                        category = "furniture",
-                        onSpawn = function(ent)
-                            net.start("BackroomsRadioSpawn")
-                            net.writeEntity(ent)
-                            net.writeBool(isGlitchRadio)
-                            net.send()
-                        end
-                    })
-                end
-            end
-
-            -- Rule 5: CRT TV Monitor (Perched neatly on desk)
-            if deskSpawned and math.random() < 0.60 then
-                local monWorldPos = deskSpawned.worldPos + Vector(0, 0, 27.1)
-                local monAng = Angle(0, deskSpawned.ang.yaw, 0)
-                local isPoweredOn = math.random() < 0.25
+                local radioWorldPos = deskSpawned and (deskSpawned.worldPos + (deskSpawned.ang:getRight() * 14) + Vector(0, 0, 20.5))
+                                     or (cCenter + Vector(math.random(-20, 20), math.random(-20, 20), 6.2))
+                local isGlitchRadio = (math.random() < CONFIG.GLITCH_RADIO_RATE)
                 table.insert(spawnQueue, {
-                    pos = monWorldPos,
-                    ang = monAng,
-                    model = PROP_PRESETS.electronics[1],
+                    pos = radioWorldPos,
+                    ang = Angle(0, math.random(0, 360), 0),
+                    model = CONFIG.RADIO_MODEL,
                     category = "furniture",
                     onSpawn = function(ent)
-                        if isPoweredOn then
-                            net.start("BackroomsTVSpawn")
-                            net.writeEntity(ent)
-                            net.send()
-                        end
-                    end
-                })
-            elseif cell.isDeadEnd and math.random() < CONFIG.FLOOR_TV_CHANCE then
-                local localMonPos = Vector(math.random(-20, 20), math.random(-20, 20), 0)
-                if checkClearance(localMonPos, 12, cell, cellProps) then
-                    local monWorldPos = cCenter + localMonPos
-                    monWorldPos.z = chipOrigin.z + 8.3
-                    table.insert(cellProps, { pos = localMonPos, radius = 12 })
-                    table.insert(spawnQueue, {
-                        pos = monWorldPos,
-                        ang = Angle(0, math.random(0, 360), 0),
-                        model = PROP_PRESETS.electronics[1],
-                        category = "furniture"
-                    })
-                end
-            end
-
-            -- Rule 6: Rare NPCs in Dead Ends (Only 2% chance)
-            if cell.isDeadEnd and math.random() < CONFIG.NPC_CHANCE then
-                local isStillLife = math.random() < 0.65
-                local npcPos = cCenter + Vector(0, 0, 10)
-                local npcAng = Angle(0, math.random(0, 360), 0)
-
-                table.insert(spawnQueue, {
-                    pos = npcPos,
-                    ang = npcAng,
-                    model = NPC_MODELS[math.random(#NPC_MODELS)],
-                    category = "npc",
-                    onSpawn = function(ent)
-                        pcall(ent.setFrozen, ent, true)
-
-                        local okNum, flexCount = pcall(ent.getFlexNum, ent)
-                        if okNum and type(flexCount) == "number" then
-                            for f = 0, math.min(flexCount - 1, 16) do
-                                if math.random() < 0.4 then
-                                    safeSetFlex(ent, f, math.random() * 1.5)
-                                end
-                            end
-                        end
-
-                        local okBone1, neckBone = pcall(ent.lookupBone, ent, "ValveBiped.Bip01_Head1")
-                        if okBone1 and neckBone then
-                            safeManipulateBoneAngles(ent, neckBone, Angle(math.random(-25, 25), math.random(30, 75), 0))
-                        end
-                        local okBone2, spineBone = pcall(ent.lookupBone, ent, "ValveBiped.Bip01_Spine2")
-                        if okBone2 and spineBone then
-                            safeManipulateBoneAngles(ent, spineBone, Angle(math.random(-15, 15), 0, math.random(-20, 20)))
-                        end
-
-                        if math.random() < 0.5 then
-                            safeSetSubMaterial(ent, 0, "models/debug/debugwhite")
-                            safeSetColor(ent, Color(0, 0, 0))
-                        else
-                            safeSetSubMaterial(ent, 1, "models/debug/debugwhite")
-                            safeSetColor(ent, Color(228, 214, 148))
-                        end
-
-                        print("[Backrooms Engine] ⚠️ Entity Manifested: " .. (isStillLife and "'Still Life'" or "'Stalker'") .. " at " .. tostring(npcPos))
+                        net.start("BackroomsRadioSpawn")
+                        net.writeEntity(ent)
+                        net.writeBool(isGlitchRadio)
+                        net.send()
                     end
                 })
             end
         end
     end
 
+    -- SECTOR 2: THE SUDDEN PITFALL CHAMBER (Dropping from Tier 0 down to Tier -1)
+    -- Located on the North flank of the Hub
+    local pitfallPos = hubOrigin + Vector(2.5 * CONFIG.CELL_SIZE, (HUB_H + 0.5) * CONFIG.CELL_SIZE, 0)
+    queuePitfall(pitfallPos)
+
+    -- SECTOR 3: THE TRANSIT RAMPS (Inclined 26.5° Hallways Connecting Tiers)
+    -- Ramp A (Going Down from Tier 0 to Tier -1 Sub-Basement)
+    local rampDownStart = hubOrigin + Vector(0.5 * CONFIG.CELL_SIZE, (HUB_H + 0.5) * CONFIG.CELL_SIZE, 0)
+    local rampDownEnd   = rampDownStart + Vector(0, CONFIG.CELL_SIZE * 2, 0)
+    queueTransitRamp(rampDownStart, rampDownEnd, CONFIG.Z_TIER_MAIN, CONFIG.Z_TIER_SUB, Angle(0, 90, 0))
+
+    -- Ramp B (Going Up from Tier 0 to Tier +1 Upper Mezzanine)
+    local rampUpStart = hubOrigin + Vector((HUB_W - 0.5) * CONFIG.CELL_SIZE, (HUB_H + 0.5) * CONFIG.CELL_SIZE, 0)
+    local rampUpEnd   = rampUpStart + Vector(0, CONFIG.CELL_SIZE * 2, 0)
+    queueTransitRamp(rampUpStart, rampUpEnd, CONFIG.Z_TIER_MAIN, CONFIG.Z_TIER_UPPER, Angle(0, -90, 0))
+
+    -- SECTOR 4: RAMP HOLE / WALL BREACH ("holes that are ramps that players can fit through")
+    -- A wall partition with an opening where an inclined ramp punches directly through into a lower chamber!
+    local breachWallPos = hubOrigin + Vector(-0.5 * CONFIG.CELL_SIZE, 2.5 * CONFIG.CELL_SIZE, 0)
+    queueRampBreach(breachWallPos, Angle(0, 180, 0))
+
+    -- SECTOR 5: THE SUB-BASEMENT UNDER-ROOMS (Tier -1 at Z = -16,250)
+    -- Materialize a deep, dark crypt beneath the descent area
+    for sx = 1, 3 do
+        for sy = 1, 3 do
+            local subCellCenter = rampDownEnd + Vector((sx - 2) * CONFIG.CELL_SIZE, (sy - 1) * CONFIG.CELL_SIZE, CONFIG.Z_TIER_SUB - CONFIG.Z_TIER_MAIN)
+            queueEnclosedCell(subCellCenter, FLOOR_SUB)
+
+            -- Perimeter Walls of Sub-Basement
+            if sy == 3 then queueWall(subCellCenter + Vector(0, HALF_CELL, CONFIG.WALL_HEIGHT * 0.5), Angle(90, 0, 0), WALL_PRESETS[3]) end
+            if sx == 1 then queueWall(subCellCenter + Vector(-HALF_CELL, 0, CONFIG.WALL_HEIGHT * 0.5), Angle(90, 90, 0), WALL_PRESETS[3]) end
+            if sx == 3 then queueWall(subCellCenter + Vector(HALF_CELL, 0, CONFIG.WALL_HEIGHT * 0.5), Angle(90, 90, 0), WALL_PRESETS[3]) end
+
+            -- Occasional low flickering light
+            if sx == 2 and sy == 2 then
+                table.insert(spawnQueue, {
+                    pos = subCellCenter + Vector(0, 0, CONFIG.WALL_HEIGHT - 3),
+                    ang = Angle(0, 0, 0),
+                    model = CONFIG.LIGHT_MODEL,
+                    category = "light",
+                    onSpawn = function(ent)
+                        safeSetMaterial(ent, "models/debug/debugwhite", Color(255, 245, 175))
+                        table.insert(activeLights, ent)
+                        net.start("BackroomsLightSpawn")
+                        net.writeEntity(ent)
+                        net.send()
+                    end
+                })
+            end
+        end
+    end
+
+    -- SECTOR 6: EXPANSIVE SPRAWLING CORRIDOR WINGS (Reaching Out Across the Bounds)
+    -- Wing East (Reaching toward X = 14,500)
+    local eastWingStart = hubOrigin + Vector(HUB_W * CONFIG.CELL_SIZE, 3.5 * CONFIG.CELL_SIZE, 0)
+    for step = 1, 6 do
+        local wingCell = eastWingStart + Vector((step - 0.5) * CONFIG.CELL_SIZE, 0, 0)
+        queueEnclosedCell(wingCell, FLOOR_MAIN)
+        queueWall(wingCell + Vector(0, HALF_CELL, CONFIG.WALL_HEIGHT * 0.5), Angle(90, 0, 0), WALL_PRESETS[1])
+        queueWall(wingCell + Vector(0, -HALF_CELL, CONFIG.WALL_HEIGHT * 0.5), Angle(90, 0, 0), WALL_PRESETS[1])
+
+        -- Void Gateway at end of the wing
+        if step == 6 then
+            local gatePos = wingCell + Vector(HALF_CELL, 0, CONFIG.WALL_HEIGHT * 0.5)
+            local gateObj = { pos = gatePos, ang = Angle(90, 90, 0), extDir = Vector(1, 0, 0), materialized = false }
+            table.insert(voidGateways, gateObj)
+            table.insert(spawnQueue, {
+                pos = gatePos,
+                ang = Angle(90, 90, 0),
+                model = CONFIG.WALL_MODEL,
+                mat = "models/debug/debugwhite",
+                color = Color(0, 0, 0),
+                category = "void_barrier",
+                onSpawn = function(ent) gateObj.barrier = ent end
+            })
+        end
+    end
+
+    -- Wing West (Reaching toward X = 8,500)
+    local westWingStart = hubOrigin + Vector(0, 1.5 * CONFIG.CELL_SIZE, 0)
+    for step = 1, 5 do
+        local wingCell = westWingStart - Vector((step - 0.5) * CONFIG.CELL_SIZE, 0, 0)
+        queueEnclosedCell(wingCell, FLOOR_MAIN)
+        queueWall(wingCell + Vector(0, HALF_CELL, CONFIG.WALL_HEIGHT * 0.5), Angle(90, 0, 0), WALL_PRESETS[2])
+        queueWall(wingCell + Vector(0, -HALF_CELL, CONFIG.WALL_HEIGHT * 0.5), Angle(90, 0, 0), WALL_PRESETS[2])
+
+        if step == 5 then
+            local gatePos = wingCell - Vector(HALF_CELL, 0, -CONFIG.WALL_HEIGHT * 0.5)
+            local gateObj = { pos = gatePos, ang = Angle(90, 90, 0), extDir = Vector(-1, 0, 0), materialized = false }
+            table.insert(voidGateways, gateObj)
+            table.insert(spawnQueue, {
+                pos = gatePos,
+                ang = Angle(90, 90, 0),
+                model = CONFIG.WALL_MODEL,
+                mat = "models/debug/debugwhite",
+                color = Color(0, 0, 0),
+                category = "void_barrier",
+                onSpawn = function(ent) gateObj.barrier = ent end
+            })
+        end
+    end
+
     local totalQueued = #spawnQueue
-    print("[Backrooms Engine] Total generation queue: " .. totalQueued .. " components.")
+    print("[Backrooms Engine] Total sprawling multi-tier queue: " .. totalQueued .. " components.")
 
     -- --------------------------------------------------------------------------
-    -- 9. PROXIMITY-TRIGGERED VOID MATERIALIZATION SEQUENCE
+    -- 7. PROXIMITY-TRIGGERED VOID MATERIALIZATION SEQUENCE
     -- --------------------------------------------------------------------------
     local function triggerMaterialize(gate)
         gate.materialized = true
-        print("[Backrooms Engine] ⚡ Void Threshold Activated! Materializing sector at " .. tostring(gate.pos))
+        print("[Backrooms Engine] ⚡ Void Threshold Activated! Expanding sector at " .. tostring(gate.pos))
 
         net.start("BackroomsVoidZap")
         net.writeVector(gate.pos)
@@ -704,54 +678,14 @@ if SERVER then
 
             for step = 1, 3 do
                 local extCell = curCenter + (stepVec * step)
-                
-                -- Extended Floor
-                table.insert(spawnQueue, {
-                    pos = extCell,
-                    ang = Angle(0, 0, 0),
-                    model = "models/hunter/plates/plate4x4.mdl",
-                    mat = FLOOR_PRESETS[1].mat,
-                    color = FLOOR_PRESETS[1].color,
-                    category = "floor"
-                })
+                queueEnclosedCell(extCell, FLOOR_MAIN)
 
-                -- Extended Ceiling
-                table.insert(spawnQueue, {
-                    pos = extCell + Vector(0, 0, CONFIG.WALL_HEIGHT),
-                    ang = Angle(180, 0, 0),
-                    model = "models/hunter/plates/plate4x4.mdl",
-                    mat = CEILING_PRESET.mat,
-                    color = CEILING_PRESET.color,
-                    category = "ceiling"
-                })
-
-                local rightOffset = Angle(0, gate.ang.yaw, 0):getRight() * (CONFIG.CELL_SIZE * 0.5)
-                table.insert(spawnQueue, {
-                    pos = extCell + rightOffset + Vector(0, 0, CONFIG.WALL_HEIGHT * 0.5),
-                    ang = Angle(90, gate.ang.yaw + 90, 0),
-                    model = CONFIG.WALL_MODEL,
-                    mat = WALL_PRESETS[1].mat,
-                    color = WALL_PRESETS[1].color,
-                    category = "wall"
-                })
-                table.insert(spawnQueue, {
-                    pos = extCell - rightOffset + Vector(0, 0, CONFIG.WALL_HEIGHT * 0.5),
-                    ang = Angle(90, gate.ang.yaw + 90, 0),
-                    model = CONFIG.WALL_MODEL,
-                    mat = WALL_PRESETS[1].mat,
-                    color = WALL_PRESETS[1].color,
-                    category = "wall"
-                })
+                local rightOffset = Angle(0, gate.ang.yaw, 0):getRight() * HALF_CELL
+                queueWall(extCell + rightOffset + Vector(0, 0, CONFIG.WALL_HEIGHT * 0.5), Angle(90, gate.ang.yaw + 90, 0), WALL_PRESETS[1])
+                queueWall(extCell - rightOffset + Vector(0, 0, CONFIG.WALL_HEIGHT * 0.5), Angle(90, gate.ang.yaw + 90, 0), WALL_PRESETS[1])
 
                 if step == 3 then
-                    table.insert(spawnQueue, {
-                        pos = extCell + (gate.extDir * (CONFIG.CELL_SIZE * 0.5)) + Vector(0, 0, CONFIG.WALL_HEIGHT * 0.5),
-                        ang = Angle(90, gate.ang.yaw, 0),
-                        model = CONFIG.WALL_MODEL,
-                        mat = WALL_PRESETS[1].mat,
-                        color = WALL_PRESETS[1].color,
-                        category = "wall"
-                    })
+                    queueWall(extCell + (gate.extDir * HALF_CELL) + Vector(0, 0, CONFIG.WALL_HEIGHT * 0.5), Angle(90, gate.ang.yaw, 0), WALL_PRESETS[1])
                 end
             end
         end)
@@ -772,7 +706,7 @@ if SERVER then
     end)
 
     -- --------------------------------------------------------------------------
-    -- 10. ASYNCHRONOUS BURST-REGULATED FIFO SPAWNER WITH GREEN XEN ZAP BURSTS
+    -- 8. ASYNCHRONOUS BURST-REGULATED FIFO SPAWNER WITH GREEN XEN ZAP BURSTS
     -- --------------------------------------------------------------------------
     local spawnIndex = 1
     local spawnedCount = 0
@@ -786,7 +720,7 @@ if SERVER then
             local item = spawnQueue[spawnIndex]
             local ok, p = pcall(prop.create, item.pos, item.ang, item.model, true)
             if ok and isValid(p) then
-                -- Architectural components get their custom materials:
+                -- Architectural components get their custom non-UV sensitive materials:
                 if item.category == "wall" or item.category == "floor" or item.category == "ceiling" or item.category == "void_barrier" then
                     safeSetMaterial(p, item.mat, item.color)
                 end
@@ -804,7 +738,7 @@ if SERVER then
                 net.writeVector(item.pos)
                 net.send()
 
-                if spawnedCount % 20 == 0 or spawnedCount == #spawnQueue then
+                if spawnedCount % 25 == 0 or spawnedCount == #spawnQueue then
                     local pct = math.floor((spawnedCount / #spawnQueue) * 100)
                     print("[Backrooms Engine] Materializing: " .. spawnedCount .. "/" .. #spawnQueue .. " (" .. pct .. "%)")
                 end
@@ -815,7 +749,7 @@ if SERVER then
     end)
 
     -- --------------------------------------------------------------------------
-    -- 11. CLEANUP ON REMOVAL
+    -- 9. CLEANUP ON REMOVAL
     -- --------------------------------------------------------------------------
     hook.add("Removed", "BackroomsCleanup", function()
         timer.remove("BackroomsSafeSpawner")
@@ -899,7 +833,6 @@ else
             bolts = 5
         })
 
-        -- Localized spatial zap sound when nearby
         local ply = player()
         if isValid(ply) and ply:getPos():getDistance(pos) < 550 then
             pcall(sound.playFile, "ambient/energy/zap" .. math.random(1, 3) .. ".wav", "3d", function(st)
@@ -949,14 +882,10 @@ else
                 if isValid(r.station) then pcall(r.station.stop, r.station) end
                 table.remove(activeRadios, i)
             else
-                -- Follow radio prop in case it moves
                 pcall(r.station.setPos, r.station, r.ent:getPos())
 
-                -- Only 10% glitch radios have dynamic tape skips & pitch waver!
-                -- 90% vibe radios play smooth, stable, cozy music.
                 if r.isGlitch and now > r.nextGlitch then
                     r.nextGlitch = now + math.random(3, 7)
-                    -- Brief volume dip / tape flutter
                     pcall(r.station.setVolume, r.station, 0.2)
                     timer.simple(0.15, function()
                         if isValid(r.station) then pcall(r.station.setVolume, r.station, 0.65) end
@@ -1027,7 +956,7 @@ else
             end
         end
 
-        -- 4. Parented CRT TV Analog Static & Emergency Broadcast Screens
+        -- 4. Parented CRT TV Analog Static Screens
         for i = #activeTVs, 1, -1 do
             local tv = activeTVs[i]
             if not isValid(tv) then
