@@ -5,7 +5,7 @@
 -- Fetches the trained Backrooms dataset live from GitHub
 -- Whitelist: raw.githubusercontent.com is allowed by default in StarfallEx!
 
-local githubDatasetURL = "https://raw.githubusercontent.com/username/backrooms_dataset/main/trained_dataset.json"
+local githubDatasetURL = "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/trained_dataset.json"
 
 print("[Dataset Streamer] Connecting to GitHub repository...")
 

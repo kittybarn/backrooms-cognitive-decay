@@ -39,7 +39,7 @@ class AudioToken:
     loop: bool = True
 
 class AudioTrainer:
-    def __init__(self, registry: TokenRegistry, github_repo: str = "username/backrooms_audio", branch: str = "main"):
+    def __init__(self, registry: TokenRegistry, github_repo: str = "kittybarn/backrooms-cognitive-decay", branch: str = "main"):
         """
         github_repo: format 'Owner/Repository' (e.g. 'myuser/backrooms_assets')
         branch: branch name (e.g. 'main' or 'master')
