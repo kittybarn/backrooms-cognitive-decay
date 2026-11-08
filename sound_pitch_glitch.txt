@@ -1,0 +1,101 @@
+--@name Cognitive Sound Glitch & Pitch Degrader
+--@author Cognitive Decay Project
+--@client
+
+-- Dynamic sound playback rate and pitch distortion based on statistical context confusion.
+-- Widely known sounds stay recognizable; unknown or decayed audio gets dragged,
+-- warped, micro-stuttered, and down-pitched like dying hardware.
+
+local activeStreams = {}
+local globalConfusion = 0.0 -- Driven by the brain (0.0 = pristine, 1.0 = total breakdown)
+
+-- Connects to audio and applies dynamic distortion
+-- Reasonable volume & acoustic falloff bounds:
+-- Sound stays contained within the local room (audible within ~150-300 Source units),
+-- gently fading away so it doesn't blast or ear-rape across the whole map.
+local function playDecayingAudio(url, pos, isWidelyKnown, customVolume)
+    bass.loadURL(url, "3d noblock", function(snd, err, errtxt)
+        if isValid(snd) then
+            -- Reasonable Volume: 0.35 to 0.55 max (comfortably ambient, not deafening)
+            local baseVolume = math.Clamp(customVolume or 0.45, 0.1, 0.65)
+            
+            snd:setPos(pos)
+            snd:setVolume(baseVolume)
+            
+            -- Room-scale Falloff Range (Source Units):
+            -- 80 units: Starts at full volume within immediate standing distance (~5 feet)
+            -- 450 units: Completely drops to silence by the end of the corridor (~28 feet)
+            snd:setFade(80, 450)
+            
+            pcall(snd.setLooping, snd, true)
+            snd:play()
+
+            table.insert(activeStreams, {
+                snd = snd,
+                isKnown = isWidelyKnown or false,
+                baseVolume = baseVolume,
+                basePitch = 1.0,
+                currentPitch = 1.0,
+                targetPitch = 1.0,
+                wobblePhase = math.random() * 10,
+                nextGlitchTime = timer.curtime() + math.random(5, 12)
+            })
+        end
+    end)
+end
+
+-- Audio think hook: dynamic pitch warping and micro-stutters
+hook.add("think", "CognitivePitchDrift", function()
+    local curTime = timer.curtime()
+    
+    for i = #activeStreams, 1, -1 do
+        local item = activeStreams[i]
+        if isValid(item.snd) then
+            -- 1. BASELINE BEHAVIOR
+            -- If the sound is "widely known" (like the iconic 60Hz hum), the baseline stays locked at 1.0
+            -- Only subtle voltage sags occur unless confusion is near total.
+            local pitchMultiplier = 1.0
+            
+            if not item.isKnown then
+                -- The audio was hallucinated or guessed from unfamiliar data:
+                -- Drag the playback rate down into a terrifying low rumble (down to 0.35x - 0.7x)
+                local driftDepth = globalConfusion * 0.55
+                local slowWobble = math.sin((curTime * 0.4) + item.wobblePhase) * driftDepth
+                pitchMultiplier = math.max(0.25, 1.0 - (globalConfusion * 0.4) + slowWobble)
+            else
+                -- Widely known sound: only minor voltage dips unless confusion > 0.7
+                if globalConfusion > 0.7 then
+                    pitchMultiplier = 1.0 - (math.sin(curTime * 1.5) * 0.15)
+                end
+            end
+
+            -- 2. HARDWARE STUTTER & TAPE DRAG (The "Reality Hiccup")
+            if curTime > item.nextGlitchTime and globalConfusion > 0.3 then
+                -- Sudden momentary pitch drop (like a tape recorder losing power or bad buffer underrun)
+                item.targetPitch = math.random(20, 60) / 100.0
+                item.nextGlitchTime = curTime + math.random(4, 12)
+                
+                -- Fast recovery back to baseline after 0.25 seconds
+                timer.simple(0.25, function()
+                    item.targetPitch = pitchMultiplier
+                end)
+            else
+                item.targetPitch = pitchMultiplier
+            end
+
+            -- Smoothly interpolate to target pitch
+            item.currentPitch = math.Approach(item.currentPitch, item.targetPitch, render.getFrameTime() * 1.8)
+            
+            -- Apply to Starfall bass audio (1.0 = normal, 0.5 = half speed, 0.2 = extreme sub-bass sludge)
+            item.snd:setPitch(item.currentPitch)
+        else
+            table.remove(activeStreams, i)
+        end
+    end
+end)
+
+-- Receive confusion updates from the cognitive server chip
+net.receive("UpdateConfusionLevel", function()
+    globalConfusion = net.readFloat()
+    print("[Audio Glitch] Stream decay updated to confusion: " .. globalConfusion)
+end)
