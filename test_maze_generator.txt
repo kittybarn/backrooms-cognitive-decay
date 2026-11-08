@@ -1,25 +1,24 @@
---@name Backrooms Test Maze Generator (Collidable, Open Roof)
+--@name Backrooms Test Maze Generator (Burst-Safe Queue, Open Roof)
 --@author Cognitive Decay Project
 --@server
 
--- Generates a procedural single-level Backrooms maze with:
--- 1. Full Player Collision (models/hunter/plates/plate1x2.mdl & plate2x2.mdl)
--- 2. Open Roof (players can look up at the endless void / airspace)
--- 3. Pristine Level 0 Yellow Wallpaper + Damp Carpet textures
--- 4. Safe spawn origin tuned to your gm_functional_flatgrass airspace
+-- Solves: "The props burst limit has been exceeded"
+-- StarfallEx limits prop.create() to ~4 props per second (plyPropBurst).
+-- This script uses an asynchronous FIFO spawn queue that checks prop.canSpawn()
+-- before materializing each wall and floor, guaranteeing ZERO burst limit errors!
 
 local origin = chip():getPos()
-local cellSize = 120 -- Source units per corridor cell (comfortably wide for players)
-local wallHeight = 110 -- Classic Backrooms wall height (tall, claustrophobic)
+local cellSize = 120 -- Source units per corridor cell
+local wallHeight = 110 -- Classic tall Backrooms wall height
 
--- Maze Grid Settings (8x8 test grid)
-local gridW = 8
-local gridH = 8
+-- Maze Grid Settings (5x5 test maze to spawn quickly and safely)
+local gridW = 5
+local gridH = 5
 
-local spawnedWalls = {}
-local spawnedFloors = {}
+local spawnQueue = {}
+local spawnedProps = {}
 
-print("[Maze Generator] Building Backrooms Level 0 Test Maze at " .. tostring(origin))
+print("[Maze Generator] Initializing Burst-Safe Backrooms Maze at " .. tostring(origin))
 
 -- 1. Generate Maze Grid Data (Depth-First Recursive Backtracker)
 local grid = {}
@@ -38,7 +37,6 @@ local function carveMaze(cx, cy)
         { dx = 1, dy = 0, wall = "east", opp = "west" },
         { dx = -1, dy = 0, wall = "west", opp = "east" }
     }
-    -- Shuffle directions randomly
     for i = #directions, 2, -1 do
         local j = math.random(1, i)
         directions[i], directions[j] = directions[j], directions[i]
@@ -54,93 +52,100 @@ local function carveMaze(cx, cy)
     end
 end
 
--- Start maze from (1, 1)
 carveMaze(1, 1)
 
--- 2. Materialize Physical Floors with Collision
--- Uses plate2x2 / plate3x3 with damp carpet texture
+-- 2. Build Queues for Floors & Walls
 local floorMat = "materials/carpet/office_carpet_damp_01"
 local wallMat  = "materials/plaster/office_wallpaper_yellow"
+local wallModel = "models/hunter/plates/plate1x2.mdl"
 
-local function buildFloor()
-    for x = 1, gridW, 2 do
-        for y = 1, gridH, 2 do
-            local floorPos = origin + Vector((x - 1) * cellSize + (cellSize * 0.5), (y - 1) * cellSize + (cellSize * 0.5), 0)
-            -- Spawn frozen collidable floor plate
-            local fl = prop.create(floorPos, Angle(0, 0, 0), "models/hunter/plates/plate2x2.mdl", true)
-            if isValid(fl) then
-                fl:setMaterial(floorMat)
-                table.insert(spawnedFloors, fl)
-            end
+-- Enqueue Floors (Using larger plate4x4 / plate2x2 to drastically reduce prop count)
+for x = 1, gridW, 2 do
+    for y = 1, gridH, 2 do
+        local floorPos = origin + Vector((x - 1) * cellSize + cellSize, (y - 1) * cellSize + cellSize, 0)
+        table.insert(spawnQueue, {
+            pos = floorPos,
+            ang = Angle(0, 0, 0),
+            model = "models/hunter/plates/plate2x2.mdl",
+            mat = floorMat
+        })
+    end
+end
+
+-- Enqueue Walls (Open Roof - No ceiling plates!)
+for x = 1, gridW do
+    for y = 1, gridH do
+        local cellCenter = origin + Vector((x - 1) * cellSize, (y - 1) * cellSize, 0)
+        local cellData = grid[x][y]
+
+        if cellData.north then
+            table.insert(spawnQueue, {
+                pos = cellCenter + Vector(0, cellSize * 0.5, wallHeight * 0.5),
+                ang = Angle(90, 0, 0),
+                model = wallModel,
+                mat = wallMat
+            })
+        end
+
+        if y == 1 and cellData.south then
+            table.insert(spawnQueue, {
+                pos = cellCenter + Vector(0, -cellSize * 0.5, wallHeight * 0.5),
+                ang = Angle(90, 0, 0),
+                model = wallModel,
+                mat = wallMat
+            })
+        end
+
+        if cellData.east then
+            table.insert(spawnQueue, {
+                pos = cellCenter + Vector(cellSize * 0.5, 0, wallHeight * 0.5),
+                ang = Angle(90, 90, 0),
+                model = wallModel,
+                mat = wallMat
+            })
+        end
+
+        if x == 1 and cellData.west then
+            table.insert(spawnQueue, {
+                pos = cellCenter + Vector(-cellSize * 0.5, 0, wallHeight * 0.5),
+                ang = Angle(90, 90, 0),
+                model = wallModel,
+                mat = wallMat
+            })
         end
     end
 end
 
--- 3. Materialize Physical Walls (Open Roof - No Ceilings Spawned!)
-local function buildWalls()
-    local wallModel = "models/hunter/plates/plate1x2.mdl" -- Perfect 48x96 Source plate
+local totalQueued = #spawnQueue
+print("[Maze Generator] " .. totalQueued .. " components queued. Starting rate-regulated spawn...")
 
-    for x = 1, gridW do
-        for y = 1, gridH do
-            local cellCenter = origin + Vector((x - 1) * cellSize, (y - 1) * cellSize, 0)
-            local cellData = grid[x][y]
+-- 3. Asynchronous Burst-Regulated Spawner
+-- Runs on a safe timer tick (every 0.22s), strictly checking prop.canSpawn()
+local spawnIndex = 1
 
-            -- North Wall
-            if cellData.north then
-                local wPos = cellCenter + Vector(0, cellSize * 0.5, wallHeight * 0.5)
-                local w = prop.create(wPos, Angle(90, 0, 0), wallModel, true)
-                if isValid(w) then
-                    w:setMaterial(wallMat)
-                    table.insert(spawnedWalls, w)
-                end
-            end
+timer.create("SafePropSpawner", 0.22, 0, function()
+    if spawnIndex > #spawnQueue then
+        timer.remove("SafePropSpawner")
+        print("[Maze Generator] ✅ MAZE COMPLETELY MATERIALIZED! Total props: " .. #spawnedProps)
+        return
+    end
 
-            -- South Wall (Boundary check)
-            if y == 1 and cellData.south then
-                local wPos = cellCenter + Vector(0, -cellSize * 0.5, wallHeight * 0.5)
-                local w = prop.create(wPos, Angle(90, 0, 0), wallModel, true)
-                if isValid(w) then
-                    w:setMaterial(wallMat)
-                    table.insert(spawnedWalls, w)
-                end
-            end
-
-            -- East Wall
-            if cellData.east then
-                local wPos = cellCenter + Vector(cellSize * 0.5, 0, wallHeight * 0.5)
-                local w = prop.create(wPos, Angle(90, 90, 0), wallModel, true)
-                if isValid(w) then
-                    w:setMaterial(wallMat)
-                    table.insert(spawnedWalls, w)
-                end
-            end
-
-            -- West Wall (Boundary check)
-            if x == 1 and cellData.west then
-                local wPos = cellCenter + Vector(-cellSize * 0.5, 0, wallHeight * 0.5)
-                local w = prop.create(wPos, Angle(90, 90, 0), wallModel, true)
-                if isValid(w) then
-                    w:setMaterial(wallMat)
-                    table.insert(spawnedWalls, w)
-                end
-            end
+    -- Check StarfallEx prop burst quota
+    if prop.canSpawn() then
+        local item = spawnQueue[spawnIndex]
+        local p = prop.create(item.pos, item.ang, item.model, true)
+        if isValid(p) then
+            p:setMaterial(item.mat)
+            table.insert(spawnedProps, p)
+            spawnIndex = spawnIndex + 1
         end
     end
-end
-
--- Build sequentially with short timer to prevent CPU quota burst
-timer.simple(0.1, function()
-    buildFloor()
-    print("[Maze Generator] Floor materialized with collision!")
-end)
-
-timer.simple(0.3, function()
-    buildWalls()
-    print("[Maze Generator] Maze completed! Walls: " .. #spawnedWalls .. " | Open roof ceiling clear.")
 end)
 
 -- Clean-up on chip remove
 hook.add("Removed", "ClearMazeProps", function()
-    for _, p in ipairs(spawnedWalls) do if isValid(p) then p:remove() end end
-    for _, p in ipairs(spawnedFloors) do if isValid(p) then p:remove() end end
+    timer.remove("SafePropSpawner")
+    for _, p in ipairs(spawnedProps) do
+        if isValid(p) then p:remove() end
+    end
 end)
