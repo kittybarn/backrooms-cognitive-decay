@@ -373,5 +373,934 @@
       16.0
     ],
     "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/allcircuitbusy.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/allcircuitbusy.mp3",
+    "name": "Audio: allcircuitbusy",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "sound",
+      "allcircuitbusy",
+      "http",
+      "audio_stream"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/attention.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/attention.mp3",
+    "name": "Audio: attention",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "sound",
+      "attention",
+      "http",
+      "audio_stream"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/audio [vocals].mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/audio [vocals].mp3",
+    "name": "Audio: audio [vocals]",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "sound",
+      "audio",
+      "audio_stream",
+      "[vocals]",
+      "http"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/button.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/button.mp3",
+    "name": "Audio: button",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "sound",
+      "button",
+      "http",
+      "audio_stream"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/button_hq.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/button_hq.mp3",
+    "name": "Audio: button_hq",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "sound",
+      "audio_stream",
+      "button",
+      "http",
+      "hq"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/button_matching.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/button_matching.mp3",
+    "name": "Audio: button_matching",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "sound",
+      "matching",
+      "audio_stream",
+      "button",
+      "http"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/button_unique.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/button_unique.mp3",
+    "name": "Audio: button_unique",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "sound",
+      "audio_stream",
+      "unique",
+      "button",
+      "http"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Car Skidding Sound Effect.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Car Skidding Sound Effect.mp3",
+    "name": "Audio: car skidding sound effect",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "skidding",
+      "sound",
+      "audio_stream",
+      "car",
+      "effect",
+      "http"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Caramell.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Caramell.mp3",
+    "name": "Audio: caramell",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "caramell",
+      "sound",
+      "http",
+      "audio_stream"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/cat.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/cat.mp3",
+    "name": "Audio: cat",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "cat",
+      "sound",
+      "http",
+      "audio_stream"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/classic-hold-sound.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/classic-hold-sound.mp3",
+    "name": "Audio: classic-hold-sound",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "hold",
+      "classic",
+      "sound",
+      "audio_stream",
+      "http"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Congratulations (Remastered).mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Congratulations (Remastered).mp3",
+    "name": "Audio: congratulations (remastered)",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "congratulations",
+      "http",
+      "sound",
+      "audio_stream",
+      "(remastered)"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/d9fe-2649-4672-be5f-fdaa99ccaf61.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/d9fe-2649-4672-be5f-fdaa99ccaf61.mp3",
+    "name": "Audio: d9fe-2649-4672-be5f-fdaa99ccaf61",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "ccaf",
+      "fe",
+      "fdaa",
+      "sound",
+      "f",
+      "be",
+      "d",
+      "audio_stream",
+      "http"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/def.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/def.mp3",
+    "name": "Audio: def",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "def",
+      "sound",
+      "http",
+      "audio_stream"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/dial-up-homemade.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/dial-up-homemade.mp3",
+    "name": "Audio: dial-up-homemade",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "homemade",
+      "sound",
+      "dial",
+      "audio_stream",
+      "up",
+      "http"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/F\u00fcr Elise, WoO 59.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/F\u00fcr Elise, WoO 59.mp3",
+    "name": "Audio: f\u00fcr elise, woo 59",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "woo",
+      "sound",
+      "elise,",
+      "audio_stream",
+      "http",
+      "f\u00fcr"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/japan-eas-alarm-tsunami-alert.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/japan-eas-alarm-tsunami-alert.mp3",
+    "name": "Audio: japan-eas-alarm-tsunami-alert",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "alert",
+      "japan",
+      "alarm",
+      "sound",
+      "eas",
+      "audio_stream",
+      "tsunami",
+      "http"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/japanese-phone-cannot-be-reached.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/japanese-phone-cannot-be-reached.mp3",
+    "name": "Audio: japanese-phone-cannot-be-reached",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "phone",
+      "sound",
+      "japanese",
+      "cannot",
+      "be",
+      "audio_stream",
+      "reached",
+      "http"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/JA_Ringback_tone.ogg": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/JA_Ringback_tone.ogg",
+    "name": "Audio: ja_ringback_tone",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "sound",
+      "tone",
+      "ringback",
+      "audio_stream",
+      "ja",
+      "http"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/JA_Ringback_tone_by_au.ogg": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/JA_Ringback_tone_by_au.ogg",
+    "name": "Audio: ja_ringback_tone_by_au",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "sound",
+      "au",
+      "tone",
+      "ringback",
+      "audio_stream",
+      "by",
+      "ja",
+      "http"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Midnight_in_Mondstadt_[_YouConvert.net_].mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Midnight_in_Mondstadt_[_YouConvert.net_].mp3",
+    "name": "Audio: midnight_in_mondstadt_[_youconvert.net_]",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "in",
+      "sound",
+      "mondstadt",
+      "midnight",
+      "net",
+      "audio_stream",
+      "[",
+      "]",
+      "http",
+      "youconvert"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/motor_loop_arc.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/motor_loop_arc.mp3",
+    "name": "Audio: motor_loop_arc",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "motor",
+      "sound",
+      "arc",
+      "loop",
+      "audio_stream",
+      "http"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/motor_loop_softtop.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/motor_loop_softtop.mp3",
+    "name": "Audio: motor_loop_softtop",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "motor",
+      "softtop",
+      "sound",
+      "loop",
+      "audio_stream",
+      "http"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/numbers_station_counting_cia.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/numbers_station_counting_cia.mp3",
+    "name": "Audio: numbers_station_counting_cia",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "cia",
+      "sound",
+      "numbers",
+      "audio_stream",
+      "counting",
+      "http",
+      "station"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/numbers_station_lincolnshire_poacher_chime.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/numbers_station_lincolnshire_poacher_chime.mp3",
+    "name": "Audio: numbers_station_lincolnshire_poacher_chime",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "chime",
+      "sound",
+      "lincolnshire",
+      "poacher",
+      "numbers",
+      "audio_stream",
+      "http",
+      "station"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/numbers_station_swedish_rhapsody_musicbox.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/numbers_station_swedish_rhapsody_musicbox.mp3",
+    "name": "Audio: numbers_station_swedish_rhapsody_musicbox",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "musicbox",
+      "sound",
+      "numbers",
+      "audio_stream",
+      "swedish",
+      "http",
+      "station",
+      "rhapsody"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/pachelbel's Canon in D--Soothing music(the best version).mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/pachelbel's Canon in D--Soothing music(the best version).mp3",
+    "name": "Audio: pachelbel's canon in d--soothing music(the best version)",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "version)",
+      "sound",
+      "in",
+      "canon",
+      "best",
+      "pachelbel's",
+      "d",
+      "audio_stream",
+      "soothing",
+      "http",
+      "music(the"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Paul Williams  - wistful dreams.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Paul Williams  - wistful dreams.mp3",
+    "name": "Audio: paul williams  - wistful dreams",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "wistful",
+      "sound",
+      "dreams",
+      "williams",
+      "audio_stream",
+      "paul",
+      "http"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/sdwad1.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/sdwad1.mp3",
+    "name": "Audio: sdwad1",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "sound",
+      "sdwad",
+      "http",
+      "audio_stream"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/sea.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/sea.mp3",
+    "name": "Audio: sea",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "sea",
+      "sound",
+      "http",
+      "audio_stream"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/sleep phonk.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/sleep phonk.mp3",
+    "name": "Audio: sleep phonk",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "phonk",
+      "http",
+      "sound",
+      "audio_stream",
+      "sleep"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Sukuna_Domain.MP3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Sukuna_Domain.MP3",
+    "name": "Audio: sukuna_domain",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "sound",
+      "domain",
+      "audio_stream",
+      "sukuna",
+      "http"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Tchaikovsky - 1812 Overture (Full with Cannons).mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Tchaikovsky - 1812 Overture (Full with Cannons).mp3",
+    "name": "Audio: tchaikovsky - 1812 overture (full with cannons)",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "overture",
+      "with",
+      "sound",
+      "(full",
+      "cannons)",
+      "audio_stream",
+      "tchaikovsky",
+      "http"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/trolled.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/trolled.mp3",
+    "name": "Audio: trolled",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "sound",
+      "trolled",
+      "http",
+      "audio_stream"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/uvb76_the_buzzer_shortwave_radio.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/uvb76_the_buzzer_shortwave_radio.mp3",
+    "name": "Audio: uvb76_the_buzzer_shortwave_radio",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "uvb",
+      "buzzer",
+      "spark",
+      "ballast",
+      "electrical",
+      "fluorescent",
+      "sound",
+      "high_freq",
+      "radio",
+      "audio_stream",
+      "shortwave",
+      "http",
+      "irritating",
+      "the"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/warning.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/warning.mp3",
+    "name": "Audio: warning",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "sound",
+      "warning",
+      "http",
+      "audio_stream"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/warning_hq.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/warning_hq.mp3",
+    "name": "Audio: warning_hq",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "warning",
+      "sound",
+      "audio_stream",
+      "http",
+      "hq"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/warning_matching.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/warning_matching.mp3",
+    "name": "Audio: warning_matching",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "warning",
+      "sound",
+      "matching",
+      "audio_stream",
+      "http"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/wind-blowing-sfx-12809.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/wind-blowing-sfx-12809.mp3",
+    "name": "Audio: wind-blowing-sfx-12809",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "void",
+      "sfx",
+      "open_space",
+      "hollow",
+      "blowing",
+      "sound",
+      "tunnel",
+      "vent",
+      "audio_stream",
+      "wind",
+      "cold",
+      "http"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Yodelling Sound Effect.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Yodelling Sound Effect.mp3",
+    "name": "Audio: yodelling sound effect",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "sound",
+      "yodelling",
+      "audio_stream",
+      "effect",
+      "http"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
   }
 }
