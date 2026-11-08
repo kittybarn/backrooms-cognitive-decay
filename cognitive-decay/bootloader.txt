@@ -15,7 +15,7 @@
 --   !decay status    - Displays current engine metrics and generation status
 -- ==============================================================================
 
-local GITHUB_MAIN_URL = "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/cognitive-decay/core/main.lua"
+local GITHUB_MAIN_URL = "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/557229c/cognitive-decay/core/main.lua"
 local NET_CODE_STREAM = "CognitiveDecay_Stream"
 local NET_CLIENT_READY = "CognitiveDecay_Ready"
 local NET_STATUS_SYNC = "CognitiveDecay_Status"
@@ -179,7 +179,13 @@ if SERVER then
 
     -- Initial Boot on Spawn
     timer.simple(0.3, function()
-        fetchFromGitHub(owner(), false)
+        local localCode = file.read("cognitive-decay/core/main.txt")
+        if localCode and #localCode > 200 then
+            notifyOwner("Loading from verified local engine storage...")
+            executeEngine(localCode, false)
+        else
+            fetchFromGitHub(owner(), false)
+        end
     end)
 
 else
