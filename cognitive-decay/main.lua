@@ -343,7 +343,7 @@ local DATASET = {
     },
 
     -- Audio Tracks & Soundscapes (by Cognitive Decay Stage)
-                            AUDIO = {
+                                AUDIO = {
         music = {
             { name = "Backrooms (Original Score), Vol. 1 - Async Research Institute.mp3", url = "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms%20%28Original%20Score%29%2C%20Vol.%201%20-%20Async%20Research%20Institute.mp3", is_music = true, category = "music", weight = 8.5, eeriness = 8.5 },
             { name = "Backrooms (Original Score), Vol. 1 - Auditory Guidepost.mp3", url = "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms%20%28Original%20Score%29%2C%20Vol.%201%20-%20Auditory%20Guidepost.mp3", is_music = true, category = "music", weight = 8.5, eeriness = 8.5 },
@@ -569,16 +569,22 @@ if SERVER then
     end
 
     -- --------------------------------------------------------------------------
-    -- 2. FULL AIRSPACE BOUNDS & DESCENDING MULTI-TIER GEOMETRY
+    -- 2. FULL AIRSPACE BOUNDS & DESCENDING MULTI-TIER GEOMETRY (ROOF-CLEAR ELEVATIONS)
     -- --------------------------------------------------------------------------
+    -- User Airspace:
+    -- Map Physical Roof:  Z = -12,576.30
+    -- Map Bedrock Floor:  Z = -16,255.70
+    -- Total Drop: 3,679.4 units!
+    --
+    -- Tier 0 Ceiling: Z = -12,910.2 (Provides >330 units of open headroom below map roof!)
     local CONFIG = {
         CELL_SIZE   = 189.8,     -- Hunter plate4x4 dimension: 189.8 units
         WALL_HEIGHT = 189.8,
         
-        -- Multi-Tier Descending Elevations (Top to Bottom across airspace)
-        Z_TIER_0 = -12700.0, -- Level 0: High Mezzanine / Ingress (Near Corner 1)
-        Z_TIER_1 = -13840.0, -- Level 0/1: Mid Liminal Sub-Offices
-        Z_TIER_2 = -14980.0, -- Level 1: Industrial Warehouse / Habitable Zone
+        -- Multi-Tier Descending Elevations (Safe clearance below roof down to bedrock)
+        Z_TIER_0 = -13100.0, -- Level 0: High Mezzanine / Ingress (Ceiling = -12,910, 334u below roof!)
+        Z_TIER_1 = -14150.0, -- Level 0/1: Mid Liminal Sub-Offices
+        Z_TIER_2 = -15200.0, -- Level 1: Industrial Warehouse / Habitable Zone
         Z_TIER_3 = -16250.0, -- Level 2: Concrete Crypt / Bedrock (Floor of Corner 2)
         
         -- Structural Primitives
@@ -589,7 +595,7 @@ if SERVER then
         DOOR_MODEL  = "models/props_c17/door01_left.mdl",
         DOOR_HEADER = "models/hunter/plates/plate2x2.mdl",
         
-        -- 100% VERIFIED VertexLitGeneric MODEL MATERIALS (NEVER USE HAZARD CAUTION)
+        -- 100% VERIFIED VertexLitGeneric MODEL MATERIALS
         MAT_WALL_PANEL    = "phoenix_storms/pack2/interior_sides", -- Smooth interior office wall panel
         MAT_WALL_CLEAN    = "phoenix_storms/fender_white",        -- Clean matte white panel
         MAT_FLOOR_CARPET  = "phoenix_storms/pack2/train_floor",   -- Textured office floor
@@ -668,7 +674,6 @@ if SERVER then
         ["models/props_c17/door01_left.mdl"]              = 54.28
     }
 
-    -- Pure VertexLitGeneric model materials (NO LIGHTMAPPED OR HAZARD CAUTION)
     local PHX_MATERIALS = {
         wallpaper = {
             CONFIG.MAT_WALL_PANEL,
@@ -1006,7 +1011,7 @@ if SERVER then
     local function generateFullAirspaceComplex()
         print("[Cognitive Decay Engine] Synthesizing top-to-bottom megastructure across airspace...")
 
-        -- TIER 0: HIGH MEZZANINE / INGRESS (Z = -12,700) Near Corner 1
+        -- TIER 0: HIGH MEZZANINE / INGRESS (Z = -13,100, Ceiling = -12,910, >330u below roof!)
         local t0Origin = Vector(6800.0, -4500.0, CONFIG.Z_TIER_0)
         for gx = 0, 3 do
             for gy = 0, 3 do
@@ -1047,10 +1052,10 @@ if SERVER then
             end
         end
 
-        -- RAMP HIGHWAY 1 (Connecting Tier 0 at -12,700 to Tier 1 at -13,840)
+        -- RAMP HIGHWAY 1 (Connecting Tier 0 at -13,100 to Tier 1 at -14,150)
         local r1Start = t0Origin + Vector(2 * CONFIG.CELL_SIZE, -3 * CONFIG.CELL_SIZE, 0)
-        local r1MidLanding = r1Start + Vector(2 * CONFIG.CELL_SIZE, -3 * CONFIG.CELL_SIZE, -570.0)
-        local r1End = r1Start + Vector(4 * CONFIG.CELL_SIZE, -6 * CONFIG.CELL_SIZE, -1140.0) -- Hits Z_TIER_1 (-13,840)!
+        local r1MidLanding = r1Start + Vector(2 * CONFIG.CELL_SIZE, -3 * CONFIG.CELL_SIZE, -525.0)
+        local r1End = r1Start + Vector(4 * CONFIG.CELL_SIZE, -6 * CONFIG.CELL_SIZE, -1050.0) -- Hits Z_TIER_1 (-14,150)!
 
         queueWalkableRampCorridor(r1Start, r1MidLanding, true, CONFIG.MAT_WALL_PANEL, CONFIG.TINT_MONO_YELLOW)
         -- Mid-flight Observation Landing with an open pit hole!
@@ -1058,7 +1063,7 @@ if SERVER then
         queueCeilingLight(r1MidLanding, MODEL_POOLS.ceiling_lights[1])
         queueWalkableRampCorridor(r1MidLanding, r1End, true, CONFIG.MAT_WALL_PANEL, CONFIG.TINT_MONO_YELLOW)
 
-        -- TIER 1: MID LIMINAL SUB-OFFICES (Z = -13,840)
+        -- TIER 1: MID LIMINAL SUB-OFFICES (Z = -14,150)
         local t1Origin = r1End
         for gx = 0, 3 do
             for gy = 0, 3 do
@@ -1118,17 +1123,17 @@ if SERVER then
             end
         end
 
-        -- RAMP HIGHWAY 2 (Connecting Tier 1 at -13,840 to Tier 2 at -14,980)
+        -- RAMP HIGHWAY 2 (Connecting Tier 1 at -14,150 to Tier 2 at -15,200)
         local r2Start = t1Origin + Vector(2 * CONFIG.CELL_SIZE, -3 * CONFIG.CELL_SIZE, 0)
-        local r2MidLanding = r2Start + Vector(2 * CONFIG.CELL_SIZE, -3 * CONFIG.CELL_SIZE, -570.0)
-        local r2End = r2Start + Vector(4 * CONFIG.CELL_SIZE, -6 * CONFIG.CELL_SIZE, -1140.0) -- Hits Z_TIER_2 (-14,980)!
+        local r2MidLanding = r2Start + Vector(2 * CONFIG.CELL_SIZE, -3 * CONFIG.CELL_SIZE, -525.0)
+        local r2End = r2Start + Vector(4 * CONFIG.CELL_SIZE, -6 * CONFIG.CELL_SIZE, -1050.0) -- Hits Z_TIER_2 (-15,200)!
 
         queueWalkableRampCorridor(r2Start, r2MidLanding, true, CONFIG.MAT_CONCRETE, CONFIG.TINT_CONCRETE)
         queueEnclosedCell(r2MidLanding, CONFIG.MAT_CONCRETE, CONFIG.MAT_CEILING_PANEL, "concrete", "ceiling", CONFIG.TINT_CONCRETE, CONFIG.TINT_CEILING)
         queueCeilingLight(r2MidLanding, MODEL_POOLS.cage_lights[1])
         queueWalkableRampCorridor(r2MidLanding, r2End, true, CONFIG.MAT_CONCRETE, CONFIG.TINT_CONCRETE)
 
-        -- TIER 2: INDUSTRIAL WAREHOUSE / HABITABLE ZONE (Z = -14,980)
+        -- TIER 2: INDUSTRIAL WAREHOUSE / HABITABLE ZONE (Z = -15,200)
         local t2Origin = r2End
         for gx = 0, 3 do
             for gy = 0, 3 do
@@ -1156,10 +1161,10 @@ if SERVER then
             end
         end
 
-        -- RAMP HIGHWAY 3 (Connecting Tier 2 at -14,980 down to Tier 3 / Bedrock at -16,250)
+        -- RAMP HIGHWAY 3 (Connecting Tier 2 at -15,200 down to Tier 3 / Bedrock at -16,250)
         local r3Start = t2Origin + Vector(2 * CONFIG.CELL_SIZE, -3 * CONFIG.CELL_SIZE, 0)
-        local r3MidLanding = r3Start + Vector(2 * CONFIG.CELL_SIZE, -3 * CONFIG.CELL_SIZE, -635.0)
-        local r3End = r3Start + Vector(4 * CONFIG.CELL_SIZE, -6 * CONFIG.CELL_SIZE, -1270.0) -- Hits Z_TIER_3 (-16,250 Bedrock Floor)!
+        local r3MidLanding = r3Start + Vector(2 * CONFIG.CELL_SIZE, -3 * CONFIG.CELL_SIZE, -525.0)
+        local r3End = r3Start + Vector(4 * CONFIG.CELL_SIZE, -6 * CONFIG.CELL_SIZE, -1050.0) -- Hits Z_TIER_3 (-16,250 Bedrock Floor)!
 
         queueWalkableRampCorridor(r3Start, r3MidLanding, true, CONFIG.MAT_CONCRETE, CONFIG.TINT_DARK_CRYPT)
         queueEnclosedCell(r3MidLanding, CONFIG.MAT_CONCRETE, CONFIG.MAT_CEILING_PANEL, "concrete", "ceiling", CONFIG.TINT_DARK_CRYPT, CONFIG.TINT_DARK_CRYPT)
@@ -1193,35 +1198,68 @@ if SERVER then
             end
         end
 
-        print(string.format("[Cognitive Decay Engine] Queued %d contiguous airspace entities spanning Z=-12,700 to Z=-16,250", #spawnQueue))
+        print(string.format("[Cognitive Decay Engine] Queued %d contiguous airspace entities spanning Z=-13,100 to Z=-16,250", #spawnQueue))
     end
 
     -- --------------------------------------------------------------------------
-    -- 8. ASYNC FAULT-TOLERANT SPAWN PIPELINE (NEVER HALTS ON MODEL/MAT FAILURES)
+    -- 8. ADAPTIVE PROP RATE CONTROLLER (ZERO DROPPED PROPS, DYNAMIC MAX THROUGHPUT)
     -- --------------------------------------------------------------------------
     local function executeSpawnQueue()
         local index = 1
-        local timerName = "CognitiveDecay_SpawnPipeline"
+        local total = #spawnQueue
+        local nextSpawnTime = 0
+        local burstDelay = 0.04 -- Dynamic adaptive delay (starts at 40ms)
+        local minDelay = 0.02   -- Max speed: 50 props/sec
+        local maxDelay = 0.40   -- Max backoff when throttled by server quota
 
-        timer.create(timerName, 0.015, #spawnQueue, function()
+        hook.add("think", "CognitiveDecay_AdaptiveSpawner", function()
+            if index > total then
+                hook.remove("think", "CognitiveDecay_AdaptiveSpawner")
+                print(string.format("[Cognitive Decay Engine] Spawning pipeline complete! All %d entities materialized.", total))
+                return
+            end
+
+            local now = timer.curtime()
+            if now < nextSpawnTime then return end
+
+            -- Check Starfall's native quota check if available
+            if prop.canSpawn and not prop.canSpawn() then
+                -- Server quota full: back off adaptively and wait!
+                burstDelay = math.min(maxDelay, burstDelay * 1.5 + 0.05)
+                nextSpawnTime = now + burstDelay
+                return
+            end
+
             local item = spawnQueue[index]
-            index = index + 1
-            if not item then return end
+            if not item then
+                index = index + 1
+                return
+            end
 
-            pcall(function()
-                local ent, usedModel = trySpawnWithFallbacks(item)
-                if isValid(ent) then
-                    table.insert(activeEntities, ent)
+            -- Attempt spawn
+            local ent, usedModel = trySpawnWithFallbacks(item)
+            if isValid(ent) then
+                -- SUCCESS! Advance to the next item!
+                index = index + 1
+                table.insert(activeEntities, ent)
 
-                    if item.mat or item.matCategory or item.tint then
-                        safeSetMaterialWithFallback(ent, item.mat, item.matCategory, item.tint)
-                    end
-
-                    if item.onSpawn then
-                        pcall(item.onSpawn, ent)
-                    end
+                if item.mat or item.matCategory or item.tint then
+                    safeSetMaterialWithFallback(ent, item.mat, item.matCategory, item.tint)
                 end
-            end)
+
+                if item.onSpawn then
+                    pcall(item.onSpawn, ent)
+                end
+
+                -- Gradually accelerate spawn rate to maximum permitted throughput
+                burstDelay = math.max(minDelay, burstDelay * 0.92)
+                nextSpawnTime = now + burstDelay
+            else
+                -- Spawn failed (rate limited by engine): DO NOT ADVANCE INDEX!
+                -- Adaptively back off and retry this exact item next tick!
+                burstDelay = math.min(maxDelay, burstDelay * 1.6 + 0.08)
+                nextSpawnTime = now + burstDelay
+            end
         end)
     end
 
@@ -1293,7 +1331,7 @@ if SERVER then
     -- 10. CLEANUP & INITIALIZATION
     -- --------------------------------------------------------------------------
     _G.CognitiveDecay_Cleanup = function()
-        timer.remove("CognitiveDecay_SpawnPipeline")
+        hook.remove("think", "CognitiveDecay_AdaptiveSpawner")
         hook.remove("think", "CognitiveDecay_DoorController")
         for _, ent in ipairs(activeEntities) do
             if isValid(ent) then pcall(ent.remove, ent) end
