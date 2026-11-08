@@ -1,0 +1,31 @@
+--@name Dynamic GitHub Dataset Streamer
+--@author Cognitive Decay Project
+--@server
+
+-- Fetches the trained Backrooms dataset live from GitHub
+-- Whitelist: raw.githubusercontent.com is allowed by default in StarfallEx!
+
+local githubDatasetURL = "https://raw.githubusercontent.com/username/backrooms_dataset/main/trained_dataset.json"
+
+print("[Dataset Streamer] Connecting to GitHub repository...")
+
+http.get(githubDatasetURL, function(body, len, headers, code)
+    if code == 200 then
+        print("[Dataset Streamer] Successfully downloaded dataset! Size: " .. len .. " bytes.")
+        
+        -- Parse the JSON dataset from GitHub
+        local trainedData = json.decode(body)
+        if trainedData then
+            print("[Dataset Streamer] Loaded " .. table.Count(trainedData.tokens or {}) .. " tokens from repository.")
+            
+            -- Trigger your generator with the fresh dataset!
+            hook.run("OnDatasetLoaded", trainedData)
+        else
+            print("[Dataset Streamer] Failed to decode JSON from GitHub response.")
+        end
+    else
+        print("[Dataset Streamer] HTTP Request failed with status code: " .. tostring(code))
+    end
+end, function(err)
+    print("[Dataset Streamer] HTTP Fetch Error: " .. tostring(err))
+end)

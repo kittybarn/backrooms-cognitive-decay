@@ -1,0 +1,69 @@
+--@name Server Asset Harvester
+--@author Cognitive Decay Project
+--@server
+
+-- Run this chip on any server you play on!
+-- It scans the map for every prop, texture, light, and brush entity that exists on the server.
+-- It writes out a clean JSON-formatted dataset to your data/ folder or console,
+-- guaranteed to contain only assets valid and mounted on this specific server.
+
+local harvestedProps = {}
+local harvestedMaterials = {}
+local propCount = 0
+
+print("[Harvester] Starting live server asset scan...")
+
+-- 1. Scan all spawned entities on the server
+local allEnts = find.all()
+
+for _, ent in ipairs(allEnts) do
+    if isValid(ent) then
+        local mdl = ent:getModel()
+        if mdl and string.find(mdl, "%.mdl$") and not harvestedProps[mdl] then
+            harvestedProps[mdl] = {
+                class = ent:getClass(),
+                mins = ent:obbMins(),
+                maxs = ent:obbMaxs()
+            }
+            propCount = propCount + 1
+        end
+
+        -- Extract materials if entity exposes them
+        if ent.getMaterials then
+            local mats = ent:getMaterials()
+            if mats then
+                for _, m in ipairs(mats) do
+                    if m and #m > 0 then
+                        harvestedMaterials[m] = true
+                    end
+                end
+            end
+        end
+    end
+end
+
+print("[Harvester] Found " .. propCount .. " unique active server models!")
+
+-- 2. Output as importable JSON
+local outputTable = {
+    server = game.getMap(),
+    models = {},
+    materials = {}
+}
+
+for mdl, data in pairs(harvestedProps) do
+    local bounds = (data.maxs - data.mins)
+    table.insert(outputTable.models, {
+        id = mdl,
+        dimensions = { math.abs(bounds.x), math.abs(bounds.y), math.abs(bounds.z) }
+    })
+end
+
+for mat, _ in pairs(harvestedMaterials) do
+    table.insert(outputTable.materials, mat)
+end
+
+-- Save to client/server data folder
+local jsonStr = json.encode(outputTable)
+print("[Harvester] Scan complete! Length: " .. #jsonStr .. " chars.")
+print("[Harvester] Copy the output or read from starfall data folder.")

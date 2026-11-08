@@ -1,0 +1,46 @@
+--@name HTTP Cognitive Soundscape
+--@author Cognitive Decay Project
+--@client
+
+-- Streams dynamic audio via HTTP (bass.loadURL)
+-- Allows the AI to inject real-world distorted radio, 60Hz hum, or audio hallucinations
+-- directly into 3D world coordinates.
+
+local soundURL = "https://example.com/backrooms_hum.mp3" -- Replace with your direct MP3/OGG link
+local audioEmitter = nil
+local chipOrigin = chip():getPos()
+
+local function streamLiminalAudio(url, pos)
+    if isValid(audioEmitter) then
+        audioEmitter:stop()
+    end
+
+    -- "3d noblock": Positional 3D audio, non-blocking download
+    bass.loadURL(url, "3d noblock", function(snd, err, errtxt)
+        if isValid(snd) then
+            audioEmitter = snd
+            snd:setPos(pos)
+            snd:setVolume(1.0)
+            snd:setFade(200, 1500) -- Falloff distance
+            pcall(snd.setLooping, snd, true)
+            snd:play()
+
+            print("[Audio Engine] HTTP Stream Connected: " .. url)
+        else
+            print("[Audio Engine] Stream failed: " .. tostring(errtxt))
+        end
+    end)
+end
+
+-- Audio Pitch & Time-Drift (Cognitive breakdown)
+-- As confusion rises, we can pitch-bend or warp the stream
+hook.add("think", "AudioDrift", function()
+    if isValid(audioEmitter) then
+        -- Subtle speed/pitch oscillation simulating bad tape or reality glitch
+        local pitchDrift = 1.0 + (math.sin(timer.curtime() * 0.5) * 0.05)
+        audioEmitter:setPitch(pitchDrift)
+    end
+end)
+
+-- Initialize stream on chip load
+streamLiminalAudio(soundURL, chipOrigin + Vector(0, 0, 80))
