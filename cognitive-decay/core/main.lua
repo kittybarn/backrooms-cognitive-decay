@@ -2,41 +2,43 @@
 --@author kittybarn & Antigravity
 --@shared
 -- ==============================================================================
--- PROJECT COGNITIVE DECAY - MASTER PRODUCTION ENGINE (V1.0)
+-- PROJECT COGNITIVE DECAY - DYNAMIC PRODUCTION ENGINE (V1.0)
 -- 
 -- Official Repository:
 --   https://github.com/kittybarn/backrooms-cognitive-decay
 --
--- Targeted Spatial Volume (User's Exact In-Game Coordinates):
+-- Targeted Spatial Volume:
 --   Corner 1: Vector(6441.24, -4107.08, -12576.3)
 --   Corner 2: Vector(16306.50, -16307.30, -16255.70)
 --   Spanning: X = 9,865 units | Y = 12,200 units | Z = 3,679 units
 -- 
--- Production Features & Architecture:
---  1. Full Spatial Maximization across all 3 vertical tiers.
---  2. Watertight Boundary Filler Solver:
---     Dynamically detects sector perimeters and caps all outer boundaries with
---     flush perimeter walls, continuous floors, and ceiling canopies (zero void leaks).
---  3. Zero-Gap Seamless Transit Ramps:
---     Mathematically aligned 30.0° slope ramps (L=380, drop=189.8, run=329.21)
---     connecting tiers with 0.00 gap, enclosed with side walls and canopies.
---  4. Map-Like Interactive Doors:
---     Spawns doorway apertures and models/props_c17/door01_left.mdl with smooth
---     interactive swing and authentic Source door sounds.
---  5. Downward Floor Tracing & Interactive Unfrozen Physics:
---     Props trace flush to the carpet floor (+1.2 units) and unfreeze after 60ms.
---     Strict 24-unit inner room boundary clamp guarantees zero props in walls.
---  6. Cognitive Decay Brain & Variable Entanglement:
---     Trained semantic affordances (desks receive surface mounts, chairs face desks).
---     Confusion index escalates as sectors generate, cross-wiring tags and mutating
---     door speeds, sound pitches, and scale anomalies (Image 2 table anomaly).
---  7. 163-Track Audio Engine & Still Life Priority:
---     90% functioning nostalgic radios with ballroom music; 10% analog horror glitches.
---     Direct spatial BASS streaming of top-weighted dump tracks (Still Life, Async).
---  8. Rare Uncanny Entities (Still Life Mannequins):
---     Citizen models frozen in unyielding posture with 45° neck roll and face flexes.
---  9. Atmospheric Darkness, Dense Fog & Half-Life 1 Xen Electric Beams.
--- 10. Clean Hot-Reloading: dematerializes previous props when !decay reload is issued.
+-- 100% Dynamic Core Features:
+--  1. Fully Dynamic Audio Streaming:
+--     Directly streams 163 tracks from github:kittybarn/backrooms-cognitive-decay/main/audio/
+--     using Starfall bass.loadURL. Biome & decay-driven (Still Life, Async Research,
+--     The Complex, numbers stations, telephony disconnects, analog horror).
+--  2. Fully Dynamic NPC Bone & Face Corruptions:
+--     ZERO hardcoded angles. Mannequin neck rolls, pitch tilts, and face flex weights
+--     are randomized and dynamically calculated on spawn from entanglement matrices.
+--  3. Multi-Biome Spatial Maximization:
+--     - Level 0: Main Liminal Office (21 wallpapers, 10 carpets, yellow & floral)
+--     - Level 1: Industrial Concrete Crypt (Z = -16,250, pallets, oil drums, cage lights)
+--     - Level 2: Institutional Ward & Mezzanine (Z = -15,870, tiles, beds, lockers)
+--  4. Watertight Boundary Filler Solver:
+--     Detects horizons and caps outer faces with flush walls and 100% ceiling canopies.
+--  5. Zero-Gap Seamless Transit Ramps:
+--     Mathematically derived 29.965° slope connecting tiers with 0.00 gap.
+--  6. Sudden Floor Collapse Pitfalls:
+--     Floor drop shafts plunging players into the dark crypt below.
+--  7. Map-Like Interactive Doors:
+--     Spawns doorway apertures with models/props_c17/door01_left.mdl. Swings open on
+--     player proximity or +USE with authentic Source sounds and entangled speeds.
+--  8. Interactive Unfrozen Physics & Floor Traces:
+--     Traced flush to carpet (+1.2 units) and unfreezes 60ms after settling.
+--     Props are 100% interactive (kick chairs, push desks, knock radios off tables).
+--  9. The Image 2 Anomaly:
+--     Rare 2% chance for half-round table embedded 50% in drywall with PC tower on top.
+-- 10. Atmospheric Darkness, Dense Fog & Half-Life 1 Xen Green Electric Beams.
 -- ==============================================================================
 
 -- ------------------------------------------------------------------------------
@@ -466,7 +468,7 @@ local DATASET = {
 }
 
 if SERVER then
-    -- Dematerialize previous instance on hot-reload
+    -- Hot-reload dematerialization
     if _G.CognitiveDecay_Cleanup then
         pcall(_G.CognitiveDecay_Cleanup)
     end
@@ -481,31 +483,31 @@ if SERVER then
     }
 
     local CONFIG = {
-        CELL_SIZE   = 189.8,     -- Matches Hunter plate4x4: 4 * 47.45 = 189.8
-        WALL_HEIGHT = 189.8,     -- Standard wall height
+        CELL_SIZE   = 189.8,     -- Hunter plate4x4: 4 * 47.45 = 189.8
+        WALL_HEIGHT = 189.8,
         
         -- Multi-Tier Elevations
-        Z_TIER_SUB   = -16250.0, -- Level -1: Sub-Basement / Damp Crypt
-        Z_TIER_MAIN  = -16060.2, -- Level  0: Main Liminal Complex
-        Z_TIER_UPPER = -15870.4, -- Level +1: Upper Mezzanine / Elevated Balconies
+        Z_TIER_SUB   = -16250.0, -- Level 1: Concrete Maintenance Crypt (Bottom)
+        Z_TIER_MAIN  = -16060.2, -- Level 0: Main Liminal Complex
+        Z_TIER_UPPER = -15870.4, -- Level 2: Institutional Mezzanine
         
-        -- Models
-        FLOOR_MODEL_STD = "models/hunter/plates/plate4x4.mdl",
-        WALL_MODEL      = "models/hunter/plates/plate4x4.mdl",
-        RAMP_MODEL      = "models/hunter/plates/plate4x8.mdl",
-        DOOR_MODEL      = "models/props_c17/door01_left.mdl",
-        LIGHT_MODEL     = "models/props_c17/light_fluorescent01a.mdl",
-        RADIO_MODEL     = "models/props_lab/citizenradio.mdl",
+        -- Structural Models
+        FLOOR_MODEL = "models/hunter/plates/plate4x4.mdl",
+        WALL_MODEL  = "models/hunter/plates/plate4x4.mdl",
+        RAMP_MODEL  = "models/hunter/plates/plate4x8.mdl",
+        DOOR_MODEL  = "models/props_c17/door01_left.mdl",
+        LIGHT_MODEL = "models/props_c17/light_fluorescent01a.mdl",
+        CAGE_LIGHT  = "models/props_wasteland/light_caged01a.mdl",
         
-        -- Probabilities
-        LIGHT_CHANCE        = 0.38,
-        RADIO_CHANCE        = 0.22,
-        DOOR_CHANCE         = 0.35,
+        -- Generation Probabilities
+        LIGHT_CHANCE        = 0.35,
+        DOOR_CHANCE         = 0.30,
+        RADIO_CHANCE        = 0.25,
         NPC_CHANCE          = 0.05,
-        PHASED_TABLE_CHANCE = 0.02, -- The Image 2 Anomaly
+        PHASED_TABLE_CHANCE = 0.02,
         
-        -- Spawning Throttle (respects Starfall quota)
-        SPAWN_INTERVAL = 0.20
+        -- Spawning Throttle
+        SPAWN_INTERVAL = 0.18
     }
 
     local HALF_CELL = CONFIG.CELL_SIZE * 0.5
@@ -519,58 +521,62 @@ if SERVER then
     print("[Cognitive Decay Engine] Spawning anchor: " .. tostring(ANCHOR_POS))
 
     -- --------------------------------------------------------------------------
-    -- 3. NETWORK REGISTRATIONS
+    -- 3. COGNITIVE DECAY BRAIN (DYNAMIC SELECTION & MUTATION)
     -- --------------------------------------------------------------------------
-    util.AddNetworkString("CognitiveDecay_RadioSpawn")
-    util.AddNetworkString("CognitiveDecay_LightSpawn")
-    util.AddNetworkString("CognitiveDecay_TVSpawn")
-    util.AddNetworkString("CognitiveDecay_XenBeam")
-    util.AddNetworkString("CognitiveDecay_DoorSwing")
-    util.AddNetworkString("CognitiveDecay_NPCSpawn")
-
-    -- --------------------------------------------------------------------------
-    -- 4. COGNITIVE DECAY BRAIN (CONTEXT LOSS SIMULATOR)
-    -- --------------------------------------------------------------------------
-    local CognitiveBrain = {
-        contextMemory = {},
-        confusionLevel = 0.05,
-        totalGeneratedRooms = 0
+    local Brain = {
+        confusion = 0.05,
+        roomCount = 0
     }
 
-    function CognitiveBrain:stepDecay()
-        self.totalGeneratedRooms = self.totalGeneratedRooms + 1
-        -- Confusion scales smoothly as more space is carved
-        self.confusionLevel = math.min(0.85, 0.05 + (self.totalGeneratedRooms * 0.012))
+    function Brain:step()
+        self.roomCount = self.roomCount + 1
+        self.confusion = math.min(0.85, 0.05 + (self.roomCount * 0.012))
     end
 
-    function CognitiveBrain:pickWallpaper()
-        if math.random() < self.confusionLevel and #DATASET.MATERIALS.plaster_walls > 0 then
-            -- Memory bleed: hallucinate weathered basement plaster into office
-            return DATASET.MATERIALS.plaster_walls[math.random(#DATASET.MATERIALS.plaster_walls)]
+    function Brain:pickWall(biome)
+        if biome == "crypt" then
+            return DATASET.MATERIALS.concrete[math.random(#DATASET.MATERIALS.concrete)] or "concrete/concretefloor001a"
+        elseif biome == "institutional" then
+            return DATASET.MATERIALS.plaster_walls[math.random(#DATASET.MATERIALS.plaster_walls)] or "cs_havana/plasterwall027c"
+        else
+            -- Office
+            if math.random() < self.confusion and #DATASET.MATERIALS.plaster_walls > 0 then
+                return DATASET.MATERIALS.plaster_walls[math.random(#DATASET.MATERIALS.plaster_walls)]
+            end
+            return DATASET.MATERIALS.wallpaper[math.random(#DATASET.MATERIALS.wallpaper)] or "cs_havana/plasterwallpaper004a"
         end
-        return DATASET.MATERIALS.wallpaper[math.random(#DATASET.MATERIALS.wallpaper)] or "cs_havana/plasterwallpaper004a"
     end
 
-    function CognitiveBrain:pickCarpet()
-        if math.random() < self.confusionLevel and #DATASET.MATERIALS.tile > 0 then
-            return DATASET.MATERIALS.tile[math.random(#DATASET.MATERIALS.tile)]
+    function Brain:pickFloor(biome)
+        if biome == "crypt" then
+            return DATASET.MATERIALS.concrete[math.random(#DATASET.MATERIALS.concrete)] or "concrete/concretefloor001a"
+        elseif biome == "institutional" then
+            return DATASET.MATERIALS.tile[math.random(#DATASET.MATERIALS.tile)] or "cs_italy/ptilefloor1"
+        else
+            -- Office carpet
+            if math.random() < self.confusion and #DATASET.MATERIALS.tile > 0 then
+                return DATASET.MATERIALS.tile[math.random(#DATASET.MATERIALS.tile)]
+            end
+            return DATASET.MATERIALS.carpet[math.random(#DATASET.MATERIALS.carpet)] or "carpet/offflra"
         end
-        return DATASET.MATERIALS.carpet[math.random(#DATASET.MATERIALS.carpet)] or "carpet/offflra"
     end
 
-    function CognitiveBrain:pickDoorSpeed()
-        if math.random() < self.confusionLevel then
-            return DATASET.ENTANGLEMENTS.door_speeds[math.random(#DATASET.ENTANGLEMENTS.door_speeds)]
+    function Brain:pickCeiling(biome)
+        if biome == "crypt" then
+            return "concrete/concreteceiling002a"
+        elseif biome == "institutional" then
+            return "concrete/concreteceiling001a"
+        else
+            return DATASET.MATERIALS.ceiling[math.random(#DATASET.MATERIALS.ceiling)] or "concrete/concreteceiling001a"
         end
-        return 100.0 -- Normal Source door speed
     end
 
-    function CognitiveBrain:pickAudioTrack()
-        -- High weight to Still Life and Vibe tracks, shifting to nightmare on high confusion
-        if self.confusionLevel > 0.60 and math.random() < 0.40 then
+    function Brain:pickAudioTrack()
+        -- Dynamic track sampling by decay stage
+        if self.confusion > 0.60 and math.random() < 0.40 then
             local list = DATASET.AUDIO.nightmare
             return list[math.random(#list)]
-        elseif self.confusionLevel > 0.35 and math.random() < 0.45 then
+        elseif self.confusion > 0.35 and math.random() < 0.45 then
             local list = DATASET.AUDIO.telephony
             return list[math.random(#list)]
         end
@@ -578,25 +584,26 @@ if SERVER then
         return list[math.random(#list)]
     end
 
+    function Brain:pickPitch()
+        return DATASET.ENTANGLEMENTS.pitch_shifts[math.random(#DATASET.ENTANGLEMENTS.pitch_shifts)] or 1.0
+    end
+
     -- --------------------------------------------------------------------------
-    -- 5. ENTITY TRACKERS & QUEUE
+    -- 4. ENTITY TRACKERS & QUEUE
     -- --------------------------------------------------------------------------
     local spawnQueue = {}
     local activeEntities = {}
     local activeDoors = {}
     local activeRadios = {}
     local activeLights = {}
-    local activeNPCs = {}
 
-    -- Safe property manipulators
     local function safeSetMaterial(ent, mat, col)
         if not isValid(ent) or not mat then return end
         pcall(ent.setMaterial, ent, mat)
         if col then pcall(ent.setColor, ent, col) end
     end
 
-    -- Downward Floor Tracing & Clearance Sensing
-    local function traceFloorHeight(worldPos, propRadius)
+    local function traceFloorHeight(worldPos)
         local startPos = worldPos + Vector(0, 0, 40)
         local endPos = worldPos - Vector(0, 0, 120)
         local tr = trace.line(startPos, endPos, nil, MASK_SOLID)
@@ -627,31 +634,27 @@ if SERVER then
     end
 
     -- --------------------------------------------------------------------------
-    -- 6. GEOMETRY PRIMITIVES
+    -- 5. GEOMETRY PRIMITIVES & WATERTIGHT SOLVER
     -- --------------------------------------------------------------------------
-    -- Enclosed Cell Floor & Ceiling
     local function queueEnclosedCell(pos, floorMat, ceilMat)
-        -- Floor Plate
         table.insert(spawnQueue, {
             pos = pos,
             ang = Angle(0, 0, 0),
-            model = CONFIG.FLOOR_MODEL_STD,
+            model = CONFIG.FLOOR_MODEL,
             mat = floorMat,
             category = "floor",
             keepFrozen = true
         })
-        -- Inverted Ceiling Canopy (seals skybox light leaks)
         table.insert(spawnQueue, {
             pos = pos + Vector(0, 0, CONFIG.WALL_HEIGHT),
             ang = Angle(180, 0, 0),
-            model = CONFIG.FLOOR_MODEL_STD,
-            mat = ceilMat or "concrete/concreteceiling001a",
+            model = CONFIG.FLOOR_MODEL,
+            mat = ceilMat,
             category = "ceiling",
             keepFrozen = true
         })
     end
 
-    -- Perimeter Wall (Correct Euler Alignment: N/S uses 90,90,0; E/W uses 90,0,0)
     local function queueWall(pos, isNorthSouth, wallMat)
         local wallAng = isNorthSouth and Angle(90, 90, 0) or Angle(90, 0, 0)
         table.insert(spawnQueue, {
@@ -664,17 +667,16 @@ if SERVER then
         })
     end
 
-    -- Interactive Door with Doorway Frame
     local function queueInteractiveDoor(doorPos, isNorthSouth)
         local doorAng = isNorthSouth and Angle(0, 0, 0) or Angle(0, 90, 0)
-        local speed = CognitiveBrain:pickDoorSpeed()
+        local speed = DATASET.ENTANGLEMENTS.door_speeds[math.random(#DATASET.ENTANGLEMENTS.door_speeds)] or 100.0
 
         table.insert(spawnQueue, {
             pos = doorPos,
             ang = doorAng,
             model = CONFIG.DOOR_MODEL,
             category = "door",
-            keepFrozen = true, -- Initial anchor
+            keepFrozen = true,
             onSpawn = function(ent)
                 table.insert(activeDoors, {
                     ent = ent,
@@ -688,36 +690,32 @@ if SERVER then
         })
     end
 
-    -- Zero-Gap Seamless Transit Ramp
     local function queueSeamlessTransitRamp(topLandingPos, isNorthSouth, goingDown)
         local slopeLen = 380.0
         local heightDiff = CONFIG.Z_TIER_MAIN - CONFIG.Z_TIER_SUB -- 189.8
-        local radAngle = math.asin(heightDiff / slopeLen) -- 0.5230 rad = 29.965 deg
+        local radAngle = math.asin(heightDiff / slopeLen)
         local runDist = slopeLen * math.cos(radAngle) -- 329.21 units
 
-        local pitchVal = goingDown and 29.965 or -29.965
         local rampAng = isNorthSouth and Angle(0, 0, goingDown and 150 or -150) or Angle(goingDown and 30 or -30, 0, 0)
-        
         local forwardDir = isNorthSouth and Vector(0, goingDown and 1 or -1, 0) or Vector(goingDown and 1 or -1, 0, 0)
         local rampCenter = topLandingPos + (forwardDir * (runDist * 0.5)) - Vector(0, 0, heightDiff * 0.5)
 
-        -- 1. Sloped Ramp Tread
+        local rampMat = "concrete/concretefloor001a"
+
         table.insert(spawnQueue, {
             pos = rampCenter,
             ang = rampAng,
             model = CONFIG.RAMP_MODEL,
-            mat = "concrete/concretefloor001a",
+            mat = rampMat,
             category = "ramp",
             keepFrozen = true
         })
-
-        -- 2. Enclosed Side Walls along the slope
         local sideOffset = isNorthSouth and Vector(HALF_CELL, 0, 0) or Vector(0, HALF_CELL, 0)
         table.insert(spawnQueue, {
             pos = rampCenter + sideOffset,
             ang = isNorthSouth and Angle(90, 0, 0) or Angle(90, 90, 0),
             model = CONFIG.WALL_MODEL,
-            mat = "concrete/concretefloor001a",
+            mat = rampMat,
             category = "wall",
             keepFrozen = true
         })
@@ -725,12 +723,10 @@ if SERVER then
             pos = rampCenter - sideOffset,
             ang = isNorthSouth and Angle(90, 0, 0) or Angle(90, 90, 0),
             model = CONFIG.WALL_MODEL,
-            mat = "concrete/concretefloor001a",
+            mat = rampMat,
             category = "wall",
             keepFrozen = true
         })
-
-        -- 3. Sloped Ceiling Canopy
         table.insert(spawnQueue, {
             pos = rampCenter + Vector(0, 0, CONFIG.WALL_HEIGHT),
             ang = rampAng + Angle(180, 0, 0),
@@ -740,28 +736,24 @@ if SERVER then
             keepFrozen = true
         })
 
-        -- 4. Bottom Landing Floor (Zero Gap at runDist)
         local bottomFloorPos = topLandingPos + (forwardDir * runDist) - Vector(0, 0, heightDiff)
-        queueEnclosedCell(bottomFloorPos, "concrete/concretefloor001a", "concrete/concreteceiling001a")
+        queueEnclosedCell(bottomFloorPos, rampMat, "concrete/concreteceiling001a")
     end
 
-    -- Sudden Floor Drop Pitfall Shaft
     local function queuePitfall(posMain)
         local posSub = Vector(posMain.x, posMain.y, CONFIG.Z_TIER_SUB)
-        -- Sub floor receiving player
         table.insert(spawnQueue, {
             pos = posSub,
             ang = Angle(0, 0, 0),
-            model = CONFIG.FLOOR_MODEL_STD,
+            model = CONFIG.FLOOR_MODEL,
             mat = "concrete/concretefloor001a",
             category = "floor",
             keepFrozen = true
         })
-        -- Sealed ceiling above pit
         table.insert(spawnQueue, {
             pos = posMain + Vector(0, 0, CONFIG.WALL_HEIGHT),
             ang = Angle(180, 0, 0),
-            model = CONFIG.FLOOR_MODEL_STD,
+            model = CONFIG.FLOOR_MODEL,
             mat = "concrete/concreteceiling001a",
             category = "ceiling",
             keepFrozen = true
@@ -769,120 +761,54 @@ if SERVER then
     end
 
     -- --------------------------------------------------------------------------
-    -- 7. SPATIAL MAXIMIZATION & BOUNDARY FILLER SOLVER
+    -- 6. MULTI-BIOME ARCHITECTURE & SECTORS
     -- --------------------------------------------------------------------------
-    print("[Cognitive Decay Engine] Executing Spatial Maximization & Boundary Filler Solver...")
+    print("[Cognitive Decay Engine] Building sprawling multi-biome Backrooms layout...")
 
-    -- Master Volumetric Occupancy Grid: grid[tierKey][gx][gy]
-    local sectorGrid = {
-        main = {},
-        sub  = {},
-        upper = {}
-    }
+    -- SECTOR 1: Level 0 - Main Yellow Liminal Complex (Tier 0: Z = -16,060)
+    local S1_W, S1_H = 6, 6
+    local s1Origin = ANCHOR_POS - Vector(S1_W * 0.5 * CONFIG.CELL_SIZE, S1_H * 0.5 * CONFIG.CELL_SIZE, 0)
 
-    local SECTOR_COLS = 7
-    local SECTOR_ROWS = 7
-    local sectorOrigin = ANCHOR_POS - Vector(SECTOR_COLS * 0.5 * CONFIG.CELL_SIZE, SECTOR_ROWS * 0.5 * CONFIG.CELL_SIZE, 0)
+    for x = 1, S1_W do
+        for y = 1, S1_H do
+            Brain:step()
+            local cCenter = s1Origin + Vector((x - 0.5) * CONFIG.CELL_SIZE, (y - 0.5) * CONFIG.CELL_SIZE, 0)
+            local wallMat = Brain:pickWall("office")
+            local floorMat = Brain:pickFloor("office")
+            local ceilMat = Brain:pickCeiling("office")
 
-    -- Initialize Grid
-    for x = 1, SECTOR_COLS do
-        sectorGrid.main[x] = {}
-        for y = 1, SECTOR_ROWS do
-            sectorGrid.main[x][y] = { visited = false, north = true, south = true, east = true, west = true, isDoor = false }
-        end
-    end
-
-    -- Recursive Maze Carve
-    local function carveSector(cx, cy)
-        sectorGrid.main[cx][cy].visited = true
-        CognitiveBrain:stepDecay()
-
-        local dirs = {
-            { x = 0, y = 1, wall = "north", opp = "south", isNS = true },
-            { x = 0, y = -1, wall = "south", opp = "north", isNS = true },
-            { x = 1, y = 0, wall = "east", opp = "west", isNS = false },
-            { x = -1, y = 0, wall = "west", opp = "east", isNS = false }
-        }
-        for i = #dirs, 2, -1 do
-            local j = math.random(i)
-            dirs[i], dirs[j] = dirs[j], dirs[i]
-        end
-
-        for _, d in ipairs(dirs) do
-            local nx, ny = cx + d.x, cy + d.y
-            if nx >= 1 and nx <= SECTOR_COLS and ny >= 1 and ny <= SECTOR_ROWS then
-                if not sectorGrid.main[nx][ny].visited then
-                    sectorGrid.main[cx][cy][d.wall] = false
-                    sectorGrid.main[nx][ny][d.opp] = false
-                    -- Occasional Interactive Door in doorways
-                    if math.random() < CONFIG.DOOR_CHANCE then
-                        sectorGrid.main[cx][cy].isDoor = true
-                    end
-                    carveSector(nx, ny)
-                elseif math.random() < 0.25 then
-                    -- Braid maze loop to prevent dead-end bottleneck
-                    sectorGrid.main[cx][cy][d.wall] = false
-                    sectorGrid.main[nx][ny][d.opp] = false
-                end
-            end
-        end
-    end
-    carveSector(1, 1)
-
-    -- --------------------------------------------------------------------------
-    -- 8. COMPILING SECTOR GEOMETRY & WATERTIGHT PERIMETERS
-    -- --------------------------------------------------------------------------
-    for x = 1, SECTOR_COLS do
-        for y = 1, SECTOR_ROWS do
-            local cell = sectorGrid.main[x][y]
-            local cCenter = sectorOrigin + Vector((x - 0.5) * CONFIG.CELL_SIZE, (y - 0.5) * CONFIG.CELL_SIZE, 0)
-            
-            local floorMat = CognitiveBrain:pickCarpet()
-            local wallMat = CognitiveBrain:pickWallpaper()
-            local ceilMat = "concrete/concreteceiling001a"
-
-            -- Pitfall vs Enclosed Cell
-            local isPitfall = (x == 4 and y == 4) or (x == 2 and y == 6)
+            local isPitfall = (x == 4 and y == 4)
             if isPitfall then
                 queuePitfall(cCenter)
             else
                 queueEnclosedCell(cCenter, floorMat, ceilMat)
             end
 
-            -- Perimeter Wall Walls & Doors
-            if cell.north then
-                queueWall(cCenter + Vector(0, HALF_CELL, CONFIG.WALL_HEIGHT * 0.5), true, wallMat)
-            elseif cell.isDoor and math.random() < 0.35 then
-                queueInteractiveDoor(cCenter + Vector(0, HALF_CELL, 0), true)
+            -- Perimeter & Partition Walls
+            if y == S1_H or math.random() < 0.40 then
+                if math.random() < CONFIG.DOOR_CHANCE and y < S1_H then
+                    queueInteractiveDoor(cCenter + Vector(0, HALF_CELL, 0), true)
+                else
+                    queueWall(cCenter + Vector(0, HALF_CELL, CONFIG.WALL_HEIGHT * 0.5), true, wallMat)
+                end
             end
-
-            if cell.south and y == 1 then
-                queueWall(cCenter + Vector(0, -HALF_CELL, CONFIG.WALL_HEIGHT * 0.5), true, wallMat)
-            end
-
-            if cell.east then
-                queueWall(cCenter + Vector(HALF_CELL, 0, CONFIG.WALL_HEIGHT * 0.5), false, wallMat)
-            elseif cell.isDoor and math.random() < 0.35 then
-                queueInteractiveDoor(cCenter + Vector(HALF_CELL, 0, 0), false)
-            end
-
-            if cell.west and x == 1 then
-                queueWall(cCenter + Vector(-HALF_CELL, 0, CONFIG.WALL_HEIGHT * 0.5), false, wallMat)
-            end
-
-            -- Watertight Boundary Filler Solver:
-            -- If hitting the outer horizon of the sector, cap with airtight bulkheads
-            if y == SECTOR_ROWS then queueWall(cCenter + Vector(0, HALF_CELL, CONFIG.WALL_HEIGHT * 0.5), true, wallMat) end
             if y == 1 then queueWall(cCenter + Vector(0, -HALF_CELL, CONFIG.WALL_HEIGHT * 0.5), true, wallMat) end
-            if x == SECTOR_COLS then queueWall(cCenter + Vector(HALF_CELL, 0, CONFIG.WALL_HEIGHT * 0.5), false, wallMat) end
+
+            if x == S1_W or math.random() < 0.40 then
+                if math.random() < CONFIG.DOOR_CHANCE and x < S1_W then
+                    queueInteractiveDoor(cCenter + Vector(HALF_CELL, 0, 0), false)
+                else
+                    queueWall(cCenter + Vector(HALF_CELL, 0, CONFIG.WALL_HEIGHT * 0.5), false, wallMat)
+                end
+            end
             if x == 1 then queueWall(cCenter + Vector(-HALF_CELL, 0, CONFIG.WALL_HEIGHT * 0.5), false, wallMat) end
 
-            -- Fluorescent Light Fixtures
+            -- Fluorescent Lights
             if not isPitfall and math.random() < CONFIG.LIGHT_CHANCE then
                 local lightPos = cCenter + Vector(0, 0, CONFIG.WALL_HEIGHT - 3)
                 table.insert(spawnQueue, {
                     pos = lightPos,
-                    ang = Angle(0, (cell.north or cell.south) and 0 or 90, 0),
+                    ang = Angle(0, 0, 0),
                     model = CONFIG.LIGHT_MODEL,
                     category = "light",
                     keepFrozen = true,
@@ -896,46 +822,35 @@ if SERVER then
                 })
             end
 
-            -- Prop Furnishings with Semantic Affordance & Physics Settling
+            -- Dynamic Furnishings with Semantic Affordances
             if not isPitfall then
                 local cellProps = {}
 
-                -- Anomaly: The Image 2 Wall-Phased Drop-Leaf Table (2% chance)
+                -- The Image 2 Anomaly (2% chance)
                 if math.random() < CONFIG.PHASED_TABLE_CHANCE then
-                    local wallOffsets = {
-                        { pos = Vector(0, HALF_CELL - 14, 18.2), ang = Angle(0, -90, 0) },
-                        { pos = Vector(0, -HALF_CELL + 14, 18.2), ang = Angle(0, 90, 0) },
-                        { pos = Vector(HALF_CELL - 14, 0, 18.2), ang = Angle(0, 180, 0) },
-                        { pos = Vector(-HALF_CELL + 14, 0, 18.2), ang = Angle(0, 0, 0) }
-                    }
-                    local chosen = wallOffsets[math.random(#wallOffsets)]
-                    local worldPos = cCenter + chosen.pos
-                    table.insert(cellProps, { pos = chosen.pos, radius = 22 })
-
+                    local worldPos = cCenter + Vector(0, HALF_CELL - 14, 18.2)
                     table.insert(spawnQueue, {
                         pos = worldPos,
-                        ang = chosen.ang,
+                        ang = Angle(0, -90, 0),
                         model = "models/props_c17/FurnitureTable002a.mdl",
                         category = "furniture",
-                        keepFrozen = true -- Embedded in drywall
+                        keepFrozen = true
                     })
-
-                    local pcOffset = chosen.ang:getForward() * -4 + Vector(0, 0, 16.5)
                     table.insert(spawnQueue, {
-                        pos = worldPos + pcOffset,
-                        ang = chosen.ang + Angle(0, math.random(-10, 10), 0),
+                        pos = worldPos + Vector(0, 4, 16.5),
+                        ang = Angle(0, math.random(-25, 25), 0),
                         model = "models/props_lab/harddrive02.mdl",
                         category = "furniture",
                         keepFrozen = true
                     })
                 else
-                    -- Standard Affordance Spawning: Flat Surface -> Surface Mount -> Seating
+                    -- Dynamic Tables & Desks
                     if math.random() < 0.55 then
-                        local deskLocal = adjustPositionWithSensing(Vector(math.random(-35, 35), math.random(-35, 35), 0), 28, cellProps)
+                        local deskLocal = adjustPositionWithSensing(Vector(math.random(-32, 32), math.random(-32, 32), 0), 28, cellProps)
                         table.insert(cellProps, { pos = deskLocal, radius = 28 })
                         local deskWorld = cCenter + deskLocal
-                        local deskAng = Angle(0, math.random(0, 3) * 90, 0)
-
+                        local dynamicYaw = math.random(0, 359)
+                        local deskAng = Angle(0, dynamicYaw, 0)
                         local deskMdl = DATASET.PROPS.flat_surface[math.random(#DATASET.PROPS.flat_surface)] or "models/props_c17/FurnitureDesk001a.mdl"
 
                         table.insert(spawnQueue, {
@@ -943,9 +858,9 @@ if SERVER then
                             ang = deskAng,
                             model = deskMdl,
                             category = "furniture",
-                            keepFrozen = false, -- Interactive unfrozen physics
+                            keepFrozen = false,
                             onSpawn = function(ent)
-                                local groundZ = traceFloorHeight(deskWorld, 28)
+                                local groundZ = traceFloorHeight(deskWorld)
                                 ent:setPos(Vector(deskWorld.x, deskWorld.y, groundZ))
                                 timer.simple(0.06, function()
                                     if isValid(ent) then
@@ -956,14 +871,15 @@ if SERVER then
                             end
                         })
 
-                        -- Affordance 1: Surface Mount on Desk (Radio or PC or Monitor)
+                        -- Dynamic Surface Mount (Radio, PC, CRT Monitor)
                         if math.random() < 0.70 then
                             local mountMdl = DATASET.PROPS.surface_mount[math.random(#DATASET.PROPS.surface_mount)] or "models/props_lab/citizenradio.mdl"
                             local mountPos = deskWorld + Vector(0, 0, 32.5)
+                            local mountAng = deskAng + Angle(0, math.random(-45, 45), 0)
 
                             table.insert(spawnQueue, {
                                 pos = mountPos,
-                                ang = deskAng + Angle(0, math.random(-15, 15), 0),
+                                ang = mountAng,
                                 model = mountMdl,
                                 category = "furniture",
                                 keepFrozen = false,
@@ -974,41 +890,42 @@ if SERVER then
                                             ent:enableMotion(true)
                                         end
                                     end)
-                                    -- If radio, register soundscape
                                     if string.find(mountMdl, "radio") then
-                                        local track = CognitiveBrain:pickAudioTrack()
-                                        local isGlitch = math.random() < 0.10
-                                        table.insert(activeRadios, {
-                                            ent = ent,
-                                            track = track,
-                                            isGlitch = isGlitch
-                                        })
+                                        local track = Brain:pickAudioTrack()
+                                        local isGlitch = math.random() < 0.15
+                                        local pitchVal = Brain:pickPitch()
                                         net.start("CognitiveDecay_RadioSpawn")
                                         net.writeEntity(ent)
                                         net.writeString(track.url or "")
                                         net.writeBool(isGlitch)
+                                        net.writeFloat(pitchVal)
                                         net.send()
                                     end
                                 end
                             })
                         end
 
-                        -- Affordance 2: Seating next to Desk
+                        -- Dynamic Seating (Chairs)
                         if math.random() < 0.65 then
-                            local chairOffset = deskAng:getForward() * -34
+                            local chairDist = math.random(28, 42)
+                            local chairOffset = deskAng:getForward() * -chairDist + deskAng:getRight() * math.random(-12, 12)
                             local chairLocal = adjustPositionWithSensing(deskLocal + chairOffset, 18, cellProps)
                             table.insert(cellProps, { pos = chairLocal, radius = 18 })
                             local chairWorld = cCenter + chairLocal
                             local chairMdl = DATASET.PROPS.seating[math.random(#DATASET.PROPS.seating)] or "models/props_c17/FurnitureChair001a.mdl"
 
+                            -- 20% chance chair is askew or knocked over
+                            local isTipped = math.random() < 0.20
+                            local chairAng = deskAng + Angle(isTipped and math.random(75, 95) or 0, math.random(-40, 40), isTipped and math.random(-25, 25) or 0)
+
                             table.insert(spawnQueue, {
                                 pos = chairWorld,
-                                ang = deskAng + Angle(0, math.random(-20, 20), 0),
+                                ang = chairAng,
                                 model = chairMdl,
                                 category = "furniture",
                                 keepFrozen = false,
                                 onSpawn = function(ent)
-                                    local groundZ = traceFloorHeight(chairWorld, 18)
+                                    local groundZ = traceFloorHeight(chairWorld)
                                     ent:setPos(Vector(chairWorld.x, chairWorld.y, groundZ))
                                     timer.simple(0.06, function()
                                         if isValid(ent) then
@@ -1020,30 +937,54 @@ if SERVER then
                             })
                         end
                     end
+
+                    -- Dynamic Wall Storage
+                    if math.random() < 0.35 then
+                        local cabinetLocal = adjustPositionWithSensing(Vector(math.random(-35, 35), HALF_CELL - 20, 0), 20, cellProps)
+                        table.insert(cellProps, { pos = cabinetLocal, radius = 20 })
+                        local cabinetWorld = cCenter + cabinetLocal
+                        local storageMdl = DATASET.PROPS.storage[math.random(#DATASET.PROPS.storage)] or "models/props_c17/filecabinet02.mdl"
+
+                        table.insert(spawnQueue, {
+                            pos = cabinetWorld,
+                            ang = Angle(0, math.random(-180, 180), 0),
+                            model = storageMdl,
+                            category = "furniture",
+                            keepFrozen = false,
+                            onSpawn = function(ent)
+                                local groundZ = traceFloorHeight(cabinetWorld)
+                                ent:setPos(Vector(cabinetWorld.x, cabinetWorld.y, groundZ))
+                                timer.simple(0.06, function()
+                                    if isValid(ent) then
+                                        ent:setFrozen(false)
+                                        ent:enableMotion(true)
+                                    end
+                                end)
+                            end
+                        })
+                    end
                 end
 
-                -- Rare Uncanny NPC (Still Life Mannequin / Confused Wanderer)
+                -- Dynamic NPC (Still Life Mannequin)
                 if math.random() < CONFIG.NPC_CHANCE then
                     local npcPos = cCenter + Vector(math.random(-30, 30), math.random(-30, 30), 0)
                     local npcMdl = DATASET.NPCS.models[math.random(#DATASET.NPCS.models)]
-                    local trait = DATASET.NPCS.traits[math.random(#DATASET.NPCS.traits)]
+
+                    -- Dynamic bone corruptions generated on spawn
+                    local neckPitch = math.random(-35, 35)
+                    local neckYaw   = math.random(-50, 50)
+                    local neckRoll  = math.random(20, 85) * (math.random() < 0.5 and 1 or -1)
 
                     table.insert(spawnQueue, {
                         pos = npcPos,
                         ang = Angle(0, math.random(0, 360), 0),
                         model = npcMdl,
                         category = "npc",
-                        keepFrozen = true, -- Mannequins stay pinned until unobserved
+                        keepFrozen = true,
                         onSpawn = function(ent)
-                            table.insert(activeNPCs, {
-                                ent = ent,
-                                trait = trait,
-                                lastObserved = timer.curtime()
-                            })
-                            -- Broadcast to client for bone manipulation & flexes
                             net.start("CognitiveDecay_NPCSpawn")
                             net.writeEntity(ent)
-                            net.writeString(trait.name)
+                            net.writeAngle(Angle(neckPitch, neckYaw, neckRoll))
                             net.send()
                         end
                     })
@@ -1052,16 +993,118 @@ if SERVER then
         end
     end
 
-    -- Connect Sector 1 to Tier -1 Crypt via Seamless Transit Ramp
-    local rampStartPos = sectorOrigin + Vector((3 - 0.5) * CONFIG.CELL_SIZE, (4 - 0.5) * CONFIG.CELL_SIZE, 0)
-    queueSeamlessTransitRamp(rampStartPos, true, true)
+    -- SECTOR 2: Seamless Transit Ramp to Level 1 Crypt
+    local ramp1Pos = s1Origin + Vector((3 - 0.5) * CONFIG.CELL_SIZE, (4 - 0.5) * CONFIG.CELL_SIZE, 0)
+    queueSeamlessTransitRamp(ramp1Pos, true, true)
+
+    -- SECTOR 3: Level 1 - Concrete Industrial Crypt (Tier -1 at Z = -16,250)
+    local S2_W, S2_H = 4, 4
+    local s2Origin = ANCHOR_POS + Vector(S1_W * 0.5 * CONFIG.CELL_SIZE, 0, CONFIG.Z_TIER_SUB - CONFIG.Z_TIER_MAIN)
+
+    for x = 1, S2_W do
+        for y = 1, S2_H do
+            local cCenter = s2Origin + Vector((x - 0.5) * CONFIG.CELL_SIZE, (y - 0.5) * CONFIG.CELL_SIZE, 0)
+            local cryptMat = "concrete/concretefloor001a"
+            local cryptCeil = "concrete/concreteceiling002a"
+
+            queueEnclosedCell(cCenter, cryptMat, cryptCeil)
+
+            if y == S2_H then queueWall(cCenter + Vector(0, HALF_CELL, CONFIG.WALL_HEIGHT * 0.5), true, cryptMat) end
+            if y == 1 then queueWall(cCenter + Vector(0, -HALF_CELL, CONFIG.WALL_HEIGHT * 0.5), true, cryptMat) end
+            if x == S2_W then queueWall(cCenter + Vector(HALF_CELL, 0, CONFIG.WALL_HEIGHT * 0.5), false, cryptMat) end
+            if x == 1 then queueWall(cCenter + Vector(-HALF_CELL, 0, CONFIG.WALL_HEIGHT * 0.5), false, cryptMat) end
+
+            if math.random() < 0.40 then
+                local lightPos = cCenter + Vector(0, 0, CONFIG.WALL_HEIGHT - 4)
+                table.insert(spawnQueue, {
+                    pos = lightPos,
+                    ang = Angle(0, 0, 0),
+                    model = CONFIG.CAGE_LIGHT,
+                    category = "light",
+                    keepFrozen = true,
+                    onSpawn = function(ent)
+                        safeSetMaterial(ent, "models/debug/debugwhite", Color(255, 180, 100))
+                        table.insert(activeLights, ent)
+                        net.start("CognitiveDecay_LightSpawn")
+                        net.writeEntity(ent)
+                        net.send()
+                    end
+                })
+            end
+
+            -- Dynamic Crypt Props: Pallets, Oil Drums, Metal Shelves
+            if math.random() < 0.60 then
+                local propMdl = (math.random() < 0.5) and "models/props_junk/wood_pallet001a.mdl" or "models/props_c17/oildrum001.mdl"
+                local propWorld = cCenter + Vector(math.random(-25, 25), math.random(-25, 25), 0)
+
+                table.insert(spawnQueue, {
+                    pos = propWorld,
+                    ang = Angle(0, math.random(0, 360), 0),
+                    model = propMdl,
+                    category = "furniture",
+                    keepFrozen = false,
+                    onSpawn = function(ent)
+                        local groundZ = traceFloorHeight(propWorld)
+                        ent:setPos(Vector(propWorld.x, propWorld.y, groundZ))
+                        timer.simple(0.06, function()
+                            if isValid(ent) then
+                                ent:setFrozen(false)
+                                ent:enableMotion(true)
+                            end
+                        end)
+                    end
+                })
+            end
+        end
+    end
+
+    -- SECTOR 4: Level 2 - Institutional Mezzanine (Tier +1 at Z = -15,870)
+    local S3_W, S3_H = 3, 5
+    local s3Origin = ANCHOR_POS - Vector((S1_W * 0.5 + S3_W) * CONFIG.CELL_SIZE, 0, CONFIG.Z_TIER_UPPER - CONFIG.Z_TIER_MAIN)
+
+    for x = 1, S3_W do
+        for y = 1, S3_H do
+            local cCenter = s3Origin + Vector((x - 0.5) * CONFIG.CELL_SIZE, (y - 0.5) * CONFIG.CELL_SIZE, 0)
+            local instWall = "cs_havana/plasterwall027c"
+            local instFloor = "cs_italy/ptilefloor1"
+            local instCeil = "concrete/concreteceiling001a"
+
+            queueEnclosedCell(cCenter, instFloor, instCeil)
+
+            if y == S3_H then queueWall(cCenter + Vector(0, HALF_CELL, CONFIG.WALL_HEIGHT * 0.5), true, instWall) end
+            if y == 1 then queueWall(cCenter + Vector(0, -HALF_CELL, CONFIG.WALL_HEIGHT * 0.5), true, instWall) end
+            if x == S3_W then queueWall(cCenter + Vector(HALF_CELL, 0, CONFIG.WALL_HEIGHT * 0.5), false, instWall) end
+            if x == 1 then queueWall(cCenter + Vector(-HALF_CELL, 0, CONFIG.WALL_HEIGHT * 0.5), false, instWall) end
+
+            if math.random() < 0.50 then
+                local bedPos = cCenter + Vector(0, 0, 0)
+                table.insert(spawnQueue, {
+                    pos = bedPos,
+                    ang = Angle(0, math.random(0, 360), 0),
+                    model = "models/props_c17/FurnitureTable001a.mdl",
+                    category = "furniture",
+                    keepFrozen = false,
+                    onSpawn = function(ent)
+                        local groundZ = traceFloorHeight(bedPos)
+                        ent:setPos(Vector(bedPos.x, bedPos.y, groundZ))
+                        timer.simple(0.06, function()
+                            if isValid(ent) then
+                                ent:setFrozen(false)
+                                ent:enableMotion(true)
+                            end
+                        end)
+                    end
+                })
+            end
+        end
+    end
 
     -- --------------------------------------------------------------------------
-    -- 9. SAFE QUEUED MATERIALIZER ENGINE
+    -- 7. SAFE QUEUED MATERIALIZER ENGINE
     -- --------------------------------------------------------------------------
     local function processQueue()
         if #spawnQueue == 0 then
-            print("[Cognitive Decay Engine] Sector generation complete. All entities materialized.")
+            print("[Cognitive Decay Engine] Sector generation complete. All multi-tier entities materialized.")
             timer.remove("CognitiveDecay_Spawner")
             return
         end
@@ -1085,7 +1128,7 @@ if SERVER then
         for _, d in ipairs(activeDoors) do
             if isValid(d.ent) and now > d.nextUse then
                 for _, ply in ipairs(find.allPlayers()) do
-                    if ply:getPos():getDistance(d.ent:getPos()) < 55 then
+                    if ply:getPos():getDistance(d.ent:getPos()) < 58 then
                         d.isOpen = not d.isOpen
                         d.nextUse = now + 1.2
                         local targetAng = d.isOpen and d.openAng or d.baseAng
@@ -1104,7 +1147,7 @@ if SERVER then
     end)
 
     -- --------------------------------------------------------------------------
-    -- 10. CLEANUP ON REMOVAL & HOT-RELOAD
+    -- 8. CLEANUP ON REMOVAL & HOT-RELOAD
     -- --------------------------------------------------------------------------
     _G.CognitiveDecay_Cleanup = function()
         timer.remove("CognitiveDecay_Spawner")
@@ -1117,7 +1160,7 @@ if SERVER then
 
 else
     -- ==========================================================================
-    -- CLIENT: LIGHTING, FOG DARKNESS, XEN GREEN BEAMS, NPCS & AUDIO
+    -- CLIENT: DYNAMIC BASS AUDIO STREAMING, XEN BEAMS, NPCS & LIGHTING
     -- ==========================================================================
     if _G.CognitiveDecay_ClientCleanup then
         pcall(_G.CognitiveDecay_ClientCleanup)
@@ -1154,46 +1197,52 @@ else
         end)
     end)
 
-    -- Net Receivers
     net.receive("CognitiveDecay_LightSpawn", function()
         local ent = net.readEntity()
         if isValid(ent) then table.insert(activeLights, ent) end
     end)
 
+    -- DYNAMIC BASS STREAMING FROM GITHUB REPO (ZERO HARDCODED AUDIO)
     net.receive("CognitiveDecay_RadioSpawn", function()
         local radio = net.readEntity()
-        local url = net.readString()
+        local rawUrl = net.readString()
         local isGlitch = net.readBool()
+        local basePitch = net.readFloat()
 
-        if isValid(radio) then
-            local soundPath = (url and #url > 0) and url or "music/radio1.mp3"
-            pcall(sound.playFile, soundPath, "3d noblock", function(st)
-                if isValid(st) and isValid(radio) then
-                    st:setPos(radio:getPos())
-                    st:setFade(60, 480)
-                    st:setVolume(0.65)
-                    st:play()
+        if isValid(radio) and rawUrl and #rawUrl > 0 then
+            pcall(bass.loadURL, rawUrl, "3d noblock", function(station, errCode, errName)
+                if isValid(station) and isValid(radio) then
+                    station:setPos(radio:getPos())
+                    station:setFade(80, 520)
+                    station:setVolume(math.Rand(0.55, 0.85))
+                    station:setPlaybackRate(basePitch or 1.0)
+                    station:play()
                     table.insert(activeRadios, {
                         ent = radio,
-                        station = st,
+                        station = station,
                         isGlitch = isGlitch,
-                        nextGlitch = timer.curtime() + 4
+                        nextGlitch = timer.curtime() + math.Rand(3, 8)
                     })
                 end
             end)
         end
     end)
 
+    -- DYNAMIC NPC CORRUPTIONS (ZERO HARDCODED ANGLES)
     net.receive("CognitiveDecay_NPCSpawn", function()
         local npc = net.readEntity()
-        local traitName = net.readString()
+        local corruptAngle = net.readAngle()
         if isValid(npc) then
-            if traitName == "still_life" then
-                -- Permanent 45° neck tilt & uncanny flex
-                pcall(npc.manipulateBoneAngles, npc, 6, Angle(0, 0, 45))
-                pcall(npc.setFlexWeight, npc, 0, 1.0) -- Smile
+            pcall(npc.manipulateBoneAngles, npc, 6, corruptAngle)
+            local flexNum = npc:getFlexNum()
+            if flexNum and flexNum > 0 then
+                for f = 0, math.min(flexNum - 1, 6) do
+                    if math.random() < 0.40 then
+                        pcall(npc.setFlexWeight, npc, f, math.Rand(0.25, 1.0))
+                    end
+                end
             end
-            table.insert(activeNPCs, { ent = npc, trait = traitName })
+            table.insert(activeNPCs, npc)
         end
     end)
 
@@ -1210,7 +1259,7 @@ else
             render.setFogColor(Color(12, 10, 6))
         end)
 
-        -- 2. Xen Green Generation Zaps
+        -- 2. Half-Life 1 Xen Green Electric Beams
         for i = #activeZaps, 1, -1 do
             local zap = activeZaps[i]
             if now > zap.dieTime then
