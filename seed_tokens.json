@@ -382,10 +382,11 @@
       "office"
     ],
     "tags": [
-      "sound",
-      "allcircuitbusy",
       "http",
-      "audio_stream"
+      "allcircuitbusy",
+      "audio_stream",
+      "high_priority",
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
@@ -403,10 +404,11 @@
       "office"
     ],
     "tags": [
-      "sound",
+      "standard",
       "attention",
       "http",
-      "audio_stream"
+      "audio_stream",
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
@@ -424,11 +426,12 @@
       "office"
     ],
     "tags": [
-      "sound",
-      "audio",
-      "audio_stream",
+      "standard",
       "[vocals]",
-      "http"
+      "http",
+      "audio_stream",
+      "audio",
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
@@ -446,10 +449,11 @@
       "office"
     ],
     "tags": [
-      "sound",
-      "button",
+      "standard",
       "http",
-      "audio_stream"
+      "audio_stream",
+      "sound",
+      "button"
     ],
     "anchor": "any",
     "dimensions": [
@@ -467,11 +471,12 @@
       "office"
     ],
     "tags": [
-      "sound",
-      "audio_stream",
-      "button",
+      "standard",
       "http",
-      "hq"
+      "hq",
+      "audio_stream",
+      "sound",
+      "button"
     ],
     "anchor": "any",
     "dimensions": [
@@ -489,11 +494,12 @@
       "office"
     ],
     "tags": [
-      "sound",
+      "standard",
+      "http",
       "matching",
       "audio_stream",
-      "button",
-      "http"
+      "sound",
+      "button"
     ],
     "anchor": "any",
     "dimensions": [
@@ -511,11 +517,12 @@
       "office"
     ],
     "tags": [
-      "sound",
-      "audio_stream",
+      "standard",
+      "http",
       "unique",
-      "button",
-      "http"
+      "audio_stream",
+      "sound",
+      "button"
     ],
     "anchor": "any",
     "dimensions": [
@@ -533,12 +540,13 @@
       "office"
     ],
     "tags": [
+      "standard",
       "skidding",
-      "sound",
-      "audio_stream",
+      "http",
       "car",
-      "effect",
-      "http"
+      "audio_stream",
+      "sound",
+      "effect"
     ],
     "anchor": "any",
     "dimensions": [
@@ -556,10 +564,12 @@
       "office"
     ],
     "tags": [
+      "standard",
+      "unfitting_anomaly",
       "caramell",
-      "sound",
       "http",
-      "audio_stream"
+      "audio_stream",
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
@@ -577,10 +587,11 @@
       "office"
     ],
     "tags": [
+      "standard",
       "cat",
-      "sound",
       "http",
-      "audio_stream"
+      "audio_stream",
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
@@ -598,11 +609,12 @@
       "office"
     ],
     "tags": [
-      "hold",
-      "classic",
-      "sound",
+      "standard",
+      "http",
       "audio_stream",
-      "http"
+      "hold",
+      "sound",
+      "classic"
     ],
     "anchor": "any",
     "dimensions": [
@@ -620,11 +632,12 @@
       "office"
     ],
     "tags": [
-      "congratulations",
+      "standard",
       "http",
-      "sound",
+      "(remastered)",
+      "congratulations",
       "audio_stream",
-      "(remastered)"
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
@@ -642,15 +655,16 @@
       "office"
     ],
     "tags": [
-      "ccaf",
-      "fe",
+      "standard",
       "fdaa",
-      "sound",
-      "f",
-      "be",
       "d",
+      "http",
+      "be",
+      "ccaf",
+      "f",
       "audio_stream",
-      "http"
+      "fe",
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
@@ -668,10 +682,11 @@
       "office"
     ],
     "tags": [
-      "def",
-      "sound",
+      "standard",
       "http",
-      "audio_stream"
+      "def",
+      "audio_stream",
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
@@ -689,12 +704,13 @@
       "office"
     ],
     "tags": [
-      "homemade",
-      "sound",
-      "dial",
-      "audio_stream",
+      "standard",
       "up",
-      "http"
+      "http",
+      "homemade",
+      "audio_stream",
+      "sound",
+      "dial"
     ],
     "anchor": "any",
     "dimensions": [
@@ -712,11 +728,12 @@
       "office"
     ],
     "tags": [
-      "woo",
-      "sound",
-      "elise,",
-      "audio_stream",
+      "standard",
       "http",
+      "audio_stream",
+      "woo",
+      "elise,",
+      "sound",
       "f\u00fcr"
     ],
     "anchor": "any",
@@ -735,14 +752,16 @@
       "office"
     ],
     "tags": [
-      "alert",
       "japan",
-      "alarm",
-      "sound",
       "eas",
-      "audio_stream",
+      "standard",
+      "alarm",
+      "http",
       "tsunami",
-      "http"
+      "alert",
+      "acute_horror",
+      "audio_stream",
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
@@ -760,14 +779,15 @@
       "office"
     ],
     "tags": [
-      "phone",
-      "sound",
-      "japanese",
-      "cannot",
+      "standard",
+      "http",
       "be",
-      "audio_stream",
       "reached",
-      "http"
+      "cannot",
+      "phone",
+      "audio_stream",
+      "japanese",
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
@@ -785,12 +805,13 @@
       "office"
     ],
     "tags": [
-      "sound",
       "tone",
-      "ringback",
-      "audio_stream",
+      "standard",
+      "http",
       "ja",
-      "http"
+      "audio_stream",
+      "ringback",
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
@@ -808,14 +829,15 @@
       "office"
     ],
     "tags": [
-      "sound",
-      "au",
       "tone",
-      "ringback",
-      "audio_stream",
-      "by",
+      "standard",
+      "http",
       "ja",
-      "http"
+      "by",
+      "audio_stream",
+      "ringback",
+      "au",
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
@@ -833,16 +855,17 @@
       "office"
     ],
     "tags": [
-      "in",
-      "sound",
-      "mondstadt",
-      "midnight",
-      "net",
-      "audio_stream",
-      "[",
+      "standard",
       "]",
       "http",
-      "youconvert"
+      "net",
+      "midnight",
+      "audio_stream",
+      "youconvert",
+      "sound",
+      "in",
+      "[",
+      "mondstadt"
     ],
     "anchor": "any",
     "dimensions": [
@@ -860,12 +883,13 @@
       "office"
     ],
     "tags": [
-      "motor",
-      "sound",
       "arc",
       "loop",
+      "standard",
+      "http",
+      "motor",
       "audio_stream",
-      "http"
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
@@ -883,12 +907,13 @@
       "office"
     ],
     "tags": [
-      "motor",
-      "softtop",
-      "sound",
       "loop",
+      "standard",
+      "http",
+      "motor",
       "audio_stream",
-      "http"
+      "sound",
+      "softtop"
     ],
     "anchor": "any",
     "dimensions": [
@@ -906,13 +931,14 @@
       "office"
     ],
     "tags": [
-      "cia",
-      "sound",
-      "numbers",
-      "audio_stream",
-      "counting",
+      "standard",
       "http",
-      "station"
+      "counting",
+      "cia",
+      "audio_stream",
+      "station",
+      "numbers",
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
@@ -931,13 +957,14 @@
     ],
     "tags": [
       "chime",
-      "sound",
-      "lincolnshire",
-      "poacher",
-      "numbers",
-      "audio_stream",
+      "standard",
       "http",
-      "station"
+      "lincolnshire",
+      "audio_stream",
+      "station",
+      "numbers",
+      "poacher",
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
@@ -955,14 +982,15 @@
       "office"
     ],
     "tags": [
-      "musicbox",
-      "sound",
-      "numbers",
-      "audio_stream",
+      "standard",
       "swedish",
       "http",
       "station",
-      "rhapsody"
+      "musicbox",
+      "audio_stream",
+      "rhapsody",
+      "numbers",
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
@@ -980,17 +1008,18 @@
       "office"
     ],
     "tags": [
-      "version)",
-      "sound",
-      "in",
+      "music(the",
       "canon",
-      "best",
-      "pachelbel's",
+      "version)",
+      "standard",
       "d",
-      "audio_stream",
-      "soothing",
+      "best",
       "http",
-      "music(the"
+      "pachelbel's",
+      "soothing",
+      "audio_stream",
+      "in",
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
@@ -1008,13 +1037,14 @@
       "office"
     ],
     "tags": [
-      "wistful",
-      "sound",
-      "dreams",
+      "standard",
+      "http",
       "williams",
+      "wistful",
+      "dreams",
       "audio_stream",
       "paul",
-      "http"
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
@@ -1032,10 +1062,11 @@
       "office"
     ],
     "tags": [
-      "sound",
-      "sdwad",
+      "standard",
       "http",
-      "audio_stream"
+      "sdwad",
+      "audio_stream",
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
@@ -1053,10 +1084,11 @@
       "office"
     ],
     "tags": [
-      "sea",
-      "sound",
+      "standard",
       "http",
-      "audio_stream"
+      "audio_stream",
+      "sea",
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
@@ -1074,11 +1106,13 @@
       "office"
     ],
     "tags": [
-      "phonk",
+      "standard",
+      "unfitting_anomaly",
+      "sleep",
       "http",
-      "sound",
       "audio_stream",
-      "sleep"
+      "phonk",
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
@@ -1096,11 +1130,12 @@
       "office"
     ],
     "tags": [
-      "sound",
+      "standard",
+      "http",
       "domain",
-      "audio_stream",
       "sukuna",
-      "http"
+      "audio_stream",
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
@@ -1118,14 +1153,15 @@
       "office"
     ],
     "tags": [
+      "tchaikovsky",
+      "standard",
+      "http",
+      "(full",
       "overture",
       "with",
-      "sound",
-      "(full",
-      "cannons)",
       "audio_stream",
-      "tchaikovsky",
-      "http"
+      "cannons)",
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
@@ -1143,10 +1179,12 @@
       "office"
     ],
     "tags": [
-      "sound",
-      "trolled",
+      "standard",
+      "unfitting_anomaly",
       "http",
-      "audio_stream"
+      "audio_stream",
+      "trolled",
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
@@ -1164,20 +1202,21 @@
       "office"
     ],
     "tags": [
-      "uvb",
       "buzzer",
+      "fluorescent",
+      "electrical",
       "spark",
       "ballast",
-      "electrical",
-      "fluorescent",
-      "sound",
-      "high_freq",
-      "radio",
-      "audio_stream",
-      "shortwave",
       "http",
+      "uvb",
+      "radio",
+      "high_freq",
       "irritating",
-      "the"
+      "audio_stream",
+      "high_priority",
+      "sound",
+      "the",
+      "shortwave"
     ],
     "anchor": "any",
     "dimensions": [
@@ -1195,10 +1234,12 @@
       "office"
     ],
     "tags": [
-      "sound",
-      "warning",
+      "standard",
       "http",
-      "audio_stream"
+      "acute_horror",
+      "audio_stream",
+      "sound",
+      "warning"
     ],
     "anchor": "any",
     "dimensions": [
@@ -1216,11 +1257,13 @@
       "office"
     ],
     "tags": [
-      "warning",
-      "sound",
-      "audio_stream",
+      "standard",
       "http",
-      "hq"
+      "hq",
+      "acute_horror",
+      "audio_stream",
+      "sound",
+      "warning"
     ],
     "anchor": "any",
     "dimensions": [
@@ -1238,11 +1281,13 @@
       "office"
     ],
     "tags": [
-      "warning",
-      "sound",
+      "standard",
+      "http",
       "matching",
+      "acute_horror",
       "audio_stream",
-      "http"
+      "sound",
+      "warning"
     ],
     "anchor": "any",
     "dimensions": [
@@ -1260,18 +1305,19 @@
       "office"
     ],
     "tags": [
-      "void",
-      "sfx",
-      "open_space",
-      "hollow",
-      "blowing",
-      "sound",
-      "tunnel",
+      "cold",
       "vent",
+      "standard",
+      "sfx",
+      "http",
+      "open_space",
+      "blowing",
+      "hollow",
       "audio_stream",
       "wind",
-      "cold",
-      "http"
+      "sound",
+      "tunnel",
+      "void"
     ],
     "anchor": "any",
     "dimensions": [
@@ -1289,11 +1335,3304 @@
       "office"
     ],
     "tags": [
-      "sound",
+      "standard",
+      "unfitting_anomaly",
+      "http",
       "yodelling",
       "audio_stream",
-      "effect",
-      "http"
+      "sound",
+      "effect"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/aithy-number-you-dialed-does-not-exist.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/aithy-number-you-dialed-does-not-exist.mp3",
+    "name": "Audio: aithy-number-you-dialed-does-not-exist",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "dialed",
+      "standard",
+      "does",
+      "http",
+      "aithy",
+      "audio_stream",
+      "not",
+      "sound",
+      "number",
+      "exist",
+      "you"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/alerta-sismica-mexico.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/alerta-sismica-mexico.mp3",
+    "name": "Audio: alerta-sismica-mexico",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "alerta",
+      "standard",
+      "http",
+      "sismica",
+      "audio_stream",
+      "sound",
+      "mexico"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/answering-machine-beep.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/answering-machine-beep.mp3",
+    "name": "Audio: answering-machine-beep",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "http",
+      "machine",
+      "beep",
+      "audio_stream",
+      "answering",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/apple-air-tag(1).mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/apple-air-tag(1).mp3",
+    "name": "Audio: apple-air-tag(1)",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "tag(",
+      "standard",
+      ")",
+      "http",
+      "air",
+      "audio_stream",
+      "apple",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/apple-air-tag.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/apple-air-tag.mp3",
+    "name": "Audio: apple-air-tag",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "http",
+      "air",
+      "audio_stream",
+      "apple",
+      "sound",
+      "tag"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/arabic-phone-cannot-be-reached.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/arabic-phone-cannot-be-reached.mp3",
+    "name": "Audio: arabic-phone-cannot-be-reached",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "arabic",
+      "http",
+      "be",
+      "reached",
+      "cannot",
+      "phone",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/avaya-cheerful-ringtone.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/avaya-cheerful-ringtone.mp3",
+    "name": "Audio: avaya-cheerful-ringtone",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "http",
+      "ringtone",
+      "cheerful",
+      "avaya",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - Async Research Institute.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - Async Research Institute.mp3",
+    "name": "Audio: backrooms (original score), vol. 1 - async research institute",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "institute",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "audio_stream",
+      "async",
+      "research",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - Auditory Guidepost.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - Auditory Guidepost.mp3",
+    "name": "Audio: backrooms (original score), vol. 1 - auditory guidepost",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "auditory",
+      "guidepost",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - Deeper Than The Walls.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - Deeper Than The Walls.mp3",
+    "name": "Audio: backrooms (original score), vol. 1 - deeper than the walls",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "walls",
+      "standard",
+      "(original",
+      "http",
+      "deeper",
+      "vol",
+      "score),",
+      "audio_stream",
+      "than",
+      "the",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - Glacier.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - Glacier.mp3",
+    "name": "Audio: backrooms (original score), vol. 1 - glacier",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "glacier",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - Government Funding.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - Government Funding.mp3",
+    "name": "Audio: backrooms (original score), vol. 1 - government funding",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "funding",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "audio_stream",
+      "sound",
+      "government"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - Hazmat.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - Hazmat.mp3",
+    "name": "Audio: backrooms (original score), vol. 1 - hazmat",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "audio_stream",
+      "hazmat",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - KV31.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - KV31.mp3",
+    "name": "Audio: backrooms (original score), vol. 1 - kv31",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "audio_stream",
+      "sound",
+      "kv"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - Missing Persons.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - Missing Persons.mp3",
+    "name": "Audio: backrooms (original score), vol. 1 - missing persons",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "missing",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "audio_stream",
+      "persons",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - Not Your Decision.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - Not Your Decision.mp3",
+    "name": "Audio: backrooms (original score), vol. 1 - not your decision",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "decision",
+      "http",
+      "vol",
+      "score),",
+      "your",
+      "audio_stream",
+      "not",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - Pipes.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - Pipes.mp3",
+    "name": "Audio: backrooms (original score), vol. 1 - pipes",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "audio_stream",
+      "pipes",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - Post-Traumatic Amnesia.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - Post-Traumatic Amnesia.mp3",
+    "name": "Audio: backrooms (original score), vol. 1 - post-traumatic amnesia",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "post",
+      "amnesia",
+      "vol",
+      "score),",
+      "traumatic",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - Sealed Away.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - Sealed Away.mp3",
+    "name": "Audio: backrooms (original score), vol. 1 - sealed away",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "away",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "audio_stream",
+      "sealed",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - The Complex.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - The Complex.mp3",
+    "name": "Audio: backrooms (original score), vol. 1 - the complex",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "complex",
+      "audio_stream",
+      "sound",
+      "the"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - The Only Thing That Matters (Demo).mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - The Only Thing That Matters (Demo).mp3",
+    "name": "Audio: backrooms (original score), vol. 1 - the only thing that matters (demo)",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "only",
+      "(original",
+      "that",
+      "thing",
+      "http",
+      "(demo)",
+      "vol",
+      "score),",
+      "audio_stream",
+      "matters",
+      "the",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - You're Done (Daisy Bell).mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 1 - You're Done (Daisy Bell).mp3",
+    "name": "Audio: backrooms (original score), vol. 1 - you're done (daisy bell)",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "done",
+      "(daisy",
+      "standard",
+      "(original",
+      "http",
+      "you're",
+      "vol",
+      "score),",
+      "audio_stream",
+      "bell)",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - A Passage.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - A Passage.mp3",
+    "name": "Audio: backrooms (original score), vol. 2 - a passage",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "a",
+      "audio_stream",
+      "passage",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Compromises.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Compromises.mp3",
+    "name": "Audio: backrooms (original score), vol. 2 - compromises",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "compromises",
+      "vol",
+      "score),",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Congratulations, Ivan.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Congratulations, Ivan.mp3",
+    "name": "Audio: backrooms (original score), vol. 2 - congratulations, ivan",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "congratulations,",
+      "audio_stream",
+      "ivan",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - data not accessible.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - data not accessible.mp3",
+    "name": "Audio: backrooms (original score), vol. 2 - data not accessible",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "accessible",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "audio_stream",
+      "not",
+      "data",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Department of Energy.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Department of Energy.mp3",
+    "name": "Audio: backrooms (original score), vol. 2 - department of energy",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "audio_stream",
+      "department",
+      "energy",
+      "of",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Distant.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Distant.mp3",
+    "name": "Audio: backrooms (original score), vol. 2 - distant",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "audio_stream",
+      "sound",
+      "distant"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Ghost.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Ghost.mp3",
+    "name": "Audio: backrooms (original score), vol. 2 - ghost",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "ghost",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Hanging Frame (Time Passages).mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Hanging Frame (Time Passages).mp3",
+    "name": "Audio: backrooms (original score), vol. 2 - hanging frame (time passages)",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "hanging",
+      "vol",
+      "score),",
+      "frame",
+      "audio_stream",
+      "(time",
+      "passages)",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Instances.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Instances.mp3",
+    "name": "Audio: backrooms (original score), vol. 2 - instances",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "audio_stream",
+      "sound",
+      "instances"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Malignant.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Malignant.mp3",
+    "name": "Audio: backrooms (original score), vol. 2 - malignant",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "malignant",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Non-Disclosure Agreement.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Non-Disclosure Agreement.mp3",
+    "name": "Audio: backrooms (original score), vol. 2 - non-disclosure agreement",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "disclosure",
+      "non",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "audio_stream",
+      "agreement",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Old Objects in Quiet Rooms.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Old Objects in Quiet Rooms.mp3",
+    "name": "Audio: backrooms (original score), vol. 2 - old objects in quiet rooms",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "old",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "quiet",
+      "rooms",
+      "audio_stream",
+      "in",
+      "sound",
+      "objects"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Person.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Person.mp3",
+    "name": "Audio: backrooms (original score), vol. 2 - person",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "person",
+      "vol",
+      "score),",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Please do not Speak.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Please do not Speak.mp3",
+    "name": "Audio: backrooms (original score), vol. 2 - please do not speak",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "do",
+      "vol",
+      "score),",
+      "please",
+      "audio_stream",
+      "not",
+      "speak",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Remember.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 2 - Remember.mp3",
+    "name": "Audio: backrooms (original score), vol. 2 - remember",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "remember",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 3 - Do You Like Air Conditioning.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 3 - Do You Like Air Conditioning.mp3",
+    "name": "Audio: backrooms (original score), vol. 3 - do you like air conditioning",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "do",
+      "conditioning",
+      "vol",
+      "score),",
+      "air",
+      "audio_stream",
+      "like",
+      "sound",
+      "you"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 3 - For the Sake of Mankind, There Is Nothing More to Be Extracted.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 3 - For the Sake of Mankind, There Is Nothing More to Be Extracted.mp3",
+    "name": "Audio: backrooms (original score), vol. 3 - for the sake of mankind, there is nothing more to be extracted",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "for",
+      "score),",
+      "the",
+      "backrooms",
+      "(original",
+      "there",
+      "http",
+      "vol",
+      "to",
+      "sound",
+      "more",
+      "extracted",
+      "be",
+      "audio_stream",
+      "of",
+      "sake",
+      "standard",
+      "nothing",
+      "is",
+      "mankind,"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 3 - MidwesternTraumaLight.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 3 - MidwesternTraumaLight.mp3",
+    "name": "Audio: backrooms (original score), vol. 3 - midwesterntraumalight",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "audio_stream",
+      "sound",
+      "midwesterntraumalight"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 3 - Off the Deep End.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 3 - Off the Deep End.mp3",
+    "name": "Audio: backrooms (original score), vol. 3 - off the deep end",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "off",
+      "(original",
+      "http",
+      "the",
+      "vol",
+      "score),",
+      "end",
+      "audio_stream",
+      "sound",
+      "deep"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 3 - Red Sun in the Sky.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 3 - Red Sun in the Sky.mp3",
+    "name": "Audio: backrooms (original score), vol. 3 - red sun in the sky",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "sun",
+      "standard",
+      "(original",
+      "http",
+      "sky",
+      "vol",
+      "score),",
+      "red",
+      "audio_stream",
+      "sound",
+      "in",
+      "the"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 3 - Rest Forever in This Dead End.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 3 - Rest Forever in This Dead End.mp3",
+    "name": "Audio: backrooms (original score), vol. 3 - rest forever in this dead end",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "rest",
+      "dead",
+      "this",
+      "end",
+      "audio_stream",
+      "in",
+      "sound",
+      "forever"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 3 - Still Life.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 3 - Still Life.mp3",
+    "name": "Audio: backrooms (original score), vol. 3 - still life",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "(original",
+      "http",
+      "still",
+      "vol",
+      "score),",
+      "highest_priority",
+      "life",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 3 - Survey.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 3 - Survey.mp3",
+    "name": "Audio: backrooms (original score), vol. 3 - survey",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "audio_stream",
+      "sound",
+      "survey"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 3 - The Reason.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 3 - The Reason.mp3",
+    "name": "Audio: backrooms (original score), vol. 3 - the reason",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "reason",
+      "vol",
+      "score),",
+      "audio_stream",
+      "sound",
+      "the"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 3 - Threshold.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 3 - Threshold.mp3",
+    "name": "Audio: backrooms (original score), vol. 3 - threshold",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "threshold",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 3 - Tunnel Vision.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 3 - Tunnel Vision.mp3",
+    "name": "Audio: backrooms (original score), vol. 3 - tunnel vision",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "(original",
+      "vision",
+      "http",
+      "vol",
+      "score),",
+      "audio_stream",
+      "high_priority",
+      "tunnel",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 3 - \u7164\u6c14\u7076.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Score), Vol. 3 - \u7164\u6c14\u7076.mp3",
+    "name": "Audio: backrooms (original score), vol. 3 - \u7164\u6c14\u7076",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "vol",
+      "score),",
+      "audio_stream",
+      "\u7164\u6c14\u7076",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - 4-PCH.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - 4-PCH.mp3",
+    "name": "Audio: backrooms (original soundtrack) - 4-pch",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "pch",
+      "standard",
+      "(original",
+      "http",
+      "audio_stream",
+      "soundtrack)",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Basement Land.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Basement Land.mp3",
+    "name": "Audio: backrooms (original soundtrack) - basement land",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "land",
+      "audio_stream",
+      "soundtrack)",
+      "sound",
+      "basement"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Cafe Bossa v1.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Cafe Bossa v1.mp3",
+    "name": "Audio: backrooms (original soundtrack) - cafe bossa v1",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "cafe",
+      "audio_stream",
+      "soundtrack)",
+      "bossa",
+      "v",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Capitol & McKee.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Capitol & McKee.mp3",
+    "name": "Audio: backrooms (original soundtrack) - capitol & mckee",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "&",
+      "mckee",
+      "audio_stream",
+      "soundtrack)",
+      "capitol",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Cold Floor.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Cold Floor.mp3",
+    "name": "Audio: backrooms (original soundtrack) - cold floor",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "cold",
+      "standard",
+      "(original",
+      "http",
+      "floor",
+      "audio_stream",
+      "soundtrack)",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Complex.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Complex.mp3",
+    "name": "Audio: backrooms (original soundtrack) - complex",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "complex",
+      "audio_stream",
+      "soundtrack)",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Dining Room.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Dining Room.mp3",
+    "name": "Audio: backrooms (original soundtrack) - dining room",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "room",
+      "audio_stream",
+      "soundtrack)",
+      "sound",
+      "dining"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Feeling of a Door Imminently Remembered.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Feeling of a Door Imminently Remembered.mp3",
+    "name": "Audio: backrooms (original soundtrack) - feeling of a door imminently remembered",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "feeling",
+      "(original",
+      "http",
+      "imminently",
+      "a",
+      "audio_stream",
+      "soundtrack)",
+      "sound",
+      "door",
+      "remembered",
+      "of"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Furnished Dead End.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Furnished Dead End.mp3",
+    "name": "Audio: backrooms (original soundtrack) - furnished dead end",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "dead",
+      "furnished",
+      "end",
+      "audio_stream",
+      "soundtrack)",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Furniture Lament.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Furniture Lament.mp3",
+    "name": "Audio: backrooms (original soundtrack) - furniture lament",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "audio_stream",
+      "soundtrack)",
+      "lament",
+      "furniture",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Handprint.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Handprint.mp3",
+    "name": "Audio: backrooms (original soundtrack) - handprint",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "handprint",
+      "audio_stream",
+      "soundtrack)",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Homothet.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Homothet.mp3",
+    "name": "Audio: backrooms (original soundtrack) - homothet",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "homothet",
+      "audio_stream",
+      "soundtrack)",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Humble MRI Company.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Humble MRI Company.mp3",
+    "name": "Audio: backrooms (original soundtrack) - humble mri company",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "mri",
+      "standard",
+      "fluorescent",
+      "60hz",
+      "(original",
+      "humble",
+      "ambient_dread",
+      "http",
+      "company",
+      "ambient",
+      "audio_stream",
+      "soundtrack)",
+      "low_freq",
+      "monotonous",
+      "drone",
+      "sound",
+      "electrical"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Landsick.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Landsick.mp3",
+    "name": "Audio: backrooms (original soundtrack) - landsick",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "landsick",
+      "audio_stream",
+      "soundtrack)",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Layout Extrapolation.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Layout Extrapolation.mp3",
+    "name": "Audio: backrooms (original soundtrack) - layout extrapolation",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "extrapolation",
+      "layout",
+      "audio_stream",
+      "soundtrack)",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Local Network.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Local Network.mp3",
+    "name": "Audio: backrooms (original soundtrack) - local network",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "network",
+      "local",
+      "audio_stream",
+      "soundtrack)",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Next Room Over.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Next Room Over.mp3",
+    "name": "Audio: backrooms (original soundtrack) - next room over",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "next",
+      "room",
+      "audio_stream",
+      "soundtrack)",
+      "sound",
+      "over"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Old Home Not Yet Built (Instupendo Remix).mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Old Home Not Yet Built (Instupendo Remix).mp3",
+    "name": "Audio: backrooms (original soundtrack) - old home not yet built (instupendo remix)",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "(instupendo",
+      "old",
+      "home",
+      "standard",
+      "(original",
+      "http",
+      "built",
+      "yet",
+      "audio_stream",
+      "soundtrack)",
+      "not",
+      "remix)",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Old Home Not Yet Built.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Old Home Not Yet Built.mp3",
+    "name": "Audio: backrooms (original soundtrack) - old home not yet built",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "old",
+      "home",
+      "standard",
+      "(original",
+      "http",
+      "built",
+      "yet",
+      "audio_stream",
+      "soundtrack)",
+      "not",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Open The Window.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Open The Window.mp3",
+    "name": "Audio: backrooms (original soundtrack) - open the window",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "vent",
+      "open",
+      "cold",
+      "standard",
+      "(original",
+      "http",
+      "the",
+      "open_space",
+      "window",
+      "hollow",
+      "audio_stream",
+      "soundtrack)",
+      "sound",
+      "tunnel",
+      "void"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Ottoman Empire.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Ottoman Empire.mp3",
+    "name": "Audio: backrooms (original soundtrack) - ottoman empire",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "ottoman",
+      "(original",
+      "http",
+      "empire",
+      "audio_stream",
+      "soundtrack)",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Paint.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Paint.mp3",
+    "name": "Audio: backrooms (original soundtrack) - paint",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "paint",
+      "audio_stream",
+      "soundtrack)",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - People In San Jose.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - People In San Jose.mp3",
+    "name": "Audio: backrooms (original soundtrack) - people in san jose",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "people",
+      "http",
+      "jose",
+      "audio_stream",
+      "soundtrack)",
+      "in",
+      "sound",
+      "san"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Pirate Shanty.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Pirate Shanty.mp3",
+    "name": "Audio: backrooms (original soundtrack) - pirate shanty",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "shanty",
+      "pirate",
+      "audio_stream",
+      "soundtrack)",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Quiet Wall in Dark Room.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Quiet Wall in Dark Room.mp3",
+    "name": "Audio: backrooms (original soundtrack) - quiet wall in dark room",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "wall",
+      "ambient_dread",
+      "http",
+      "quiet",
+      "room",
+      "audio_stream",
+      "soundtrack)",
+      "in",
+      "dark",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - The Untrained Mind.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - The Untrained Mind.mp3",
+    "name": "Audio: backrooms (original soundtrack) - the untrained mind",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "untrained",
+      "audio_stream",
+      "soundtrack)",
+      "sound",
+      "the",
+      "mind"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Wired.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - Wired.mp3",
+    "name": "Audio: backrooms (original soundtrack) - wired",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "(original",
+      "http",
+      "audio_stream",
+      "soundtrack)",
+      "wired",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - You Know Me.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms (Original Soundtrack) - You Know Me.mp3",
+    "name": "Audio: backrooms (original soundtrack) - you know me",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "backrooms",
+      "standard",
+      "know",
+      "me",
+      "(original",
+      "http",
+      "audio_stream",
+      "soundtrack)",
+      "sound",
+      "you"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/balmuda-phone-low-battery-sound.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/balmuda-phone-low-battery-sound.mp3",
+    "name": "Audio: balmuda-phone-low-battery-sound",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "http",
+      "low",
+      "balmuda",
+      "phone",
+      "battery",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/bhaasaakhmaer-phone-cannot-be-reached.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/bhaasaakhmaer-phone-cannot-be-reached.mp3",
+    "name": "Audio: bhaasaakhmaer-phone-cannot-be-reached",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "http",
+      "bhaasaakhmaer",
+      "be",
+      "reached",
+      "cannot",
+      "phone",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/classic-hold-sound(1).mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/classic-hold-sound(1).mp3",
+    "name": "Audio: classic-hold-sound(1)",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      ")",
+      "http",
+      "audio_stream",
+      "sound(",
+      "hold",
+      "sound",
+      "classic"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/classic-hold-sound(2).mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/classic-hold-sound(2).mp3",
+    "name": "Audio: classic-hold-sound(2)",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      ")",
+      "http",
+      "audio_stream",
+      "sound(",
+      "hold",
+      "sound",
+      "classic"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/constellation-iphone-ringtone.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/constellation-iphone-ringtone.mp3",
+    "name": "Audio: constellation-iphone-ringtone",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "http",
+      "ringtone",
+      "constellation",
+      "audio_stream",
+      "iphone",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/dial-up-homemade(1).mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/dial-up-homemade(1).mp3",
+    "name": "Audio: dial-up-homemade(1)",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      ")",
+      "up",
+      "http",
+      "homemade(",
+      "audio_stream",
+      "sound",
+      "dial"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/disconnected-2x.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/disconnected-2x.mp3",
+    "name": "Audio: disconnected-2x",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "http",
+      "x",
+      "audio_stream",
+      "disconnected",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/disconnected-phone-number.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/disconnected-phone-number.mp3",
+    "name": "Audio: disconnected-phone-number",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "http",
+      "number",
+      "phone",
+      "audio_stream",
+      "disconnected",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/dtmf-dial-tones-1.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/dtmf-dial-tones-1.mp3",
+    "name": "Audio: dtmf-dial-tones-1",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "http",
+      "tones",
+      "audio_stream",
+      "sound",
+      "dtmf",
+      "dial"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/dtmf-dial-tones-9.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/dtmf-dial-tones-9.mp3",
+    "name": "Audio: dtmf-dial-tones-9",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "http",
+      "tones",
+      "audio_stream",
+      "sound",
+      "dtmf",
+      "dial"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/electronics(1).mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/electronics(1).mp3",
+    "name": "Audio: electronics(1)",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      ")",
+      "http",
+      "electronics(",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/electronics.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/electronics.mp3",
+    "name": "Audio: electronics",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "electronics",
+      "standard",
+      "http",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/european-spanish-phone-cannot-be-reached.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/european-spanish-phone-cannot-be-reached.mp3",
+    "name": "Audio: european-spanish-phone-cannot-be-reached",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "http",
+      "be",
+      "reached",
+      "cannot",
+      "phone",
+      "audio_stream",
+      "european",
+      "sound",
+      "spanish"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/german-phone-cannot-be-reached.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/german-phone-cannot-be-reached.mp3",
+    "name": "Audio: german-phone-cannot-be-reached",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "german",
+      "http",
+      "be",
+      "reached",
+      "cannot",
+      "phone",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/guan-hua-voicemail-yu-yin-xin-xiang.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/guan-hua-voicemail-yu-yin-xin-xiang.mp3",
+    "name": "Audio: guan-hua-voicemail-yu-yin-xin-xiang",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "yu",
+      "voicemail",
+      "http",
+      "hua",
+      "audio_stream",
+      "yin",
+      "xin",
+      "xiang",
+      "sound",
+      "guan"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/hindi-phone-cannot-be-reached.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/hindi-phone-cannot-be-reached.mp3",
+    "name": "Audio: hindi-phone-cannot-be-reached",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "http",
+      "be",
+      "reached",
+      "hindi",
+      "cannot",
+      "phone",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/indonesian-phone-cannot-be-reached.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/indonesian-phone-cannot-be-reached.mp3",
+    "name": "Audio: indonesian-phone-cannot-be-reached",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "http",
+      "indonesian",
+      "be",
+      "reached",
+      "cannot",
+      "phone",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/japanese-phone-cannot-be-reached(1).mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/japanese-phone-cannot-be-reached(1).mp3",
+    "name": "Audio: japanese-phone-cannot-be-reached(1)",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "reached(",
+      "standard",
+      ")",
+      "http",
+      "be",
+      "cannot",
+      "phone",
+      "audio_stream",
+      "japanese",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/loon-bird-calling.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/loon-bird-calling.mp3",
+    "name": "Audio: loon-bird-calling",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "loon",
+      "http",
+      "bird",
+      "calling",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/los-angeles-metro-chime(1).mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/los-angeles-metro-chime(1).mp3",
+    "name": "Audio: los-angeles-metro-chime(1)",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      ")",
+      "metro",
+      "angeles",
+      "http",
+      "chime(",
+      "audio_stream",
+      "los",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/los-angeles-metro-chime(2).mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/los-angeles-metro-chime(2).mp3",
+    "name": "Audio: los-angeles-metro-chime(2)",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      ")",
+      "metro",
+      "angeles",
+      "http",
+      "chime(",
+      "audio_stream",
+      "los",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/los-angeles-metro-chime(3).mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/los-angeles-metro-chime(3).mp3",
+    "name": "Audio: los-angeles-metro-chime(3)",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      ")",
+      "metro",
+      "angeles",
+      "http",
+      "chime(",
+      "audio_stream",
+      "los",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/los-angeles-metro-chime(4).mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/los-angeles-metro-chime(4).mp3",
+    "name": "Audio: los-angeles-metro-chime(4)",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      ")",
+      "metro",
+      "angeles",
+      "http",
+      "chime(",
+      "audio_stream",
+      "los",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/los-angeles-metro-chime(5).mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/los-angeles-metro-chime(5).mp3",
+    "name": "Audio: los-angeles-metro-chime(5)",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      ")",
+      "metro",
+      "angeles",
+      "http",
+      "chime(",
+      "audio_stream",
+      "los",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/los-angeles-metro-chime(6).mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/los-angeles-metro-chime(6).mp3",
+    "name": "Audio: los-angeles-metro-chime(6)",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      ")",
+      "metro",
+      "angeles",
+      "http",
+      "chime(",
+      "audio_stream",
+      "los",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/los-angeles-metro-chime(7).mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/los-angeles-metro-chime(7).mp3",
+    "name": "Audio: los-angeles-metro-chime(7)",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      ")",
+      "metro",
+      "angeles",
+      "http",
+      "chime(",
+      "audio_stream",
+      "los",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/los-angeles-metro-chime(8).mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/los-angeles-metro-chime(8).mp3",
+    "name": "Audio: los-angeles-metro-chime(8)",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      ")",
+      "metro",
+      "angeles",
+      "http",
+      "chime(",
+      "audio_stream",
+      "los",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/los-angeles-metro-chime(9).mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/los-angeles-metro-chime(9).mp3",
+    "name": "Audio: los-angeles-metro-chime(9)",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      ")",
+      "metro",
+      "angeles",
+      "http",
+      "chime(",
+      "audio_stream",
+      "los",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/los-angeles-metro-chime.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/los-angeles-metro-chime.mp3",
+    "name": "Audio: los-angeles-metro-chime",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "chime",
+      "standard",
+      "metro",
+      "angeles",
+      "http",
+      "audio_stream",
+      "los",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/mbxbb447pq2pr2f80r61wmw6shbhj88d7v4nmb8j69143_audio.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/mbxbb447pq2pr2f80r61wmw6shbhj88d7v4nmb8j69143_audio.mp3",
+    "name": "Audio: mbxbb447pq2pr2f80r61wmw6shbhj88d7v4nmb8j69143_audio",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "pq",
+      "standard",
+      "d",
+      "http",
+      "mbxbb",
+      "pr",
+      "j",
+      "nmb",
+      "f",
+      "audio_stream",
+      "audio",
+      "wmw",
+      "v",
+      "shbhj",
+      "sound",
+      "r"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/metro-rj-pavuna.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/metro-rj-pavuna.mp3",
+    "name": "Audio: metro-rj-pavuna",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "metro",
+      "pavuna",
+      "http",
+      "rj",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/nokia-mozart-40.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/nokia-mozart-40.mp3",
+    "name": "Audio: nokia-mozart-40",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "mozart",
+      "http",
+      "nokia",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/north-korea-phone-cannot-be-reached.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/north-korea-phone-cannot-be-reached.mp3",
+    "name": "Audio: north-korea-phone-cannot-be-reached",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "north",
+      "http",
+      "be",
+      "reached",
+      "cannot",
+      "phone",
+      "korea",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/omc-electronics-rosie-go-on-have-a-go(1).mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/omc-electronics-rosie-go-on-have-a-go(1).mp3",
+    "name": "Audio: omc-electronics-rosie-go-on-have-a-go(1)",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "electronics",
+      "standard",
+      ")",
+      "http",
+      "go(",
+      "have",
+      "a",
+      "audio_stream",
+      "omc",
+      "on",
+      "rosie",
+      "go",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/omc-electronics-rosie-go-on-have-a-go.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/omc-electronics-rosie-go-on-have-a-go.mp3",
+    "name": "Audio: omc-electronics-rosie-go-on-have-a-go",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "electronics",
+      "standard",
+      "http",
+      "have",
+      "a",
+      "audio_stream",
+      "omc",
+      "on",
+      "rosie",
+      "go",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/phone-call-transfer-elevator-music.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/phone-call-transfer-elevator-music.mp3",
+    "name": "Audio: phone-call-transfer-elevator-music",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "http",
+      "elevator",
+      "phone",
+      "music",
+      "audio_stream",
+      "transfer",
+      "call",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/phone-static.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/phone-static.mp3",
+    "name": "Audio: phone-static",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "glitch",
+      "signal",
+      "http",
+      "white_noise",
+      "radio",
+      "hiss",
+      "phone",
+      "corrupted",
+      "audio_stream",
+      "ambient_dread",
+      "static",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/polish-phone-cannot-be-reached(1).mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/polish-phone-cannot-be-reached(1).mp3",
+    "name": "Audio: polish-phone-cannot-be-reached(1)",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "reached(",
+      "standard",
+      ")",
+      "http",
+      "be",
+      "cannot",
+      "phone",
+      "audio_stream",
+      "polish",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/polish-phone-cannot-be-reached.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/polish-phone-cannot-be-reached.mp3",
+    "name": "Audio: polish-phone-cannot-be-reached",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "http",
+      "be",
+      "reached",
+      "cannot",
+      "phone",
+      "audio_stream",
+      "polish",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/russian-phone-cannot-be-reached.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/russian-phone-cannot-be-reached.mp3",
+    "name": "Audio: russian-phone-cannot-be-reached",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "http",
+      "russian",
+      "be",
+      "reached",
+      "cannot",
+      "phone",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/russkii-intercept-message.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/russkii-intercept-message.mp3",
+    "name": "Audio: russkii-intercept-message",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "intercept",
+      "standard",
+      "russkii",
+      "http",
+      "message",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/short-sms-tone.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/short-sms-tone.mp3",
+    "name": "Audio: short-sms-tone",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "tone",
+      "standard",
+      "sms",
+      "http",
+      "short",
+      "audio_stream",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/turkce-phone-cannot-be-reached.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/turkce-phone-cannot-be-reached.mp3",
+    "name": "Audio: turkce-phone-cannot-be-reached",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "http",
+      "be",
+      "reached",
+      "cannot",
+      "phone",
+      "audio_stream",
+      "sound",
+      "turkce"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/vietnamese-phone-cannot-be-reached.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/vietnamese-phone-cannot-be-reached.mp3",
+    "name": "Audio: vietnamese-phone-cannot-be-reached",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "http",
+      "be",
+      "reached",
+      "cannot",
+      "phone",
+      "audio_stream",
+      "vietnamese",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/windows-phone-7-x-8-x-low-battery-sound_fP8zqW1.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/windows-phone-7-x-8-x-low-battery-sound_fP8zqW1.mp3",
+    "name": "Audio: windows-phone-7-x-8-x-low-battery-sound_fp8zqw1",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "cold",
+      "vent",
+      "standard",
+      "zqw",
+      "http",
+      "low",
+      "open_space",
+      "x",
+      "phone",
+      "hollow",
+      "battery",
+      "audio_stream",
+      "windows",
+      "fp",
+      "tunnel",
+      "void",
+      "sound"
+    ],
+    "anchor": "any",
+    "dimensions": [
+      16.0,
+      16.0,
+      16.0
+    ],
+    "co_occurs_with": []
+  },
+  "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/your-call-has-been-forwarded.mp3": {
+    "id": "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/your-call-has-been-forwarded.mp3",
+    "name": "Audio: your-call-has-been-forwarded",
+    "token_type": "sound_emitter",
+    "biomes": [
+      "office"
+    ],
+    "tags": [
+      "standard",
+      "forwarded",
+      "http",
+      "been",
+      "your",
+      "audio_stream",
+      "has",
+      "call",
+      "sound"
     ],
     "anchor": "any",
     "dimensions": [
