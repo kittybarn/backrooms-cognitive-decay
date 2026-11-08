@@ -31,7 +31,7 @@
 --  6. Sudden Floor Collapse Pitfalls:
 --     Floor drop shafts plunging players into the dark crypt below.
 --  7. Map-Like Interactive Doors:
---     Spawns doorway apertures with models/props_c17/door01_left.mdl. Swings open on
+--     Spawns doorway apertures with doorless open portal. Swings open on
 --     player proximity or +USE with authentic Source sounds and entangled speeds.
 --  8. Interactive Unfrozen Physics & Floor Traces:
 --     Traced flush to carpet (+1.2 units) and unfreezes 60ms after settling.
@@ -343,7 +343,7 @@ local DATASET = {
     },
 
     -- Audio Tracks & Soundscapes (by Cognitive Decay Stage)
-                                AUDIO = {
+                                        AUDIO = {
         music = {
             { name = "Backrooms (Original Score), Vol. 1 - Async Research Institute.mp3", url = "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms%20%28Original%20Score%29%2C%20Vol.%201%20-%20Async%20Research%20Institute.mp3", is_music = true, category = "music", weight = 8.5, eeriness = 8.5 },
             { name = "Backrooms (Original Score), Vol. 1 - Auditory Guidepost.mp3", url = "https://raw.githubusercontent.com/kittybarn/backrooms-cognitive-decay/main/audio/Backrooms%20%28Original%20Score%29%2C%20Vol.%201%20-%20Auditory%20Guidepost.mp3", is_music = true, category = "music", weight = 8.5, eeriness = 8.5 },
@@ -569,50 +569,67 @@ if SERVER then
     end
 
     -- --------------------------------------------------------------------------
-    -- 2. FULL AIRSPACE BOUNDS & DESCENDING MULTI-TIER GEOMETRY (ROOF-CLEAR ELEVATIONS)
+    -- 1. AIRSPACE BOUNDS & VERTICAL VALLEY CHASM GEOMETRY
     -- --------------------------------------------------------------------------
-    -- User Airspace:
-    -- Map Physical Roof:  Z = -12,576.30
-    -- Map Bedrock Floor:  Z = -16,255.70
+    -- Airspace designated bounds:
+    -- Corner 1 (Top NW): Vector(6441.24, -4107.08, -12576.30)
+    -- Corner 2 (Bottom SE): Vector(16306.50, -16307.30, -16255.70)
     -- Total Drop: 3,679.4 units!
     --
-    -- Tier 0 Ceiling: Z = -12,910.2 (Provides >330 units of open headroom below map roof!)
+    -- 4 Stacked Horizontal Levels cut by a central Grand Valley Chasm:
+    -- Level 0 (Top Mezzanine):  Z = -13000.0 (Ceiling = -12810.2, >234u clearance below roof)
+    -- Level 1 (Mid Sub-Offices): Z = -14050.0
+    -- Level 2 (Industrial Whse): Z = -15100.0
+    -- Level 3 (Deep Bedrock):   Z = -16150.0 (Floor of Corner 2 bedrock basin)
     local CONFIG = {
         CELL_SIZE   = 189.8,     -- Hunter plate4x4 dimension: 189.8 units
         WALL_HEIGHT = 189.8,
         
-        -- Multi-Tier Descending Elevations (Safe clearance below roof down to bedrock)
-        Z_TIER_0 = -13100.0, -- Level 0: High Mezzanine / Ingress (Ceiling = -12,910, 334u below roof!)
-        Z_TIER_1 = -14150.0, -- Level 0/1: Mid Liminal Sub-Offices
-        Z_TIER_2 = -15200.0, -- Level 1: Industrial Warehouse / Habitable Zone
-        Z_TIER_3 = -16250.0, -- Level 2: Concrete Crypt / Bedrock (Floor of Corner 2)
+        Z_TIERS = {
+            [0] = -13000.0,
+            [1] = -14050.0,
+            [2] = -15100.0,
+            [3] = -16150.0
+        },
+
+        GRID_X = 8, -- 8 cells wide along X (0..7)
+        GRID_Y = 6, -- 6 cells deep along Y (0..5)
         
+        -- Central Grand Valley Chasm: columns 3 and 4 (380 units wide, 1140 units long, 3150 units deep!)
+        VALLEY_COLS = { [3] = true, [4] = true },
+        
+        -- Aligned Facade Entryway Rows leading to chasm overlook balconies
+        ENTRY_ROWS  = { [1] = true, [4] = true },
+
         -- Structural Primitives
         FLOOR_MODEL = "models/hunter/plates/plate4x4.mdl",
         WALL_MODEL  = "models/hunter/plates/plate4x4.mdl",
-        RAMP_MODEL  = "models/hunter/plates/plate4x8.mdl",
+        HEADER_MODEL= "models/hunter/plates/plate2x4.mdl",
+        BALCONY_MODEL = "models/hunter/plates/plate2x4.mdl",
         RAIL_MODEL  = "models/hunter/plates/plate1x4.mdl",
-        DOOR_MODEL  = "models/props_c17/door01_left.mdl",
-        DOOR_HEADER = "models/hunter/plates/plate2x2.mdl",
-        
-        -- 100% VERIFIED VertexLitGeneric MODEL MATERIALS
-        MAT_WALL_PANEL    = "phoenix_storms/pack2/interior_sides", -- Smooth interior office wall panel
-        MAT_WALL_CLEAN    = "phoenix_storms/fender_white",        -- Clean matte white panel
-        MAT_FLOOR_CARPET  = "phoenix_storms/pack2/train_floor",   -- Textured office floor
+
+        -- 100% VERIFIED VertexLitGeneric MODEL MATERIALS (ZERO HAZARD PATTERNS, ZERO BATHROOM TILES)
+        MAT_WALL_PANEL    = "phoenix_storms/pack2/interior_sides", -- Smooth yellow office wallpaper
+        MAT_WALL_WHITE    = "phoenix_storms/fender_white",        -- Clean matte white panel
+        MAT_FLOOR_CARPET  = "phoenix_storms/pack2/train_floor",   -- Textured vintage office carpet
         MAT_CEILING_PANEL = "phoenix_storms/pack2/interior_top",   -- Drop-ceiling acoustic tile
         MAT_CONCRETE      = "phoenix_storms/concrete1",            -- Real industrial concrete
+        MAT_CONCRETE_DARK = "phoenix_storms/concrete2",            -- Subterranean crypt concrete
         MAT_DEBUG_WHITE   = "models/debug/debugwhite",             -- Universal VertexLitGeneric matte
-        
+
         -- Vibrant Liminal Color Tints
         TINT_MONO_YELLOW  = Color(245, 225, 140), -- Classic Backrooms Level 0 Mono-Yellow!
         TINT_CARPET       = Color(185, 170, 120), -- Damp vintage office carpet
         TINT_CEILING      = Color(215, 210, 190), -- Aged drop-ceiling tiles
+        TINT_WHITE_WALL   = Color(230, 230, 220), -- Liminal living quarters white
+        TINT_GREY_CARPET  = Color(145, 140, 135), -- Muted institutional carpet
         TINT_CONCRETE     = Color(150, 150, 150), -- Cold warehouse concrete
-        TINT_DARK_CRYPT   = Color(125, 125, 125), -- Subterranean crypt
+        TINT_DARK_CRYPT   = Color(105, 105, 110), -- Deep bedrock crypt concrete
+        TINT_CHASM_BALCONY= Color(130, 130, 130), -- Overlook metal/concrete
     }
 
     -- --------------------------------------------------------------------------
-    -- 3. VERIFIED SOURCE MODEL POOLS (100% COLLISION & PHYSICS VERIFIED)
+    -- 2. VERIFIED BASE SOURCE MODEL POOLS & EXACT BOUNDING OFFSETS
     -- --------------------------------------------------------------------------
     local MODEL_POOLS = {
         office_desks = {
@@ -623,11 +640,17 @@ if SERVER then
         },
         office_storage = {
             "models/props_c17/furnituredrawer001a.mdl",
-            "models/props_c17/furnituredrawer002a.mdl"
+            "models/props_c17/furnituredrawer002a.mdl",
+            "models/props_lab/filecabinet02.mdl"
         },
-        monitors = {
-            "models/props_c17/tv_monitor01.mdl",
+        couches = {
+            "models/props_c17/furniturecouch001a.mdl"
+        },
+        crt_monitors = {
             "models/props_lab/monitor01a.mdl"
+        },
+        crt_tvs = {
+            "models/props_c17/tv_monitor01.mdl"
         },
         radios = {
             "models/props_lab/citizenradio.mdl"
@@ -635,8 +658,7 @@ if SERVER then
         office_props = {
             "models/props_trainstation/trashcan_indoor001a.mdl",
             "models/props_junk/trashbin01a.mdl",
-            "models/props_c17/display_cooler01a.mdl",
-            "models/props_c17/furniturecouch001a.mdl"
+            "models/props_c17/display_cooler01a.mdl"
         },
         warehouse_props = {
             "models/props_junk/wood_pallet001a.mdl",
@@ -649,6 +671,11 @@ if SERVER then
         },
         cage_lights = {
             "models/props_c17/light_cagelight01_on.mdl"
+        },
+        npcs = {
+            "models/humans/group01/male_01.mdl",
+            "models/humans/group01/female_01.mdl",
+            "models/police.mdl"
         }
     }
 
@@ -671,13 +698,16 @@ if SERVER then
         ["models/props_junk/cardboard_box002a.mdl"]       = 12.27,
         ["models/props_interiors/lights_florescent01a.mdl"] = 3.5,
         ["models/props_c17/light_cagelight01_on.mdl"]    = 5.0,
-        ["models/props_c17/door01_left.mdl"]              = 54.28
+        ["models/props_lab/filecabinet02.mdl"]            = 24.0,
+        ["models/humans/group01/male_01.mdl"]             = 36.0,
+        ["models/humans/group01/female_01.mdl"]           = 36.0,
+        ["models/police.mdl"]                             = 36.0,
     }
 
     local PHX_MATERIALS = {
         wallpaper = {
             CONFIG.MAT_WALL_PANEL,
-            CONFIG.MAT_WALL_CLEAN,
+            CONFIG.MAT_WALL_WHITE,
             CONFIG.MAT_DEBUG_WHITE
         },
         carpet = {
@@ -690,18 +720,20 @@ if SERVER then
         },
         concrete = {
             CONFIG.MAT_CONCRETE,
+            CONFIG.MAT_CONCRETE_DARK,
             CONFIG.MAT_DEBUG_WHITE
         }
     }
 
     -- --------------------------------------------------------------------------
-    -- 4. STATE TRACKING & SPAWN QUEUE
+    -- 3. STATE TRACKING & ADAPTIVE SPAWN QUEUE
     -- --------------------------------------------------------------------------
     local spawnQueue = {}
     local activeEntities = {}
-    local activeDoors = {}
     local activeRadios = {}
+    local activeTVs = {}
     local activeLights = {}
+    local activeNPCs = {}
 
     local function safeChoice(tbl, fallback)
         if not tbl or #tbl == 0 then return fallback end
@@ -744,7 +776,7 @@ if SERVER then
         end
 
         local cat = item.category or "flat_surface"
-        local universalModel = (cat == "floor" or cat == "wall" or cat == "ceiling" or cat == "ramp")
+        local universalModel = (cat == "floor" or cat == "wall" or cat == "ceiling")
             and "models/hunter/plates/plate4x4.mdl"
             or "models/props_c17/furnituretable001a.mdl"
 
@@ -757,11 +789,11 @@ if SERVER then
     end
 
     -- --------------------------------------------------------------------------
-    -- 5. GEOMETRY PRIMITIVES: ENCLOSED ROOMS, FRAMED DOORS, CEILING LIGHTS
+    -- 4. GEOMETRY PRIMITIVES: ENCLOSED ROOMS, SOLID FACADES, OVERLOOK BALCONIES
     -- --------------------------------------------------------------------------
     local HALF_CELL = CONFIG.CELL_SIZE * 0.5
 
-    local function queueEnclosedCell(pos, floorMat, ceilMat, floorCat, ceilCat, floorTint, ceilTint)
+    local function queueFloorAndCeiling(pos, floorMat, ceilMat, floorCat, ceilCat, floorTint, ceilTint)
         -- Floor Plate
         table.insert(spawnQueue, {
             pos = pos,
@@ -800,7 +832,7 @@ if SERVER then
         })
     end
 
-    local function queueCeilingLight(cellPos, lightModel)
+    local function queueCeilingLight(cellPos, lightModel, isCage)
         local ceilZ = cellPos.z + CONFIG.WALL_HEIGHT
         local lightZ = ceilZ - (MODEL_OFFSETS[lightModel] or 3.5)
         local lightPos = Vector(cellPos.x, cellPos.y, lightZ)
@@ -812,103 +844,58 @@ if SERVER then
             category = "light",
             keepFrozen = true,
             onSpawn = function(ent)
-                table.insert(activeLights, ent)
+                pcall(ent.setSkin, ent, 1) -- illuminated glowing tube texture skin
+                table.insert(activeLights, { ent = ent, isCage = isCage })
+                net.start("CognitiveDecay_RegisterLight")
+                net.writeEntity(ent)
+                net.writeBool(isCage or false)
+                net.send()
             end
         })
     end
 
-    local function queueFramedDoor(cellCenter, isNorthSouth, wallMat, wallTint)
-        -- Door origin at floorZ + 54.3 rests flush on the floor surface!
-        local doorPos = cellCenter + (isNorthSouth and Vector(0, HALF_CELL, 54.3) or Vector(HALF_CELL, 0, 54.3))
-        local doorAng = isNorthSouth and Angle(0, 0, 0) or Angle(0, 90, 0)
+    -- Doorless Open Archway Entryway leading to the Valley Chasm Overlook Balcony
+    local function queueValleyEntryway(cellCenter, facingEast, wallMat, wallTint)
+        local sign = facingEast and 1 or -1
+        local wallPos = cellCenter + Vector(sign * HALF_CELL, 0, HALF_CELL)
 
-        -- 1. Realistic Interactive Source Door
+        -- Top Header Plate above doorway (leaves bottom 95 units completely open)
         table.insert(spawnQueue, {
-            pos = doorPos,
-            ang = doorAng,
-            model = CONFIG.DOOR_MODEL,
-            category = "door",
-            keepFrozen = true,
-            onSpawn = function(ent)
-                table.insert(activeDoors, {
-                    ent = ent,
-                    isOpen = false,
-                    moving = false,
-                    moveStart = 0,
-                    moveDuration = 0.85,
-                    startAng = doorAng,
-                    baseAng = doorAng,
-                    openAng = doorAng + Angle(0, 90, 0),
-                    nextUse = 0
-                })
-            end
-        })
-
-        -- 2. Solid Wall Header Plate above the door frame up to the ceiling
-        local headerPos = doorPos + Vector(0, 0, 54.3 + 41.0)
-        local headerAng = isNorthSouth and Angle(90, 90, 0) or Angle(90, 0, 0)
-        table.insert(spawnQueue, {
-            pos = headerPos,
-            ang = headerAng,
-            model = CONFIG.DOOR_HEADER,
+            pos = wallPos + Vector(0, 0, 47.5),
+            ang = Angle(90, 90, 0),
+            model = CONFIG.HEADER_MODEL,
             mat = wallMat or CONFIG.MAT_WALL_PANEL,
             tint = wallTint or CONFIG.TINT_MONO_YELLOW,
             category = "wall",
             keepFrozen = true
         })
-    end
 
-    -- Continuous Walkable Ramp Connecting Two Elevation Tiers
-    local function queueWalkableRampCorridor(startPos, endPos, isNorthSouth, wallMat, wallTint)
-        local delta = endPos - startPos
-        local distHoriz = isNorthSouth and math.abs(delta.y) or math.abs(delta.x)
-        local distVert  = math.abs(delta.z)
-        local numRamps = math.max(1, math.ceil(distVert / 190.0))
+        -- Overlook Balcony Ledge extending 95u out into the Chasm
+        local balconyPos = cellCenter + Vector(sign * (HALF_CELL + 47.5), 0, 0)
+        table.insert(spawnQueue, {
+            pos = balconyPos,
+            ang = Angle(0, 0, 0),
+            model = CONFIG.BALCONY_MODEL,
+            mat = CONFIG.MAT_CONCRETE,
+            tint = CONFIG.TINT_CHASM_BALCONY,
+            category = "floor",
+            keepFrozen = true
+        })
 
-        for i = 1, numRamps do
-            local frac = (i - 0.5) / numRamps
-            local midPos = startPos + (isNorthSouth and Vector(0, delta.y * frac, delta.z * frac) or Vector(delta.x * frac, 0, delta.z * frac))
-            
-            -- Pitch: 30 degrees down
-            local rampPitch = 30.0 * (delta.z < 0 and 1 or -1)
-            local rampAng = isNorthSouth and Angle(rampPitch, 90, 0) or Angle(rampPitch, 0, 0)
-
-            -- Ramp Floor
-            table.insert(spawnQueue, {
-                pos = midPos,
-                ang = rampAng,
-                model = CONFIG.RAMP_MODEL,
-                mat = CONFIG.MAT_CONCRETE,
-                tint = wallTint or CONFIG.TINT_CONCRETE,
-                category = "ramp",
-                keepFrozen = true
-            })
-
-            -- Side Safety Railings
-            local sideOffset = isNorthSouth and Vector(HALF_CELL, 0, 30) or Vector(0, HALF_CELL, 30)
-            table.insert(spawnQueue, {
-                pos = midPos + sideOffset,
-                ang = isNorthSouth and Angle(90, 90, 0) or Angle(90, 0, 0),
-                model = CONFIG.RAIL_MODEL,
-                mat = wallMat or CONFIG.MAT_WALL_PANEL,
-                tint = wallTint or CONFIG.TINT_MONO_YELLOW,
-                category = "wall",
-                keepFrozen = true
-            })
-            table.insert(spawnQueue, {
-                pos = midPos - sideOffset,
-                ang = isNorthSouth and Angle(90, 90, 0) or Angle(90, 0, 0),
-                model = CONFIG.RAIL_MODEL,
-                mat = wallMat or CONFIG.MAT_WALL_PANEL,
-                tint = wallTint or CONFIG.TINT_MONO_YELLOW,
-                category = "wall",
-                keepFrozen = true
-            })
-        end
+        -- Guardrails on Balcony Edges
+        table.insert(spawnQueue, {
+            pos = balconyPos + Vector(sign * 47.5, 0, 20),
+            ang = Angle(90, 90, 0),
+            model = CONFIG.RAIL_MODEL,
+            mat = CONFIG.MAT_CONCRETE,
+            tint = CONFIG.TINT_CHASM_BALCONY,
+            category = "wall",
+            keepFrozen = true
+        })
     end
 
     -- --------------------------------------------------------------------------
-    -- 6. CONTEXTUAL PROPS & GLITCH ANOMALIES (100% PERMANENTLY FROZEN)
+    -- 5. CONTEXTUAL PROPS & COGNITIVE DECAY ANOMALIES (100% PERMANENTLY FROZEN)
     -- --------------------------------------------------------------------------
     local function queueProp(pos, ang, mdl, category, isGlitched)
         local offset = MODEL_OFFSETS[mdl] or 15.0
@@ -916,9 +903,9 @@ if SERVER then
         local finalAng = ang or Angle(0, math.random(0, 3) * 90, 0)
 
         if isGlitched then
-            -- 8% rare anomaly item tilted surreal and suspended in space
+            -- 8-12% rare anomaly item tilted surreal and suspended in space
             finalAng = Angle(math.random(-35, 35), math.random(0, 360), math.random(-35, 35))
-            finalPos = finalPos + Vector(0, 0, math.random(25, 60))
+            finalPos = finalPos + Vector(0, 0, math.random(25, 55))
         end
 
         table.insert(spawnQueue, {
@@ -947,9 +934,9 @@ if SERVER then
 
         local tableSurfaceZ = floorZ + 1.8 + 37.0
 
-        -- Monitor on Desk
-        local monMdl = safeChoice(MODEL_POOLS.monitors, "models/props_c17/tv_monitor01.mdl")
-        local monOffset = MODEL_OFFSETS[monMdl] or 8.28
+        -- CRT Monitor on Desk
+        local monMdl = MODEL_POOLS.crt_monitors[1]
+        local monOffset = MODEL_OFFSETS[monMdl] or 13.12
         local monPos = Vector(cellPos.x, cellPos.y, tableSurfaceZ + monOffset)
         local monAng = deskAng + Angle(0, math.random(-15, 15), 0)
 
@@ -961,7 +948,7 @@ if SERVER then
             keepFrozen = true
         })
 
-        -- Chair
+        -- Office Swivel Chair
         local chairMdl = MODEL_POOLS.office_chairs[1]
         local fwd = deskAng:getForward()
         local chairPos = Vector(cellPos.x, cellPos.y, floorZ + 1.8 + MODEL_OFFSETS[chairMdl]) - (fwd * 34.0)
@@ -975,10 +962,10 @@ if SERVER then
             keepFrozen = true
         })
 
-        -- Radio (25% chance per workstation)
-        if math.random() < 0.25 then
+        -- Citizen Radio on Desk (40% chance)
+        if math.random() < 0.40 then
             local radioMdl = MODEL_POOLS.radios[1]
-            local rPos = Vector(cellPos.x + 28, cellPos.y - 15, tableSurfaceZ + MODEL_OFFSETS[radioMdl])
+            local rPos = Vector(cellPos.x + 26, cellPos.y - 12, tableSurfaceZ + MODEL_OFFSETS[radioMdl])
             table.insert(spawnQueue, {
                 pos = rPos,
                 ang = deskAng + Angle(0, 30, 0),
@@ -986,12 +973,11 @@ if SERVER then
                 category = "radio",
                 keepFrozen = true,
                 onSpawn = function(ent)
-                    local isMusicRadio = (math.random() < 0.5)
+                    local isMusicRadio = (math.random() < 0.65)
                     local rData = {
                         ent = ent,
                         isMusic = isMusicRadio,
-                        isLooping = (math.random() < 0.35),
-                        category = isMusicRadio and "music" or "sound",
+                        isLooping = (math.random() < 0.40),
                         nextHopTime = timer.curtime() + 60,
                         hasStarted = false
                     }
@@ -1005,211 +991,300 @@ if SERVER then
         end
     end
 
-    -- --------------------------------------------------------------------------
-    -- 7. MASTER MULTI-TIER TOP-TO-BOTTOM GENERATOR
-    -- --------------------------------------------------------------------------
-    local function generateFullAirspaceComplex()
-        print("[Cognitive Decay Engine] Synthesizing top-to-bottom megastructure across airspace...")
+    local function queueLivingLounge(cellPos, floorZ, isGlitched)
+        local couchMdl = MODEL_POOLS.couches[1]
+        local couchYaw = math.random(0, 3) * 90
+        local couchAng = Angle(0, couchYaw, 0)
+        local couchPos = Vector(cellPos.x, cellPos.y, floorZ + 1.8 + MODEL_OFFSETS[couchMdl])
 
-        -- TIER 0: HIGH MEZZANINE / INGRESS (Z = -13,100, Ceiling = -12,910, >330u below roof!)
-        local t0Origin = Vector(6800.0, -4500.0, CONFIG.Z_TIER_0)
-        for gx = 0, 3 do
-            for gy = 0, 3 do
-                local cPos = t0Origin + Vector(gx * CONFIG.CELL_SIZE, -gy * CONFIG.CELL_SIZE, 0)
-                queueEnclosedCell(cPos, CONFIG.MAT_FLOOR_CARPET, CONFIG.MAT_CEILING_PANEL, "carpet", "ceiling", CONFIG.TINT_CARPET, CONFIG.TINT_CEILING)
+        -- Couch
+        table.insert(spawnQueue, {
+            pos = couchPos,
+            ang = couchAng,
+            model = couchMdl,
+            category = "furniture",
+            keepFrozen = true
+        })
 
-                -- Outer Perimeter Walls
-                if gx == 0 then queueWall(cPos - Vector(HALF_CELL, 0, -HALF_CELL), true, CONFIG.MAT_WALL_PANEL, "wallpaper", CONFIG.TINT_MONO_YELLOW) end
-                if gx == 3 then queueWall(cPos + Vector(HALF_CELL, 0, HALF_CELL), true, CONFIG.MAT_WALL_PANEL, "wallpaper", CONFIG.TINT_MONO_YELLOW) end
-                
-                -- Entrance Doorway at gy == 0, gx == 1 (Enter from outside!)
-                if gy == 0 then
-                    if gx == 1 then
-                        queueFramedDoor(cPos, false, CONFIG.MAT_WALL_PANEL, CONFIG.TINT_MONO_YELLOW)
-                    else
-                        queueWall(cPos + Vector(0, HALF_CELL, HALF_CELL), false, CONFIG.MAT_WALL_PANEL, "wallpaper", CONFIG.TINT_MONO_YELLOW)
-                    end
-                end
+        -- Coffee Table with CRT TV Monitor in front of Couch
+        local fwd = couchAng:getForward()
+        local tablePos = couchPos + (fwd * 55.0)
+        local tableMdl = MODEL_POOLS.office_desks[1]
+        table.insert(spawnQueue, {
+            pos = Vector(tablePos.x, tablePos.y, floorZ + 1.8 + MODEL_OFFSETS[tableMdl]),
+            ang = couchAng + Angle(0, 180, 0),
+            model = tableMdl,
+            category = "furniture",
+            keepFrozen = true
+        })
 
-                -- gy == 3 has open exit to Ramp 1!
-                if gy == 3 and gx ~= 2 then
-                    queueWall(cPos - Vector(0, HALF_CELL, -HALF_CELL), false, CONFIG.MAT_WALL_PANEL, "wallpaper", CONFIG.TINT_MONO_YELLOW)
-                end
+        -- CRT TV Monitor displaying analog emergency glitch
+        local tvMdl = MODEL_POOLS.crt_tvs[1]
+        local tvSurfaceZ = floorZ + 1.8 + 37.0
+        local tvPos = Vector(tablePos.x, tablePos.y, tvSurfaceZ + MODEL_OFFSETS[tvMdl])
+        local tvAng = couchAng + Angle(0, 180, 0)
 
-                -- Ceiling Lights
-                if (gx == 1 and gy == 1) or (gx == 2 and gy == 2) then
-                    queueCeilingLight(cPos, MODEL_POOLS.ceiling_lights[1])
-                end
-
-                -- Contextual Office Furniture
-                if (gx == 1 and gy == 2) or (gx == 2 and gy == 1) then
-                    queueDeskWorkstation(cPos, CONFIG.Z_TIER_0, false)
-                elseif gx == 0 and gy == 1 then
-                    queueProp(cPos, Angle(0, 0, 0), MODEL_POOLS.office_storage[1], "furniture", false)
-                elseif gx == 3 and gy == 2 then
-                    queueProp(cPos, Angle(0, 180, 0), MODEL_POOLS.office_props[4], "furniture", (math.random() < 0.10))
-                end
+        table.insert(spawnQueue, {
+            pos = tvPos,
+            ang = tvAng,
+            model = tvMdl,
+            category = "tv",
+            keepFrozen = true,
+            onSpawn = function(ent)
+                table.insert(activeTVs, ent)
+                net.start("CognitiveDecay_RegisterTV")
+                net.writeEntity(ent)
+                net.send()
             end
+        })
+    end
+
+    local function queueStorageWarehouse(cellPos, floorZ, isGlitched)
+        local palletMdl = MODEL_POOLS.warehouse_props[1]
+        local pPos = Vector(cellPos.x, cellPos.y, floorZ + 1.8 + MODEL_OFFSETS[palletMdl])
+        local pAng = Angle(0, math.random(0, 3) * 90, 0)
+
+        -- Pallet
+        table.insert(spawnQueue, {
+            pos = pPos,
+            ang = pAng,
+            model = palletMdl,
+            category = "furniture",
+            keepFrozen = true
+        })
+
+        -- Cargo Crates / Oil Drums stacked on pallet
+        if math.random() < 0.5 then
+            local boxMdl = MODEL_POOLS.warehouse_props[3]
+            table.insert(spawnQueue, {
+                pos = pPos + Vector(0, 0, 10 + MODEL_OFFSETS[boxMdl]),
+                ang = pAng + Angle(0, math.random(-15, 15), 0),
+                model = boxMdl,
+                category = "furniture",
+                keepFrozen = true
+            })
+        else
+            local drumMdl = MODEL_POOLS.warehouse_props[2]
+            table.insert(spawnQueue, {
+                pos = pPos + Vector(0, 0, 10 + MODEL_OFFSETS[drumMdl]),
+                ang = pAng,
+                model = drumMdl,
+                category = "furniture",
+                keepFrozen = true
+            })
         end
+    end
 
-        -- RAMP HIGHWAY 1 (Connecting Tier 0 at -13,100 to Tier 1 at -14,150)
-        local r1Start = t0Origin + Vector(2 * CONFIG.CELL_SIZE, -3 * CONFIG.CELL_SIZE, 0)
-        local r1MidLanding = r1Start + Vector(2 * CONFIG.CELL_SIZE, -3 * CONFIG.CELL_SIZE, -525.0)
-        local r1End = r1Start + Vector(4 * CONFIG.CELL_SIZE, -6 * CONFIG.CELL_SIZE, -1050.0) -- Hits Z_TIER_1 (-14,150)!
+    local function queueGlitchedNPC(pos, floorZ, tier)
+        local npcMdl = safeChoice(MODEL_POOLS.npcs, "models/humans/group01/male_01.mdl")
+        local npcPos = Vector(pos.x, pos.y, floorZ + 1.8 + (MODEL_OFFSETS[npcMdl] or 36.0))
+        local npcAng = Angle(0, math.random(0, 360), 0)
 
-        queueWalkableRampCorridor(r1Start, r1MidLanding, true, CONFIG.MAT_WALL_PANEL, CONFIG.TINT_MONO_YELLOW)
-        -- Mid-flight Observation Landing with an open pit hole!
-        queueEnclosedCell(r1MidLanding, CONFIG.MAT_CONCRETE, CONFIG.MAT_CEILING_PANEL, "concrete", "ceiling", CONFIG.TINT_CONCRETE, CONFIG.TINT_CEILING)
-        queueCeilingLight(r1MidLanding, MODEL_POOLS.ceiling_lights[1])
-        queueWalkableRampCorridor(r1MidLanding, r1End, true, CONFIG.MAT_WALL_PANEL, CONFIG.TINT_MONO_YELLOW)
-
-        -- TIER 1: MID LIMINAL SUB-OFFICES (Z = -14,150)
-        local t1Origin = r1End
-        for gx = 0, 3 do
-            for gy = 0, 3 do
-                local cPos = t1Origin + Vector(gx * CONFIG.CELL_SIZE, -gy * CONFIG.CELL_SIZE, 0)
-
-                -- Pit Hole in cell (1, 1): floor omitted! Looking down into the darkness!
-                if gx == 1 and gy == 1 then
-                    table.insert(spawnQueue, {
-                        pos = cPos + Vector(0, 0, CONFIG.WALL_HEIGHT),
-                        ang = Angle(180, 0, 0),
-                        model = CONFIG.FLOOR_MODEL,
-                        mat = CONFIG.MAT_CEILING_PANEL,
-                        tint = CONFIG.TINT_CEILING,
-                        category = "ceiling",
-                        keepFrozen = true
-                    })
-                    -- Safety warning rail
-                    table.insert(spawnQueue, {
-                        pos = cPos - Vector(HALF_CELL, 0, -30),
-                        ang = Angle(90, 90, 0),
-                        model = CONFIG.RAIL_MODEL,
-                        mat = CONFIG.MAT_WALL_PANEL,
-                        tint = CONFIG.TINT_MONO_YELLOW,
-                        category = "wall",
-                        keepFrozen = true
-                    })
-                else
-                    queueEnclosedCell(cPos, CONFIG.MAT_FLOOR_CARPET, CONFIG.MAT_CEILING_PANEL, "carpet", "ceiling", CONFIG.TINT_CARPET, CONFIG.TINT_CEILING)
+        table.insert(spawnQueue, {
+            pos = npcPos,
+            ang = npcAng,
+            model = npcMdl,
+            category = "npc",
+            keepFrozen = true,
+            onSpawn = function(ent)
+                table.insert(activeNPCs, ent)
+                -- Apply uncanny bone manipulations
+                local headBone = ent:lookupBone("ValveBiped.Bip01_Head1")
+                if headBone then
+                    ent:manipulateBoneAngles(headBone, Angle(0, 0, math.random(35, 75)))
                 end
-
-                -- Outer Perimeter Walls
-                if gx == 0 then queueWall(cPos - Vector(HALF_CELL, 0, -HALF_CELL), true, CONFIG.MAT_WALL_PANEL, "wallpaper", CONFIG.TINT_MONO_YELLOW) end
-                if gx == 3 then queueWall(cPos + Vector(HALF_CELL, 0, HALF_CELL), true, CONFIG.MAT_WALL_PANEL, "wallpaper", CONFIG.TINT_MONO_YELLOW) end
-                if gy == 0 and gx ~= 0 then queueWall(cPos + Vector(0, HALF_CELL, HALF_CELL), false, CONFIG.MAT_WALL_PANEL, "wallpaper", CONFIG.TINT_MONO_YELLOW) end
-                if gy == 3 and gx ~= 2 then queueWall(cPos - Vector(0, HALF_CELL, -HALF_CELL), false, CONFIG.MAT_WALL_PANEL, "wallpaper", CONFIG.TINT_MONO_YELLOW) end
-
-                -- Interior Partition Walls & Framed Doors
-                if gx == 2 and gy == 1 then
-                    queueFramedDoor(cPos, true, CONFIG.MAT_WALL_PANEL, CONFIG.TINT_MONO_YELLOW)
-                elseif gx == 1 and gy == 2 then
-                    queueFramedDoor(cPos, false, CONFIG.MAT_WALL_PANEL, CONFIG.TINT_MONO_YELLOW)
+                local spineBone = ent:lookupBone("ValveBiped.Bip01_Spine1")
+                if spineBone then
+                    ent:manipulateBoneAngles(spineBone, Angle(math.random(-15, 15), math.random(-10, 10), 0))
                 end
-
-                -- Ceiling Lights
-                if (gx == 0 and gy == 2) or (gx == 3 and gy == 1) then
-                    queueCeilingLight(cPos, MODEL_POOLS.ceiling_lights[1])
-                end
-
-                -- Furniture & Anomaly Items
-                if gx == 0 and gy == 3 then
-                    queueDeskWorkstation(cPos, CONFIG.Z_TIER_1, false)
-                elseif gx == 3 and gy == 3 then
-                    queueProp(cPos, Angle(0, 90, 0), MODEL_POOLS.office_props[3], "furniture", false)
-                elseif gx == 2 and gy == 3 then
-                    queueProp(cPos, Angle(0, 0, 0), MODEL_POOLS.office_storage[2], "furniture", (math.random() < 0.15))
-                end
+                -- Flex uncanny smile or vacant stare
+                local smileFlex = ent:getFlexByName("smile")
+                if smileFlex then ent:setFlexWeight(smileFlex, 1.0) end
             end
-        end
-
-        -- RAMP HIGHWAY 2 (Connecting Tier 1 at -14,150 to Tier 2 at -15,200)
-        local r2Start = t1Origin + Vector(2 * CONFIG.CELL_SIZE, -3 * CONFIG.CELL_SIZE, 0)
-        local r2MidLanding = r2Start + Vector(2 * CONFIG.CELL_SIZE, -3 * CONFIG.CELL_SIZE, -525.0)
-        local r2End = r2Start + Vector(4 * CONFIG.CELL_SIZE, -6 * CONFIG.CELL_SIZE, -1050.0) -- Hits Z_TIER_2 (-15,200)!
-
-        queueWalkableRampCorridor(r2Start, r2MidLanding, true, CONFIG.MAT_CONCRETE, CONFIG.TINT_CONCRETE)
-        queueEnclosedCell(r2MidLanding, CONFIG.MAT_CONCRETE, CONFIG.MAT_CEILING_PANEL, "concrete", "ceiling", CONFIG.TINT_CONCRETE, CONFIG.TINT_CEILING)
-        queueCeilingLight(r2MidLanding, MODEL_POOLS.cage_lights[1])
-        queueWalkableRampCorridor(r2MidLanding, r2End, true, CONFIG.MAT_CONCRETE, CONFIG.TINT_CONCRETE)
-
-        -- TIER 2: INDUSTRIAL WAREHOUSE / HABITABLE ZONE (Z = -15,200)
-        local t2Origin = r2End
-        for gx = 0, 3 do
-            for gy = 0, 3 do
-                local cPos = t2Origin + Vector(gx * CONFIG.CELL_SIZE, -gy * CONFIG.CELL_SIZE, 0)
-                queueEnclosedCell(cPos, CONFIG.MAT_CONCRETE, CONFIG.MAT_CEILING_PANEL, "concrete", "ceiling", CONFIG.TINT_CONCRETE, CONFIG.TINT_DARK_CRYPT)
-
-                -- Concrete Perimeter Walls
-                if gx == 0 then queueWall(cPos - Vector(HALF_CELL, 0, -HALF_CELL), true, CONFIG.MAT_CONCRETE, "concrete", CONFIG.TINT_CONCRETE) end
-                if gx == 3 then queueWall(cPos + Vector(HALF_CELL, 0, HALF_CELL), true, CONFIG.MAT_CONCRETE, "concrete", CONFIG.TINT_CONCRETE) end
-                if gy == 0 and gx ~= 0 then queueWall(cPos + Vector(0, HALF_CELL, HALF_CELL), false, CONFIG.MAT_CONCRETE, "concrete", CONFIG.TINT_CONCRETE) end
-                if gy == 3 and gx ~= 2 then queueWall(cPos - Vector(0, HALF_CELL, -HALF_CELL), false, CONFIG.MAT_CONCRETE, "concrete", CONFIG.TINT_CONCRETE) end
-
-                -- Industrial Cage Lights
-                if (gx == 1 and gy == 1) or (gx == 2 and gy == 2) then
-                    queueCeilingLight(cPos, MODEL_POOLS.cage_lights[1])
-                end
-
-                -- Warehouse Pallets, Oil Drums, and Storage Crates
-                if gx == 1 and gy == 2 then
-                    queueProp(cPos, Angle(0, 45, 0), MODEL_POOLS.warehouse_props[1], "furniture", false)
-                    queueProp(cPos + Vector(0, 0, 9), Angle(0, 15, 0), MODEL_POOLS.warehouse_props[3], "furniture", false)
-                elseif gx == 0 and gy == 2 then
-                    queueProp(cPos, Angle(0, 0, 0), MODEL_POOLS.warehouse_props[2], "furniture", (math.random() < 0.10))
-                end
-            end
-        end
-
-        -- RAMP HIGHWAY 3 (Connecting Tier 2 at -15,200 down to Tier 3 / Bedrock at -16,250)
-        local r3Start = t2Origin + Vector(2 * CONFIG.CELL_SIZE, -3 * CONFIG.CELL_SIZE, 0)
-        local r3MidLanding = r3Start + Vector(2 * CONFIG.CELL_SIZE, -3 * CONFIG.CELL_SIZE, -525.0)
-        local r3End = r3Start + Vector(4 * CONFIG.CELL_SIZE, -6 * CONFIG.CELL_SIZE, -1050.0) -- Hits Z_TIER_3 (-16,250 Bedrock Floor)!
-
-        queueWalkableRampCorridor(r3Start, r3MidLanding, true, CONFIG.MAT_CONCRETE, CONFIG.TINT_DARK_CRYPT)
-        queueEnclosedCell(r3MidLanding, CONFIG.MAT_CONCRETE, CONFIG.MAT_CEILING_PANEL, "concrete", "ceiling", CONFIG.TINT_DARK_CRYPT, CONFIG.TINT_DARK_CRYPT)
-        queueCeilingLight(r3MidLanding, MODEL_POOLS.cage_lights[1])
-        queueWalkableRampCorridor(r3MidLanding, r3End, true, CONFIG.MAT_CONCRETE, CONFIG.TINT_DARK_CRYPT)
-
-        -- TIER 3: THE DEEP CRYPT & PIPE DREAMS (Z = -16,250 - Bedrock Floor of Corner 2!)
-        local t3Origin = r3End
-        for gx = 0, 3 do
-            for gy = 0, 3 do
-                local cPos = t3Origin + Vector(gx * CONFIG.CELL_SIZE, -gy * CONFIG.CELL_SIZE, 0)
-                queueEnclosedCell(cPos, CONFIG.MAT_CONCRETE, CONFIG.MAT_CEILING_PANEL, "concrete", "ceiling", CONFIG.TINT_DARK_CRYPT, CONFIG.TINT_DARK_CRYPT)
-
-                -- Heavy Concrete Walls
-                if gx == 0 then queueWall(cPos - Vector(HALF_CELL, 0, -HALF_CELL), true, CONFIG.MAT_CONCRETE, "concrete", CONFIG.TINT_DARK_CRYPT) end
-                if gx == 3 then queueWall(cPos + Vector(HALF_CELL, 0, HALF_CELL), true, CONFIG.MAT_CONCRETE, "concrete", CONFIG.TINT_DARK_CRYPT) end
-                if gy == 0 and gx ~= 0 then queueWall(cPos + Vector(0, HALF_CELL, HALF_CELL), false, CONFIG.MAT_CONCRETE, "concrete", CONFIG.TINT_DARK_CRYPT) end
-                if gy == 3 then queueWall(cPos - Vector(0, HALF_CELL, -HALF_CELL), false, CONFIG.MAT_CONCRETE, "concrete", CONFIG.TINT_DARK_CRYPT) end
-
-                -- Maintenance Cage Lights
-                if (gx == 1 and gy == 2) or (gx == 2 and gy == 1) then
-                    queueCeilingLight(cPos, MODEL_POOLS.cage_lights[1])
-                end
-
-                -- Heavy crypt barrels, crates, and radio
-                if gx == 2 and gy == 2 then
-                    queueProp(cPos, Angle(0, 0, 0), MODEL_POOLS.warehouse_props[2], "furniture", false)
-                elseif gx == 1 and gy == 1 then
-                    queueProp(cPos, Angle(0, 30, 0), MODEL_POOLS.warehouse_props[4], "furniture", (math.random() < 0.15))
-                end
-            end
-        end
-
-        print(string.format("[Cognitive Decay Engine] Queued %d contiguous airspace entities spanning Z=-13,100 to Z=-16,250", #spawnQueue))
+        })
     end
 
     -- --------------------------------------------------------------------------
-    -- 8. ADAPTIVE PROP RATE CONTROLLER (ZERO DROPPED PROPS, DYNAMIC MAX THROUGHPUT)
+    -- 6. MASTER MULTI-TIER VALLEY CHASM GENERATOR
+    -- --------------------------------------------------------------------------
+    local function generateFullAirspaceComplex()
+        print("[Cognitive Decay Engine] Synthesizing 4-Tier Valley Megastructure with Hole-Free Autofill...")
+
+        local origin = Vector(7200.0, -4800.0, 0)
+
+        for tier = 0, 3 do
+            local floorZ = CONFIG.Z_TIERS[tier]
+            local entropy = (tier / 3.0) * 0.75 + 0.10
+
+            -- Tier Biome Configuration
+            local wallMat, wallTint, floorMat, floorTint, ceilMat, ceilTint, isCageLight
+            if tier == 0 then
+                wallMat = CONFIG.MAT_WALL_PANEL
+                wallTint = CONFIG.TINT_MONO_YELLOW
+                floorMat = CONFIG.MAT_FLOOR_CARPET
+                floorTint = CONFIG.TINT_CARPET
+                ceilMat = CONFIG.MAT_CEILING_PANEL
+                ceilTint = CONFIG.TINT_CEILING
+                isCageLight = false
+            elseif tier == 1 then
+                wallMat = CONFIG.MAT_WALL_WHITE
+                wallTint = CONFIG.TINT_WHITE_WALL
+                floorMat = CONFIG.MAT_FLOOR_CARPET
+                floorTint = CONFIG.TINT_GREY_CARPET
+                ceilMat = CONFIG.MAT_CEILING_PANEL
+                ceilTint = CONFIG.TINT_CEILING
+                isCageLight = false
+            elseif tier == 2 then
+                wallMat = CONFIG.MAT_CONCRETE
+                wallTint = CONFIG.TINT_CONCRETE
+                floorMat = CONFIG.MAT_CONCRETE
+                floorTint = CONFIG.TINT_CONCRETE
+                ceilMat = CONFIG.MAT_CONCRETE_DARK
+                ceilTint = CONFIG.TINT_DARK_CRYPT
+                isCageLight = true
+            else -- tier 3: deep crypt & bedrock chasm floor
+                wallMat = CONFIG.MAT_CONCRETE_DARK
+                wallTint = CONFIG.TINT_DARK_CRYPT
+                floorMat = CONFIG.MAT_CONCRETE_DARK
+                floorTint = CONFIG.TINT_DARK_CRYPT
+                ceilMat = CONFIG.MAT_CONCRETE_DARK
+                ceilTint = CONFIG.TINT_DARK_CRYPT
+                isCageLight = true
+            end
+
+            for gx = 0, CONFIG.GRID_X - 1 do
+                for gy = 0, CONFIG.GRID_Y - 1 do
+                    local isChasm = CONFIG.VALLEY_COLS[gx] or false
+                    local cellCenter = origin + Vector(gx * CONFIG.CELL_SIZE, -gy * CONFIG.CELL_SIZE, floorZ)
+
+                    -- 1. FLOOR & CEILING
+                    if not isChasm then
+                        queueFloorAndCeiling(cellCenter, floorMat, ceilMat, (tier >= 2 and "concrete" or "carpet"), (tier >= 2 and "concrete" or "ceiling"), floorTint, ceilTint)
+                    elseif tier == 3 then
+                        -- Bottom of Valley Chasm has solid bedrock concrete floor!
+                        table.insert(spawnQueue, {
+                            pos = cellCenter,
+                            ang = Angle(0, 0, 0),
+                            model = CONFIG.FLOOR_MODEL,
+                            mat = CONFIG.MAT_CONCRETE_DARK,
+                            tint = CONFIG.TINT_DARK_CRYPT,
+                            category = "floor",
+                            matCategory = "concrete",
+                            keepFrozen = true
+                        })
+                    end
+
+                    -- 2. SOLID EXTERIOR PERIMETER WALLS (AUTOFILL: ZERO VOID HOLES)
+                    -- West Outer Perimeter (gx == 0)
+                    if gx == 0 then
+                        queueWall(cellCenter - Vector(HALF_CELL, 0, -HALF_CELL), true, wallMat, (tier >= 2 and "concrete" or "wallpaper"), wallTint)
+                    end
+                    -- East Outer Perimeter (gx == GRID_X - 1)
+                    if gx == CONFIG.GRID_X - 1 then
+                        queueWall(cellCenter + Vector(HALF_CELL, 0, HALF_CELL), true, wallMat, (tier >= 2 and "concrete" or "wallpaper"), wallTint)
+                    end
+                    -- North Outer Perimeter (gy == 0)
+                    if gy == 0 and not isChasm then
+                        queueWall(cellCenter + Vector(0, HALF_CELL, HALF_CELL), false, wallMat, (tier >= 2 and "concrete" or "wallpaper"), wallTint)
+                    end
+                    -- South Outer Perimeter (gy == GRID_Y - 1)
+                    if gy == CONFIG.GRID_Y - 1 and not isChasm then
+                        queueWall(cellCenter - Vector(0, HALF_CELL, -HALF_CELL), false, wallMat, (tier >= 2 and "concrete" or "wallpaper"), wallTint)
+                    end
+
+                    -- 3. SOLID VALLEY FACADE WALLS & OVERLOOK BALCONY ENTRYWAYS
+                    -- West Wing Facade facing East into Chasm (gx == 2)
+                    if gx == 2 then
+                        if CONFIG.ENTRY_ROWS[gy] then
+                            queueValleyEntryway(cellCenter, true, wallMat, wallTint)
+                        else
+                            queueWall(cellCenter + Vector(HALF_CELL, 0, HALF_CELL), true, wallMat, (tier >= 2 and "concrete" or "wallpaper"), wallTint)
+                        end
+                    end
+                    -- East Wing Facade facing West into Chasm (gx == 5)
+                    if gx == 5 then
+                        if CONFIG.ENTRY_ROWS[gy] then
+                            queueValleyEntryway(cellCenter, false, wallMat, wallTint)
+                        else
+                            queueWall(cellCenter - Vector(HALF_CELL, 0, -HALF_CELL), true, wallMat, (tier >= 2 and "concrete" or "wallpaper"), wallTint)
+                        end
+                    end
+
+                    -- 4. INTERIOR PARTITION WALLS (Doorless navigation)
+                    if not isChasm then
+                        -- West Wing internal division: wall along Y between gx=0 and gx=1 (except at gy=2 doorless portal)
+                        if gx == 1 and gy ~= 2 and gy ~= 4 then
+                            queueWall(cellCenter - Vector(HALF_CELL, 0, -HALF_CELL), true, wallMat, (tier >= 2 and "concrete" or "wallpaper"), wallTint)
+                        end
+                        -- East Wing internal division: wall along Y between gx=6 and gx=7 (except at gy=2 doorless portal)
+                        if gx == 6 and gy ~= 1 and gy ~= 3 then
+                            queueWall(cellCenter + Vector(HALF_CELL, 0, HALF_CELL), true, wallMat, (tier >= 2 and "concrete" or "wallpaper"), wallTint)
+                        end
+                    end
+
+                    -- 5. CEILING LIGHTS (Active dynamic light sources)
+                    if not isChasm then
+                        if (gx == 1 and (gy == 1 or gy == 4)) or (gx == 6 and (gy == 2 or gy == 5)) then
+                            local lightMdl = isCageLight and MODEL_POOLS.cage_lights[1] or MODEL_POOLS.ceiling_lights[1]
+                            queueCeilingLight(cellCenter, lightMdl, isCageLight)
+                        end
+                    elseif tier == 3 and (gx == 3 and gy == 2) then
+                        -- Abyss beacon cage light at bedrock
+                        queueCeilingLight(cellCenter, MODEL_POOLS.cage_lights[1], true)
+                    end
+
+                    -- 6. GENERATIVE CONTEXTUAL PROPS (Trained Data Driven)
+                    if not isChasm then
+                        local isAnomaly = (math.random() < (0.08 + entropy * 0.05))
+                        if tier == 0 then
+                            -- Level 0 Office Suite
+                            if (gx == 1 and gy == 2) or (gx == 6 and gy == 3) then
+                                queueDeskWorkstation(cellCenter, floorZ, isAnomaly)
+                            elseif gx == 0 and gy == 3 then
+                                queueProp(cellCenter, Angle(0, 0, 0), MODEL_POOLS.office_storage[1], "furniture", isAnomaly)
+                            elseif gx == 7 and gy == 2 then
+                                queueProp(cellCenter, Angle(0, 90, 0), MODEL_POOLS.office_props[3], "furniture", isAnomaly)
+                            end
+                        elseif tier == 1 then
+                            -- Level 1 Habitable Living Quarters
+                            if (gx == 1 and gy == 2) or (gx == 6 and gy == 3) then
+                                queueLivingLounge(cellCenter, floorZ, isAnomaly)
+                            elseif gx == 0 and gy == 1 then
+                                queueProp(cellCenter, Angle(0, 0, 0), MODEL_POOLS.office_storage[3], "furniture", isAnomaly)
+                            end
+                        elseif tier == 2 then
+                            -- Level 2 Industrial Warehouse
+                            if (gx == 1 and gy == 1) or (gx == 6 and gy == 2) or (gx == 1 and gy == 4) then
+                                queueStorageWarehouse(cellCenter, floorZ, isAnomaly)
+                            end
+                        else
+                            -- Level 3 Bedrock Substation Crypt
+                            if (gx == 1 and gy == 3) or (gx == 6 and gy == 2) then
+                                queueProp(cellCenter, Angle(0, 45, 0), MODEL_POOLS.warehouse_props[2], "furniture", isAnomaly)
+                            end
+                        end
+
+                        -- Chance for Motionless Observer NPC (1-2 per tier)
+                        if (gx == 0 and gy == 5 and tier <= 1) or (gx == 7 and gy == 0 and tier >= 2) then
+                            queueGlitchedNPC(cellCenter, floorZ, tier)
+                        end
+                    end
+                end
+            end
+        end
+
+        print(string.format("[Cognitive Decay Engine] Queued %d watertight entities across 4 tiers with Central Chasm!", #spawnQueue))
+    end
+
+    -- --------------------------------------------------------------------------
+    -- 7. ADAPTIVE PROP RATE CONTROLLER (ZERO DROPPED PROPS, DYNAMIC MAX THROUGHPUT)
     -- --------------------------------------------------------------------------
     local function executeSpawnQueue()
         local index = 1
         local total = #spawnQueue
         local nextSpawnTime = 0
-        local burstDelay = 0.04 -- Dynamic adaptive delay (starts at 40ms)
-        local minDelay = 0.02   -- Max speed: 50 props/sec
+        local burstDelay = 0.03 -- Dynamic adaptive delay (starts at 30ms)
+        local minDelay = 0.015  -- Max speed: ~66 props/sec
         local maxDelay = 0.40   -- Max backoff when throttled by server quota
 
         hook.add("think", "CognitiveDecay_AdaptiveSpawner", function()
@@ -1252,7 +1327,7 @@ if SERVER then
                 end
 
                 -- Gradually accelerate spawn rate to maximum permitted throughput
-                burstDelay = math.max(minDelay, burstDelay * 0.92)
+                burstDelay = math.max(minDelay, burstDelay * 0.94)
                 nextSpawnTime = now + burstDelay
             else
                 -- Spawn failed (rate limited by engine): DO NOT ADVANCE INDEX!
@@ -1264,82 +1339,18 @@ if SERVER then
     end
 
     -- --------------------------------------------------------------------------
-    -- 9. INTERACTIVE DOOR CONTROLLER (+USE 'E' KEY, COSINE SMOOTH EASE, WOOD SOUNDS)
-    -- --------------------------------------------------------------------------
-    local function toggleDoor(d)
-        if not isValid(d.ent) or d.moving then return end
-        d.isOpen = not d.isOpen
-        d.moving = true
-        d.moveStart = timer.curtime()
-        d.startAng = d.ent:getAngles()
-        d.targetAng = d.isOpen and d.openAng or d.baseAng
-        d.nextUse = timer.curtime() + 1.0
-
-        local dPos = d.ent:getPos()
-        pcall(sound.play, "doors/door_latch1.wav", dPos, 70, 100)
-        pcall(sound.play, "doors/door_wood_move1.wav", dPos, 65, 100)
-    end
-
-    hook.add("think", "CognitiveDecay_DoorController", function()
-        pcall(function()
-            local now = timer.curtime()
-
-            -- 1. Animate moving doors with smooth cosine ease
-            for i = #activeDoors, 1, -1 do
-                local d = activeDoors[i]
-                if not isValid(d.ent) then
-                    table.remove(activeDoors, i)
-                elseif d.moving then
-                    local frac = math.min(1.0, (now - d.moveStart) / d.moveDuration)
-                    local smooth = 0.5 - 0.5 * math.cos(frac * math.pi)
-                    local curAng = LerpAngle(smooth, d.startAng, d.targetAng)
-                    pcall(d.ent.setAngles, d.ent, curAng)
-
-                    if frac >= 1.0 then
-                        d.moving = false
-                        pcall(d.ent.setAngles, d.ent, d.targetAng)
-                        if not d.isOpen then
-                            pcall(sound.play, "doors/door_wood_close1.wav", d.ent:getPos(), 70, 100)
-                        end
-                    end
-                end
-            end
-
-            -- 2. +USE ('E' Key) Listener
-            local players = find.allPlayers()
-            for _, ply in ipairs(players) do
-                if isValid(ply) and ply:keyDown(32) then -- 32 = IN_USE ('E' key)
-                    local eyePos = ply:getEyePos()
-                    local aimVec = ply:getAimVector()
-                    local tr = trace.line(eyePos, eyePos + (aimVec * 85), nil, MASK_SOLID)
-
-                    for _, d in ipairs(activeDoors) do
-                        if isValid(d.ent) and now > (d.nextUse or 0) then
-                            local dPos = d.ent:getPos()
-                            if tr.Entity == d.ent or tr.HitPos:getDistance(dPos) < 55 or eyePos:getDistance(dPos) < 75 then
-                                toggleDoor(d)
-                                break
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    end)
-
-    -- --------------------------------------------------------------------------
-    -- 10. CLEANUP & INITIALIZATION
+    -- 8. CLEANUP & INITIALIZATION
     -- --------------------------------------------------------------------------
     _G.CognitiveDecay_Cleanup = function()
         hook.remove("think", "CognitiveDecay_AdaptiveSpawner")
-        hook.remove("think", "CognitiveDecay_DoorController")
         for _, ent in ipairs(activeEntities) do
             if isValid(ent) then pcall(ent.remove, ent) end
         end
         table.empty(activeEntities)
-        table.empty(activeDoors)
         table.empty(activeRadios)
+        table.empty(activeTVs)
         table.empty(activeLights)
+        table.empty(activeNPCs)
         table.empty(spawnQueue)
         print("[Cognitive Decay Engine] Dematerialized all existing entities.")
     end
@@ -1351,11 +1362,16 @@ if SERVER then
 else -- CLIENT
 
     local activeRadios = {}
+    local activeTVs = {}
     local activeLights = {}
+    local dynamicLights = {}
+
     local glowMat = Material("sprites/light_glow02")
     if not glowMat or glowMat:isError() then glowMat = Material("sprites/glow01") end
 
-    -- Dynamic Radio Tuning with Automatic Looping & Station Hopping
+    -- --------------------------------------------------------------------------
+    -- 9. DYNAMIC 160-TRACK RADIO STREAMER (STATION HOPPING & SEAMLESS REWIND)
+    -- --------------------------------------------------------------------------
     local function tuneRadio(rData)
         if not isValid(rData.ent) then return end
         if isValid(rData.station) then pcall(rData.station.stop, rData.station) end
@@ -1385,7 +1401,7 @@ else -- CLIENT
                 local rData = {
                     ent = ent,
                     isMusic = isMusic,
-                    isLooping = (math.random() < 0.35),
+                    isLooping = (math.random() < 0.40),
                     nextHopTime = timer.curtime() + 60,
                     hasStarted = false
                 }
@@ -1395,7 +1411,7 @@ else -- CLIENT
         end)
     end)
 
-    -- Radio Life Management Loop: Loops or hops stations when track ends so it never dies
+    -- Radio Life Management Loop: Never dies, hops stations or loops
     hook.add("think", "CognitiveDecay_RadioLifeManager", function()
         pcall(function()
             local now = timer.curtime()
@@ -1430,30 +1446,149 @@ else -- CLIENT
         end)
     end)
 
-    -- Ambient Fluorescent Hum & Ceilings Glow Render Hook
-    hook.add("render", "CognitiveDecay_ClientLighting", function()
+    -- --------------------------------------------------------------------------
+    -- 10. REAL DYNAMIC LIGHTING EMISSION (TRUE ILLUMINATION & GLOW SPRITES)
+    -- --------------------------------------------------------------------------
+    net.receive("CognitiveDecay_RegisterLight", function()
+        pcall(function()
+            local ent = net.readEntity()
+            local isCage = net.readBool()
+            if isValid(ent) then
+                table.insert(activeLights, { ent = ent, isCage = isCage })
+            end
+        end)
+    end)
+
+    hook.add("think", "CognitiveDecay_RealDynamicLighting", function()
         pcall(function()
             local ply = player()
             if not isValid(ply) then return end
             local plyPos = ply:getPos()
+            local now = timer.curtime()
 
-            -- Warm Fluorescent Light Glow Sprites
-            if glowMat then
-                render.setMaterial(glowMat)
-                for _, fix in ipairs(find.byClass("prop_physics")) do
-                    if isValid(fix) and fix:getModel() == "models/props_interiors/lights_florescent01a.mdl" then
-                        local fPos = fix:getPos()
-                        if plyPos:getDistance(fPos) < 900 then
-                            render.setColor(Color(255, 245, 180, 215))
-                            render.drawSprite(fPos - Vector(0, 0, 6), 160, 160)
+            -- Manage dynamic lights for nearby fixtures (< 1200 units)
+            for _, fix in ipairs(activeLights) do
+                if isValid(fix.ent) then
+                    local fPos = fix.ent:getPos()
+                    local dist = plyPos:getDistance(fPos)
+
+                    if dist < 1200 then
+                        if not dynamicLights[fix.ent] and light and light.create then
+                            local ok, dl = pcall(light.create, fPos - Vector(0, 0, 8), 650, 2.5, fix.isCage and Color(255, 195, 110) or Color(255, 240, 185))
+                            if ok and dl then
+                                dynamicLights[fix.ent] = dl
+                            end
                         end
-                    elseif isValid(fix) and fix:getModel() == "models/props_c17/light_cagelight01_on.mdl" then
-                        local fPos = fix:getPos()
-                        if plyPos:getDistance(fPos) < 700 then
-                            render.setColor(Color(255, 210, 130, 200))
-                            render.drawSprite(fPos - Vector(0, 0, 8), 120, 120)
+
+                        local dl = dynamicLights[fix.ent]
+                        if dl then
+                            pcall(dl.setDieTime, dl, now + 1.0)
+                            pcall(dl.draw, dl)
+                        end
+                    else
+                        if dynamicLights[fix.ent] then
+                            pcall(dynamicLights[fix.ent].destroy, dynamicLights[fix.ent])
+                            dynamicLights[fix.ent] = nil
                         end
                     end
+                end
+            end
+        end)
+    end)
+
+    hook.add("render", "CognitiveDecay_LightSprites", function()
+        pcall(function()
+            local ply = player()
+            if not isValid(ply) or not glowMat then return end
+            local plyPos = ply:getPos()
+
+            render.setMaterial(glowMat)
+            for _, fix in ipairs(activeLights) do
+                if isValid(fix.ent) then
+                    local fPos = fix.ent:getPos()
+                    local dist = plyPos:getDistance(fPos)
+                    if dist < 950 then
+                        if fix.isCage then
+                            render.setColor(Color(255, 200, 120, 190))
+                            render.drawSprite(fPos - Vector(0, 0, 6), 110, 110)
+                        else
+                            render.setColor(Color(255, 245, 180, 210))
+                            render.drawSprite(fPos - Vector(0, 0, 5), 150, 150)
+                        end
+                    end
+                end
+            end
+        end)
+    end)
+
+    -- --------------------------------------------------------------------------
+    -- 11. CRT TV ANALOG GLITCH & EMERGENCY BROADCAST SCREEN RENDERER
+    -- --------------------------------------------------------------------------
+    net.receive("CognitiveDecay_RegisterTV", function()
+        pcall(function()
+            local ent = net.readEntity()
+            if isValid(ent) then
+                table.insert(activeTVs, ent)
+            end
+        end)
+    end)
+
+    local tvFont = render.createFont("Trebuchet", 28, 700, true)
+    local tvAlertMessages = {
+        "[ EMERGENCY BROADCAST SYSTEM ]",
+        "COGNITIVE DECAY - SECTOR NULL",
+        "WARNING: CONTEXT DRIFT ACTIVE",
+        "FACILITY CORRIDORS VACATED",
+        "UNATTENDED LIMINAL SPACE"
+    }
+
+    hook.add("PostDrawTranslucentRenderables", "CognitiveDecay_TVScreens", function()
+        pcall(function()
+            local ply = player()
+            if not isValid(ply) then return end
+            local plyPos = ply:getPos()
+            local curSec = math.floor(timer.curtime())
+
+            for i = #activeTVs, 1, -1 do
+                local tv = activeTVs[i]
+                if not isValid(tv) then
+                    table.remove(activeTVs, i)
+                elseif plyPos:getDistance(tv:getPos()) < 500 then
+                    local m = tv:getMatrix()
+                    -- CRT screen surface position on props_c17/tv_monitor01.mdl
+                    m:translate(Vector(8.8, 0, 1.2))
+                    m:rotate(Angle(0, 90, 90))
+                    m:setScale(Vector(0.045, -0.045, 0.045))
+
+                    render.pushMatrix(m)
+                    -- Dark CRT Phosphor Background
+                    render.setColor(Color(8, 15, 10, 245))
+                    render.drawRect(-160, -120, 320, 240)
+
+                    -- Analog Scanlines
+                    local offsetScan = math.floor((timer.curtime() * 40) % 8)
+                    render.setColor(Color(15, 30, 20, 180))
+                    for y = -120, 120, 8 do
+                        render.drawRectFast(-160, y + offsetScan, 320, 3)
+                    end
+
+                    -- Static Noise Jitter
+                    render.setColor(Color(math.random(30, 80), math.random(60, 140), math.random(30, 80), 120))
+                    for n = 1, 14 do
+                        render.drawRectFast(math.random(-150, 150), math.random(-110, 110), math.random(15, 45), 2)
+                    end
+
+                    -- Corrupted Amber/Green Emergency Text
+                    render.enableDepth(true)
+                    render.setColor(Color(255, 190, 40, 240))
+                    render.setFont(tvFont)
+                    local msgIdx = (curSec % #tvAlertMessages) + 1
+                    render.drawSimpleText(0, -35, tvAlertMessages[msgIdx], 1, 1)
+
+                    render.setColor(Color(120, 255, 140, 210))
+                    render.drawSimpleText(0, 15, "SECTOR DECAY: " .. string.format("%.1f%%", (math.sin(timer.curtime() * 0.5) * 20 + 75)), 1, 1)
+
+                    render.popMatrix()
                 end
             end
         end)
