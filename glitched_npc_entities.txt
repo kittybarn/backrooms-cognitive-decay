@@ -1,0 +1,176 @@
+--@name "Still Life" & Glitched Entity Generator
+--@author Cognitive Decay Project
+--@shared
+
+-- Spawns rare, deeply disturbing Backrooms entities ("Still Life" and Stalkers):
+-- 1. Facial Flex Distortion (holo:setFlexWeight) -> unnatural stretched smiles, hollow eyes, gaping jaws
+-- 2. Skeletal Bone Deformities (holo:manipulateBoneScale / BoneAngles) -> elongated limbs, snapped necks, warped spines
+-- 3. Behavioral Archetypes:
+--    - "STILL LIFE": A frozen human figure standing motionlessly in the corner of a dark room facing the wall.
+--      If you turn your back, it shifts closer.
+--    - "STALKER / GLITCHED CHASER": Rapidly twitches towards you, speaking cross-wired broken speech
+--      (muffled Citizen VO, fast-forwarded reversed radio chatter, or high-pitch modem screams).
+
+if SERVER then
+    util.addNetworkString("SpawnEntityAnomaly")
+
+    local activeAnomalies = {}
+
+    -- Rare chance to spawn an anomaly in a room (~5% to 15% based on confusion)
+    function attemptSpawnAnomaly(roomOrigin, confusion)
+        if math.random() > (0.05 + (confusion * 0.12)) then return end
+
+        local isHostile = math.random() > 0.65
+        local anomalyType = isHostile and "stalker" or "still_life"
+        
+        -- Source Models (Citizens, Scientists, Combine, Zombies)
+        local modelPool = {
+            "models/humans/group01/male_07.mdl",
+            "models/humans/group01/female_02.mdl",
+            "models/player/scientist.mdl",
+            "models/zombie/classic.mdl",
+            "models/police.mdl"
+        }
+        local chosenModel = modelPool[math.random(1, #modelPool)]
+        local spawnPos = roomOrigin + Vector(math.random(-120, 120), math.random(-120, 120), 0)
+        local spawnAng = Angle(0, math.random(0, 360), 0)
+
+        net.start("SpawnEntityAnomaly")
+        net.writeString(anomalyType)
+        net.writeString(chosenModel)
+        net.writeVector(spawnPos)
+        net.writeAngle(spawnAng)
+        net.writeFloat(confusion)
+        net.send()
+
+        print("[Entity Engine] RARE ANOMALY MATERIALIZED: " .. anomalyType .. " (" .. chosenModel .. ")")
+    end
+end
+
+if CLIENT then
+    local spawnedEntities = {}
+
+    -- Uncanny Face Posing (Flex manipulation)
+    local function deformFacialFlexes(holo)
+        local count = holo:getFlexNum()
+        if count and count > 0 then
+            for i = 0, count - 1 do
+                -- Randomly stretch jaw drop, smile, or eye widener beyond normal human limits (up to 2.5x)
+                if math.random() > 0.7 then
+                    holo:setFlexWeight(i, math.Rand(0.8, 2.5))
+                end
+            end
+        end
+    end
+
+    -- Permanent Skeletal Warping (Bone manipulation)
+    local function deformSkeleton(holo, isStillLife)
+        local boneCount = holo:getBoneCount()
+        if not boneCount or boneCount <= 0 then return end
+
+        -- 1. Neck / Head Snapping (Classic uncanny 90 degree head tilt)
+        local headBone = holo:lookupBone("ValveBiped.Bip01_Head1")
+        if headBone then
+            local snappedAng = Angle(math.random(-45, 45), math.random(-80, 80), math.random(35, 75))
+            holo:manipulateBoneAngles(headBone, snappedAng)
+            -- Sometimes stretch or shrink the head
+            holo:manipulateBoneScale(headBone, Vector(math.Rand(0.8, 1.4), math.Rand(0.8, 1.4), math.Rand(1.2, 2.0)))
+        end
+
+        -- 2. Elongated Slender Limbs (Arms / Spine stretch)
+        local spineBone = holo:lookupBone("ValveBiped.Bip01_Spine")
+        if spineBone then
+            holo:manipulateBoneScale(spineBone, Vector(1.0, 1.0, math.Rand(1.2, 1.8)))
+        end
+
+        local leftArm = holo:lookupBone("ValveBiped.Bip01_L_Forearm")
+        local rightArm = holo:lookupBone("ValveBiped.Bip01_R_Forearm")
+        if leftArm then
+            holo:manipulateBoneScale(leftArm, Vector(1.0, 1.0, math.Rand(1.4, 2.2)))
+        end
+        if rightArm then
+            holo:manipulateBoneScale(rightArm, Vector(1.0, 1.0, math.Rand(1.4, 2.2)))
+        end
+    end
+
+    net.receive("SpawnEntityAnomaly", function()
+        local aType     = net.readString()
+        local mdl       = net.readString()
+        local pos       = net.readVector()
+        local ang       = net.readAngle()
+        local confusion = net.readFloat()
+
+        local holo = holograms.create(pos, ang, mdl, Vector(1, 1, 1))
+        if not isValid(holo) then return end
+
+        -- Apply deformed face & skeleton
+        deformFacialFlexes(holo)
+        deformSkeleton(holo, aType == "still_life")
+
+        -- Audio Cross-Wiring (Weird Speech / Static)
+        local weirdSounds = {
+            "vo/npc/male01/cheese.wav",
+            "vo/npc/male01/whoops01.wav",
+            "vo/npc/male01/didyouhear.wav",
+            "ambient/machines/teleport1.wav",
+            "ambient/energy/zap1.wav"
+        }
+        local soundToPlay = weirdSounds[math.random(1, #weirdSounds)]
+
+        if aType == "still_life" then
+            -- "Still Life": Absolutely motionless, facing the wall
+            holo:setColor(Color(220, 220, 220, 255))
+            -- Plays a quiet, reversed pitch-shifted mutter occasionally
+            timer.simple(math.random(3, 8), function()
+                if isValid(holo) then
+                    sound.play(soundToPlay, holo:getPos(), 65, math.random(50, 75))
+                end
+            end)
+        else
+            -- "Stalker": Twitches and tracks players
+            table.insert(spawnedEntities, {
+                holo = holo,
+                speed = math.Rand(90, 160),
+                nextTwitch = timer.curtime() + 0.5,
+                sound = soundToPlay
+            })
+        end
+    end)
+
+    -- Stalker chasing & twitching loop
+    hook.add("think", "AnomalousEntityThink", function()
+        local ply = player()
+        if not isValid(ply) then return end
+        local plyPos = ply:getPos()
+        local curTime = timer.curtime()
+
+        for i = #spawnedEntities, 1, -1 do
+            local ent = spawnedEntities[i]
+            local h = ent.holo
+            if isValid(h) then
+                local hPos = h:getPos()
+                local dist = hPos:getDistance(plyPos)
+
+                -- If player is within 600 units, stare and creep toward them
+                if dist < 650 and dist > 45 then
+                    local dir = (plyPos - hPos):getNormalized()
+                    local faceAngle = dir:getAngle()
+                    h:setAngles(Angle(0, faceAngle.y, 0))
+
+                    -- Stutter-step twitch movement (like an analog glitch)
+                    if curTime > ent.nextTwitch then
+                        h:setPos(hPos + (dir * 25))
+                        ent.nextTwitch = curTime + math.Rand(0.08, 0.25)
+                        
+                        -- Chilling random audio glitch
+                        if math.random() > 0.85 then
+                            sound.play(ent.sound, hPos, 70, math.random(120, 180))
+                        end
+                    end
+                end
+            else
+                table.remove(spawnedEntities, i)
+            end
+        end
+    end)
+end
